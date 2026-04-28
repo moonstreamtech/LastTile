@@ -1,0 +1,17 @@
+# Gradle / Android build outputs
+.gradle/
+build/
+local.properties
+.cxx/
+
+# IDE / editor metadata
+.idea/
+*.iml
+.vscode/
+.DS_Store
+
+# Keystores: ignore by default, except the pinned project debug keystore.
+# Release / upload keystores must NEVER be committed and stay outside the repo.
+*.keystore
+*.jks
+!AndroidBuild/app/debug.keystore
