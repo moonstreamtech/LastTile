@@ -19,6 +19,14 @@ that `legal/privacy-policy.md`, `docs/privacy-policy/index.html`, and
 `store-assets/play-store/data-safety.md` still match the implementation
 and update them in the same commit if not.
 
+## Score submission semantics
+- LOCAL leaderboard: submit only on game-over (one entry per run)
+- GPGS (online) leaderboard: submit on game-over AND on every new
+  in-run personal best
+This dual-track approach keeps the local "top 10 finished runs" display
+clean while ensuring online scores reflect live progress (important
+because growBoard makes game-over rare).
+
 ## Branch policy
 All AI-driven work happens on a `claude/...` or `codex/...` branch and is
 merged via pull request. Never push directly to `main`/`master`.
