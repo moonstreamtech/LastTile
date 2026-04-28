@@ -60,9 +60,22 @@ android {
         jvmTarget = "17"
     }
 
+    signingConfigs {
+        // DEBUG keystore only — uses well-known Android default credentials.
+        // Safe to commit. Release keystore lives outside the repo and is
+        // injected via GitHub Secrets at build time.
+        getByName("debug") {
+            storeFile = file("debug.keystore")
+            storePassword = "android"
+            keyAlias = "androiddebugkey"
+            keyPassword = "android"
+        }
+    }
+
     buildTypes {
         getByName("debug") {
             isMinifyEnabled = false
+            signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
             isMinifyEnabled = false
