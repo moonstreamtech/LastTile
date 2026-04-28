@@ -3,6 +3,25 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+// AdMob credentials are injected at build time. Real IDs come from GitHub
+// Secrets (ADMOB_APP_ID / ADMOB_BANNER_AD_UNIT_ID) and stay out of the repo.
+// When either env var is missing or blank, the build falls back to Google's
+// official test IDs so local and CI builds never serve real ads.
+val ADMOB_TEST_APP_ID = "ca-app-pub-3940256099942544~3347511713"
+val ADMOB_TEST_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741"
+
+val resolvedAdmobAppId: String = System.getenv("ADMOB_APP_ID")
+    ?.takeIf { it.isNotBlank() }
+    ?: ADMOB_TEST_APP_ID
+val resolvedAdmobBannerAdUnitId: String = System.getenv("ADMOB_BANNER_AD_UNIT_ID")
+    ?.takeIf { it.isNotBlank() }
+    ?: ADMOB_TEST_BANNER_AD_UNIT_ID
+val admobMode: String = if (
+    resolvedAdmobAppId == ADMOB_TEST_APP_ID ||
+    resolvedAdmobBannerAdUnitId == ADMOB_TEST_BANNER_AD_UNIT_ID
+) "TEST" else "PRODUCTION"
+println("[Last Tile] AdMob mode: $admobMode (real IDs are never logged)")
+
 android {
     namespace = "com.moonstreamtech.lasttile"
     compileSdk = 34
@@ -41,10 +60,18 @@ android {
             "nl",
             "uk"
         )
+
+        manifestPlaceholders["admobAppId"] = resolvedAdmobAppId
+        buildConfigField(
+            "String",
+            "ADMOB_BANNER_AD_UNIT_ID",
+            "\"$resolvedAdmobBannerAdUnitId\""
+        )
     }
 
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 
     composeOptions {
@@ -98,4 +125,5 @@ dependencies {
     implementation("androidx.compose.material3:material3")
     implementation("com.google.android.gms:play-services-games-v2:20.1.2")
     implementation("com.google.android.gms:play-services-tasks:18.0.2")
+    implementation("com.google.android.gms:play-services-ads:23.6.0")
 }

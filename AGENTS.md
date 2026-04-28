@@ -48,6 +48,14 @@ deltas freely.
 GitHub Pages copy) must agree with `store-assets/play-store/data-safety.md`.
 If you change one, update the others in the same commit.
 
+## AdMob secrets sync rule
+AdMob App ID and Banner Ad Unit ID are stored only in GitHub Secrets
+(`ADMOB_APP_ID`, `ADMOB_BANNER_AD_UNIT_ID`). They MUST NEVER be committed
+to the repository. Local development and any build without those secrets
+automatically uses Google's official test IDs via the fallback in
+`AndroidBuild/app/build.gradle.kts`. When adding new ad units, add a new
+secret and a new `BuildConfig` field — do not hardcode IDs.
+
 ## Screenshots
 Screenshots in the Play Store listing reflect the actual app. If you change
 visible UI, mark a TODO in the PR description that screenshots may need to

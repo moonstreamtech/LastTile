@@ -9,8 +9,8 @@
       starting 5×5, an expanded 9×9 board, and the leaderboard dialog
 - [ ] Category: Puzzle; tags: Brain Games, Casual, Puzzle
 - [ ] Content rating completed (PEGI 3 / ESRB Everyone expected)
-- [ ] **"Contains ads"** left OFF (no ad SDK in this build)
+- [ ] **"Contains ads"** switched ON (AdMob banner integrated)
 - [ ] **"In-app purchases"** left OFF (no IAP in this build)
 - [ ] Contact email and privacy policy URL filled
 - [ ] Data safety form completed in Play Console — answers in
-      `data-safety.md` (no data collected)
+      `data-safety.md` (declares GPGS leaderboard + AdMob banner data)

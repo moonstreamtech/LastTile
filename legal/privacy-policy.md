@@ -29,21 +29,33 @@ Games Services Privacy Policy.
 You can opt out by signing out of Google Play Games. The local leaderboard
 will continue to work without sign-in.
 
+## Advertising
+Last Tile displays banner advertisements served by Google AdMob. AdMob may
+collect your advertising ID, IP address, and information about your
+interactions with ads to serve relevant ads and measure performance. For
+more information, see Google's Privacy Policy:
+https://policies.google.com/privacy. You can reset your advertising ID or
+opt out of personalized ads in your Android device settings
+(Settings → Privacy → Ads).
+
 ## Third-party services
 - **Google Play Games Services** — used solely to host the optional global
   leaderboard. Google handles all account, identity, and storage on its
   side; Last Tile only forwards the numeric score. See Google's Play Games
   Services Privacy Policy for details.
+- **Google AdMob** — serves the bottom banner advertisement. Subject to
+  Google's Privacy Policy linked above.
 
-If a future version adds an ad network, analytics, or any other third-party
-service, this policy and the in-app data safety disclosure will be updated
-before that version is published.
+If a future version adds an analytics SDK, additional ad formats, or any
+other third-party service, this policy and the in-app data safety
+disclosure will be updated before that version is published.
 
 ## Children
-The game is family-friendly, has no user-generated content, no chat, no
-purchases, and no ads in this version. It is suitable for all ages 7 and
-above. Children using Google Play Games are covered by Google's family
-account controls.
+The game is family-friendly, has no user-generated content, no chat, and
+no in-app purchases. It does display a single banner ad served by Google
+AdMob. It is suitable for all ages 7 and above. Children using Google
+Play Games are covered by Google's family account controls; ad
+personalisation can also be controlled via the Android system ad settings.
 
 ## Contact
 Replace this placeholder before release: **moonstreamtech@gmail.com**.
