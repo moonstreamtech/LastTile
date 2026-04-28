@@ -42,7 +42,7 @@ Highlights:
 - Run state (board, unlocks, score, turn, combo, pressed tile) persists in `SharedPreferences`, so cold restarts resume the exact run.
 - Local leaderboard: top-10 runs (score / turn / max board size / timestamp) are stored on-device and surfaced from the in-game **Leaderboard** button. `LeaderboardProvider` is interface-driven so an online provider can be dropped in later.
 - Online leaderboard via Google Play Games Services: every finished run is forwarded to GPGS in addition to the local store, and the in-game Leaderboard dialog has a **Global** tab that opens the GPGS leaderboard UI. Sign-out / no-internet keeps the Local tab fully functional.
-- Fixed-height bottom ad banner slot (50 dp, full-width) reserved below the gameplay area as a placeholder; currently sized 0 dp so the app truly ships with no ads. Swap the composable for a real AdMob/banner view when the ad SDK is integrated.
+- Bottom banner ad (320×50, fixed 50 dp full-width) served by Google AdMob via the Google Mobile Ads SDK. The ad slot fails gracefully on devices without Google Play Services and during dev/CI builds (which use Google's official test ad IDs).
 - Hazards (Fire / Ice / Poison) are active, persisted, and capped per board size. Spawn rates ramp from 2–4% in the early game to 13–15% in the collapse stage. See `release-info/balancing-guide.md` for the full table.
 
 See architecture details in `release-info/architecture.md`.
@@ -88,6 +88,14 @@ Single workflow: `.github/workflows/android-native.yml`.
 - No secrets required.
 
 > CI builds both the debug APK and an **unsigned** release AAB (`bundleRelease`) so release-only issues (R8/proguard, manifest stripping, resource shrinking) are caught on every push. The AAB is not yet uploadable to Play directly — wire up a keystore + the corresponding `*_BASE64`, `*_PASSWORD`, `*_ALIAS` secrets to produce a signed AAB, or rely on Play App Signing on upload.
+
+### AdMob credentials
+AdMob credentials are injected at build time via GitHub Secrets:
+`ADMOB_APP_ID` and `ADMOB_BANNER_AD_UNIT_ID`. Builds without these secrets
+fall back to Google's official test ad IDs (safe for development; never
+serves real ad inventory). The configuration step prints
+`[Last Tile] AdMob mode: TEST` or `... PRODUCTION` so the active mode is
+auditable from CI logs without leaking the real IDs.
 
 ### Download the APK from GitHub Actions
 1. Push to a tracked branch (or run **Actions → Android Native APK → Run workflow** manually).

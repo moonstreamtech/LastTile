@@ -2,6 +2,7 @@ package com.moonstreamtech.lasttile.ui
 
 import android.app.Activity
 import android.content.Context
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -47,7 +48,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
+import com.google.android.gms.ads.AdListener
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
+import com.google.android.gms.ads.LoadAdError
+import com.moonstreamtech.lasttile.BuildConfig
 import com.moonstreamtech.lasttile.GameState
 import com.moonstreamtech.lasttile.GpgsLeaderboard
 import com.moonstreamtech.lasttile.LeaderboardEntry
@@ -198,15 +206,48 @@ fun GameScreen() {
 
 @Composable
 private fun BottomAdBanner() {
-    // TODO: enable when AdMob is integrated.
-    // Layout slot is reserved (50.dp) but currently hidden so the app
-    // truthfully ships with no ads. Swap the height back and drop a
-    // BannerAdView in here when the SDK lands.
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(0.dp)
-    )
+    // Hosts a 320x50 AdMob banner. Ads only show when MobileAds has
+    // initialised AND inventory is available; otherwise the AdView stays
+    // blank inside the 50dp slot so the layout never jumps. On devices
+    // without Google Play Services (e.g. some Huawei models) AdView
+    // construction or loading fails and we fall back to a transparent
+    // placeholder of the same height for the same reason.
+    val context = LocalContext.current
+    val bannerModifier = Modifier
+        .fillMaxWidth()
+        .height(50.dp)
+
+    val adView: AdView? = remember(context) {
+        runCatching {
+            AdView(context).apply {
+                setAdSize(AdSize.BANNER)
+                adUnitId = BuildConfig.ADMOB_BANNER_AD_UNIT_ID
+                adListener = object : AdListener() {
+                    override fun onAdLoaded() {
+                        Log.i("BottomAdBanner", "Banner ad loaded.")
+                    }
+                    override fun onAdFailedToLoad(error: LoadAdError) {
+                        Log.w(
+                            "BottomAdBanner",
+                            "Banner ad failed to load: ${error.code} ${error.message}"
+                        )
+                    }
+                }
+                loadAd(AdRequest.Builder().build())
+            }
+        }.onFailure { e ->
+            Log.w("BottomAdBanner", "AdView creation failed", e)
+        }.getOrNull()
+    }
+
+    if (adView != null) {
+        AndroidView(
+            modifier = bannerModifier,
+            factory = { adView }
+        )
+    } else {
+        Box(modifier = bannerModifier)
+    }
 }
 
 private enum class LeaderboardTab { GLOBAL, LOCAL }

@@ -16,6 +16,8 @@ Features
 ▸ On-device leaderboard — your best ten runs are saved locally with score, turn count and final board size.
 ▸ Auto-save — close the app any time. The exact same board, score and combo come back when you return.
 ▸ Fully offline, single player — no account, no login, no internet required.
-▸ No ads. No data collection. Game state stays on your device.
+▸ Game state stays on your device. The only data leaving the device is your final score (when you sign in to Google Play Games for the global leaderboard) and the standard ad signals used by the bottom banner.
+
+Contains a single banner ad at the bottom of the screen.
 
 Made for puzzle players who want a quiet, focused session — no flashing rewards, no timers, no required accounts. Just merge, plan and protect your last tile.
