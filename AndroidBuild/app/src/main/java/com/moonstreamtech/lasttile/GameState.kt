@@ -262,6 +262,12 @@ class GameState(
     }
 
     private fun trySplit(row: Int, col: Int, value: Int) {
+        // A tile that's still under its post-move "pressed" cooldown is
+        // locked — tryMove already rejects acting on it, and split is
+        // another player-driven action against the same tile, so it
+        // must reject too. Without this guard, double-tapping a freshly-
+        // moved tile would split it AND silently drop the lock.
+        if ((row to col) in pressedTiles) return
         val half = value / 2
         if (half < 1) return
 
@@ -292,8 +298,9 @@ class GameState(
         // which prevents farming extra unlocks via split → re-merge loops.
         val splitPenalty = unlockCountFor(value)
         if (splitPenalty > 0) unlockDebt += splitPenalty
-        val splitPos = row to col
-        if (splitPos in pressedTiles) pressedTiles = pressedTiles - splitPos
+        // Note: no pressedTiles cleanup needed here. The guard at the top
+        // of trySplit already rejects when the source is pressed, so the
+        // source position cannot be in pressedTiles when we get here.
         advanceTurn(b, skipSpawn = true)
         recordRunIfOver()
         save()
@@ -677,20 +684,19 @@ class GameState(
         }
     }
 
+    // Spawn rolls only ever produce value-2 normals (or hazards), never
+    // value-4. The merge ladder is intentionally start-from-2 so the
+    // player owns every doubling step; gifting a 4 short-circuits the
+    // early game's tactical density.
     private fun spawnTile(b: MutableList<MutableList<Tile>>) {
         val phase = phaseFor(turn)
         val roll = Random.nextInt(100)
-        val newTile: Tile? = when {
-            roll < phase.normal2 -> Tile.Normal(2)
-            roll < phase.normal2 + phase.normal4 -> Tile.Normal(4)
-            else -> null
-        }
-        if (newTile != null) {
+        if (roll < phase.normal) {
             val spot = randomEmpty(b) ?: return
-            b[spot.first][spot.second] = newTile
+            b[spot.first][spot.second] = Tile.Normal(2)
             return
         }
-        val rest = roll - (phase.normal2 + phase.normal4)
+        val rest = roll - phase.normal
         val hazardKind = when {
             rest < phase.fire -> HazardKind.FIRE
             rest < phase.fire + phase.ice -> HazardKind.ICE
@@ -769,18 +775,20 @@ class GameState(
     private enum class HazardKind { FIRE, ICE, POISON }
 
     private data class Phase(
-        val normal2: Int,
-        val normal4: Int,
+        val normal: Int,
         val fire: Int,
         val ice: Int,
         val poison: Int
     )
 
+    // Hazard rates per stage are unchanged from the prior tuning; the
+    // former normal2 + normal4 split was collapsed into a single normal
+    // bucket so spawns are always value-2.
     private fun phaseFor(t: Int): Phase = when {
-        t < 8 -> Phase(normal2 = 91, normal4 = 0, fire = 3, ice = 4, poison = 2)
-        t < 20 -> Phase(normal2 = 67, normal4 = 12, fire = 7, ice = 8, poison = 6)
-        t < 40 -> Phase(normal2 = 52, normal4 = 15, fire = 11, ice = 12, poison = 10)
-        else -> Phase(normal2 = 40, normal4 = 18, fire = 14, ice = 15, poison = 13)
+        t < 8 -> Phase(normal = 91, fire = 3, ice = 4, poison = 2)
+        t < 20 -> Phase(normal = 79, fire = 7, ice = 8, poison = 6)
+        t < 40 -> Phase(normal = 67, fire = 11, ice = 12, poison = 10)
+        else -> Phase(normal = 58, fire = 14, ice = 15, poison = 13)
     }
 
     private fun isInfected(t: Tile): Boolean =

@@ -31,6 +31,23 @@ and update them in the same commit if not.
   run regardless of how the run ends. bestThisRun is the per-run high-
   water mark for the live PB tracker.
 
+## Compose pointerInput correctness rule
+Modifier.pointerInput must NEVER be keyed on Unit when its callbacks
+capture state values that can change during the lifetime of the
+Composable. Either key on the captured values directly, or wrap
+callbacks in rememberUpdatedState. This applies to all gesture
+detectors: detectDragGestures, detectTapGestures, etc.
+
+The canonical bug this rule prevents: in BoardView the viewport's
+(originRow, originCol) shifts when the board grows past 7×7 and the
+auto-follow LaunchedEffect re-centers on the latest focus tile. Each
+TileView's `pos` is a derived value (originRow + rIdx, originCol + cIdx)
+captured by drag callbacks. With key=Unit, the pointerInput suspend
+block freezes those callbacks at first composition; after a pan, the
+slot fires the OLD callbacks against the OLD pos and a tile 1-3 cells
+away from the player's finger animates instead. Always key on `pos`
+(or equivalent) for any pointerInput inside an iterated grid.
+
 ## Branch policy
 All AI-driven work happens on a `claude/...` or `codex/...` branch and is
 merged via pull request. Never push directly to `main`/`master`.
