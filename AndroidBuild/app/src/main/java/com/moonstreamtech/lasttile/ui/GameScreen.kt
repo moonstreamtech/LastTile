@@ -667,6 +667,7 @@ private fun BoardView(state: GameState) {
                             val isPressed = pos in state.pressedTiles
 
                             TileView(
+                                pos = pos,
                                 tile = tile,
                                 unlocked = isUnlocked,
                                 selected = state.selected == pos,
@@ -780,6 +781,15 @@ private fun miniMapColor(tile: Tile, unlocked: Boolean): Color {
 
 @Composable
 private fun TileView(
+    // pos is the tile's logical board coordinate. It is wired through as
+    // a parameter (rather than only being captured by callback closures)
+    // so that the pointerInput modifier below can be keyed on it. Without
+    // this key, Modifier.pointerInput(Unit) would cache the suspend block
+    // and its captured callbacks at first composition; subsequent
+    // viewport pans (which shift the (originRow, originCol) origin in
+    // BoardView) would silently invoke stale callbacks, animating a tile
+    // 1-3 cells away from the one the player actually touched.
+    pos: Pair<Int, Int>,
     tile: Tile,
     unlocked: Boolean,
     selected: Boolean,
@@ -849,8 +859,15 @@ private fun TileView(
         else -> 0.dp
     }
 
+    // Key on `pos` (not Unit). When BoardView pans the viewport,
+    // (originRow, originCol) shift and each TileView slot's pos changes;
+    // re-keying forces pointerInput to relaunch its suspend block and
+    // re-capture the latest onDragStart / onDrag / onDragEnd from the
+    // surrounding closure. Otherwise a slot would keep firing the FIRST
+    // composition's callbacks, which capture the pre-pan pos, and the
+    // wrong tile would respond to the drag.
     val dragModifier = if (draggable && unlocked) {
-        Modifier.pointerInput(Unit) {
+        Modifier.pointerInput(pos) {
             detectDragGestures(
                 onDragStart = { onDragStart() },
                 onDrag = { change, dragAmount ->
