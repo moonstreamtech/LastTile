@@ -53,3 +53,10 @@ Screenshots in the Play Store listing reflect the actual app. If you change
 visible UI, mark a TODO in the PR description that screenshots may need to
 be re-captured. Keep master graphics under
 `store-assets/play-store/graphics/`.
+
+## History note
+
+This repository was migrated from a previous private repository on
+27 April 2026. When the repo was made public under the moonstreamtech
+organization, git history was reset to a single initial commit.
+Earlier development history is not preserved in this repository.
