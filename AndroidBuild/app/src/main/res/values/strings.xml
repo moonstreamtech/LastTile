@@ -7,7 +7,7 @@
     <!-- Replace with the numeric Project ID from Play Console > Play Games Services
          once the app is registered. Until then GPGS sign-in fails gracefully and
          only the local leaderboard works. -->
-    <string name="game_services_app_id" translatable="false">PLACEHOLDER_GAME_SERVICES_APP_ID</string>
+    <string name="game_services_app_id" translatable="false">245356515245</string>
 
     <!-- Header / branding. The wordmark is intentionally untranslated. -->
     <string name="title_wordmark" translatable="false">LAST  TILE</string>
