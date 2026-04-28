@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">合併 · 分裂 · 擴展</string>
+
+    <string name="stat_score">得分</string>
+    <string name="stat_turn">回合</string>
+    <string name="stat_combo">連擊</string>
+
+    <string name="btn_play_again">再玩一次</string>
+    <string name="btn_restart">重新開始</string>
+    <string name="btn_leaderboard">排行榜</string>
+    <string name="btn_close">關閉</string>
+    <string name="btn_clear">清除</string>
+    <string name="btn_view_online_leaderboard">查看線上排行榜</string>
+
+    <string name="leaderboard_title">排行榜</string>
+    <string name="leaderboard_tab_global">全球</string>
+    <string name="leaderboard_tab_local">本機</string>
+    <string name="leaderboard_local_subtitle">前 10 · 本機</string>
+    <string name="leaderboard_empty">尚無紀錄。完成一局即可上榜。</string>
+    <string name="leaderboard_powered_by">由 Google Play Games 提供</string>
+    <string name="leaderboard_not_configured_long">線上排行榜尚未設定。下個版本將啟用 Google Play Games 排行。</string>
+    <string name="leaderboard_compete">與全球玩家較量。出現提示時請登入 Google Play Games。</string>
+    <string name="leaderboard_activity_unavailable">活動不可用。請從遊戲畫面再試一次。</string>
+    <string name="leaderboard_opening">正在開啟 Google Play Games…</string>
+    <string name="leaderboard_open_failed">無法開啟 Play Games：%1$s</string>
+    <string name="leaderboard_not_configured_short">線上排行榜尚未設定。</string>
+    <string name="leaderboard_sign_in_hint">登入 Google Play Games 即可查看全球排行。</string>
+
+    <string name="status_game_over">遊戲  結束</string>
+    <string name="status_split">已對半分裂。</string>
+    <string name="status_frame_opened">邊框已開啟！</string>
+    <string name="status_hint_match_or_split">點選匹配 · 點兩下分裂</string>
+    <string name="status_hint_match">點選相鄰匹配</string>
+
+    <string name="hazard_fire_subtitle">火 %1$dt</string>
+    <string name="hazard_ice_subtitle">冰 %1$dt</string>
+    <string name="hazard_poison_subtitle">毒 %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="other">已淨化 %d 個危險！</item>
+    </plurals>
+</resources>

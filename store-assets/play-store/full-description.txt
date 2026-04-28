@@ -1,0 +1,21 @@
+Last Tile is a calm, focused merge puzzle. You start on a small active region inside a locked frame and grow the board one ring at a time as you climb tier by tier. Every merge costs a turn. Slides and swaps are free, but the moved tile is locked until its value changes. Splits give you a way out when no merge is left.
+
+The run ends when no adjacent matching pair remains. Play at your own pace. There is no timer.
+
+How to play
+▸ Tap a tile, then tap an adjacent matching tile to merge.
+▸ Or drag any tile onto an adjacent matching tile to merge directly.
+▸ Double-tap a tile (value 2 or higher) to split it into two halves.
+▸ Drag a tile one step onto an empty cell to slide, or onto a non-matching neighbor to swap.
+
+Features
+▸ Growing board — start at 5×5 inside a 7×7 frame; expand to 7×7, 9×9, 11×11 and beyond as you unlock the frame.
+▸ Value-tier frame unlocks — reaching 64, 128, 256 and higher tiers opens 1 to 6 random locked cells at a time.
+▸ Combo system — chain merges to multiply your score; sliding or swapping resets the combo, so plan when to spend a slide.
+▸ Hazards — fire, ice and poison can infect a tile for a few turns. Burn them off with a high-tier merge nearby, or wait them out and the tile returns with the same value (poison softens it).
+▸ On-device leaderboard — your best ten runs are saved locally with score, turn count and final board size.
+▸ Auto-save — close the app any time. The exact same board, score and combo come back when you return.
+▸ Fully offline, single player — no account, no login, no internet required.
+▸ No ads. No data collection. Game state stays on your device.
+
+Made for puzzle players who want a quiet, focused session — no flashing rewards, no timers, no required accounts. Just merge, plan and protect your last tile.

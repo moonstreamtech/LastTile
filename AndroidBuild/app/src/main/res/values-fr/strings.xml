@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">fusionne · divise · agrandis</string>
+
+    <string name="stat_score">SCORE</string>
+    <string name="stat_turn">TOUR</string>
+    <string name="stat_combo">COMBO</string>
+
+    <string name="btn_play_again">Rejouer</string>
+    <string name="btn_restart">Recommencer</string>
+    <string name="btn_leaderboard">Classement</string>
+    <string name="btn_close">Fermer</string>
+    <string name="btn_clear">Effacer</string>
+    <string name="btn_view_online_leaderboard">Voir le classement en ligne</string>
+
+    <string name="leaderboard_title">CLASSEMENT</string>
+    <string name="leaderboard_tab_global">Mondial</string>
+    <string name="leaderboard_tab_local">Local</string>
+    <string name="leaderboard_local_subtitle">Top 10 · cet appareil</string>
+    <string name="leaderboard_empty">Aucune partie. Termine une partie complète pour apparaître au classement.</string>
+    <string name="leaderboard_powered_by">Propulsé par Google Play Games</string>
+    <string name="leaderboard_not_configured_long">Le classement en ligne n\'est pas encore configuré. La prochaine version activera les classements Google Play Games.</string>
+    <string name="leaderboard_compete">Affronte des joueurs du monde entier. Connecte-toi à Google Play Games lorsque demandé.</string>
+    <string name="leaderboard_activity_unavailable">Activité indisponible. Réessaie depuis l\'écran de jeu.</string>
+    <string name="leaderboard_opening">Ouverture de Google Play Games…</string>
+    <string name="leaderboard_open_failed">Impossible d\'ouvrir Play Games : %1$s</string>
+    <string name="leaderboard_not_configured_short">Le classement en ligne n\'est pas encore configuré.</string>
+    <string name="leaderboard_sign_in_hint">Connecte-toi à Google Play Games pour voir les classements mondiaux.</string>
+
+    <string name="status_game_over">PARTIE  TERMINÉE</string>
+    <string name="status_split">Divisée en deux.</string>
+    <string name="status_frame_opened">Cadre ouvert !</string>
+    <string name="status_hint_match_or_split">Touche une paire · double-touche pour diviser</string>
+    <string name="status_hint_match">Touche une paire adjacente</string>
+
+    <string name="hazard_fire_subtitle">FEU %1$dt</string>
+    <string name="hazard_ice_subtitle">GLACE %1$dt</string>
+    <string name="hazard_poison_subtitle">POIS %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="one">%d danger éliminé !</item>
+        <item quantity="other">%d dangers éliminés !</item>
+    </plurals>
+</resources>

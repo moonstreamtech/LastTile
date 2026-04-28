@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- App identity. The on-device launcher label and the Play Games meta-data
+         pointer stay in English in every locale because they are brand /
+         platform identifiers. -->
+    <string name="app_name" translatable="false">Last Tile</string>
+    <!-- Replace with the numeric Project ID from Play Console > Play Games Services
+         once the app is registered. Until then GPGS sign-in fails gracefully and
+         only the local leaderboard works. -->
+    <string name="game_services_app_id" translatable="false">PLACEHOLDER_GAME_SERVICES_APP_ID</string>
+
+    <!-- Header / branding. The wordmark is intentionally untranslated. -->
+    <string name="title_wordmark" translatable="false">LAST  TILE</string>
+    <string name="tagline">merge · split · expand</string>
+
+    <!-- Stat cards. -->
+    <string name="stat_score">SCORE</string>
+    <string name="stat_turn">TURN</string>
+    <string name="stat_combo">COMBO</string>
+
+    <!-- Primary buttons. -->
+    <string name="btn_play_again">Play Again</string>
+    <string name="btn_restart">Restart</string>
+    <string name="btn_leaderboard">Leaderboard</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_clear">Clear</string>
+    <string name="btn_view_online_leaderboard">View Online Leaderboard</string>
+
+    <!-- Leaderboard dialog. -->
+    <string name="leaderboard_title">LEADERBOARD</string>
+    <string name="leaderboard_tab_global">Global</string>
+    <string name="leaderboard_tab_local">Local</string>
+    <string name="leaderboard_local_subtitle">Top 10 · local device</string>
+    <string name="leaderboard_empty">No runs yet. Survive one full run to chart.</string>
+    <string name="leaderboard_powered_by">Powered by Google Play Games</string>
+    <string name="leaderboard_not_configured_long">Online leaderboard isn\'t configured yet. The next release will enable Google Play Games rankings.</string>
+    <string name="leaderboard_compete">Compete with players worldwide. Sign in to Google Play Games when prompted.</string>
+    <string name="leaderboard_activity_unavailable">Activity unavailable. Try again from the game screen.</string>
+    <string name="leaderboard_opening">Opening Google Play Games…</string>
+    <string name="leaderboard_open_failed">Couldn\'t open Play Games: %1$s</string>
+    <string name="leaderboard_not_configured_short">Online leaderboard isn\'t configured yet.</string>
+    <string name="leaderboard_sign_in_hint">Sign in to Google Play Games to see global rankings.</string>
+
+    <!-- Status line. -->
+    <string name="status_game_over">GAME  OVER</string>
+    <string name="status_split">Split into halves.</string>
+    <string name="status_frame_opened">Frame opened!</string>
+    <string name="status_hint_match_or_split">Tap match · double-tap to split</string>
+    <string name="status_hint_match">Tap an adjacent match</string>
+
+    <!-- Hazard subtitles, %1$d is the remaining turns until the hazard's
+         scheduled cleanse / jump / poison tick. Translators may shorten the
+         labels but should keep the trailing "t" (turns) compact since the
+         tile is small. -->
+    <string name="hazard_fire_subtitle">FIRE %1$dt</string>
+    <string name="hazard_ice_subtitle">ICE %1$dt</string>
+    <string name="hazard_poison_subtitle">POIS %1$dt</string>
+
+    <!-- Plural-aware cleanse banner. -->
+    <plurals name="cleansed_hazards">
+        <item quantity="one">Cleansed %d hazard!</item>
+        <item quantity="other">Cleansed %d hazards!</item>
+    </plurals>
+</resources>

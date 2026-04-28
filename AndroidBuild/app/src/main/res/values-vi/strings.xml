@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">ghép · tách · mở rộng</string>
+
+    <string name="stat_score">ĐIỂM</string>
+    <string name="stat_turn">LƯỢT</string>
+    <string name="stat_combo">COMBO</string>
+
+    <string name="btn_play_again">Chơi lại</string>
+    <string name="btn_restart">Khởi động lại</string>
+    <string name="btn_leaderboard">Bảng xếp hạng</string>
+    <string name="btn_close">Đóng</string>
+    <string name="btn_clear">Xoá</string>
+    <string name="btn_view_online_leaderboard">Xem bảng xếp hạng trực tuyến</string>
+
+    <string name="leaderboard_title">BẢNG XẾP HẠNG</string>
+    <string name="leaderboard_tab_global">Toàn cầu</string>
+    <string name="leaderboard_tab_local">Cục bộ</string>
+    <string name="leaderboard_local_subtitle">Top 10 · thiết bị này</string>
+    <string name="leaderboard_empty">Chưa có ván nào. Hoàn thành một ván để có tên trong bảng.</string>
+    <string name="leaderboard_powered_by">Được hỗ trợ bởi Google Play Games</string>
+    <string name="leaderboard_not_configured_long">Bảng xếp hạng trực tuyến chưa được cấu hình. Phiên bản tiếp theo sẽ bật xếp hạng Google Play Games.</string>
+    <string name="leaderboard_compete">Tranh tài với người chơi khắp thế giới. Đăng nhập Google Play Games khi được nhắc.</string>
+    <string name="leaderboard_activity_unavailable">Hoạt động không khả dụng. Thử lại từ màn hình trò chơi.</string>
+    <string name="leaderboard_opening">Đang mở Google Play Games…</string>
+    <string name="leaderboard_open_failed">Không mở được Play Games: %1$s</string>
+    <string name="leaderboard_not_configured_short">Bảng xếp hạng trực tuyến chưa được cấu hình.</string>
+    <string name="leaderboard_sign_in_hint">Đăng nhập Google Play Games để xem xếp hạng toàn cầu.</string>
+
+    <string name="status_game_over">KẾT  THÚC</string>
+    <string name="status_split">Đã tách đôi.</string>
+    <string name="status_frame_opened">Đã mở khung!</string>
+    <string name="status_hint_match_or_split">Chạm vào cặp · chạm hai lần để tách</string>
+    <string name="status_hint_match">Chạm vào cặp lân cận</string>
+
+    <string name="hazard_fire_subtitle">LỬA %1$dt</string>
+    <string name="hazard_ice_subtitle">BĂNG %1$dt</string>
+    <string name="hazard_poison_subtitle">ĐỘC %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="other">Đã thanh tẩy %d hiểm hoạ!</item>
+    </plurals>
+</resources>

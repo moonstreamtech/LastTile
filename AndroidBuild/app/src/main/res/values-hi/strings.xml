@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">मिलाओ · बाँटो · बढ़ाओ</string>
+
+    <string name="stat_score">स्कोर</string>
+    <string name="stat_turn">चाल</string>
+    <string name="stat_combo">कॉम्बो</string>
+
+    <string name="btn_play_again">फिर से खेलें</string>
+    <string name="btn_restart">पुनः प्रारंभ</string>
+    <string name="btn_leaderboard">लीडरबोर्ड</string>
+    <string name="btn_close">बंद करें</string>
+    <string name="btn_clear">साफ़ करें</string>
+    <string name="btn_view_online_leaderboard">ऑनलाइन लीडरबोर्ड देखें</string>
+
+    <string name="leaderboard_title">लीडरबोर्ड</string>
+    <string name="leaderboard_tab_global">वैश्विक</string>
+    <string name="leaderboard_tab_local">स्थानीय</string>
+    <string name="leaderboard_local_subtitle">शीर्ष 10 · यह डिवाइस</string>
+    <string name="leaderboard_empty">अभी कोई गेम नहीं। चार्ट में आने के लिए एक पूरा गेम पूरा करें।</string>
+    <string name="leaderboard_powered_by">Google Play Games द्वारा संचालित</string>
+    <string name="leaderboard_not_configured_long">ऑनलाइन लीडरबोर्ड अभी कॉन्फ़िगर नहीं किया गया है। अगला रिलीज़ Google Play Games रैंकिंग सक्षम करेगा।</string>
+    <string name="leaderboard_compete">दुनिया भर के खिलाड़ियों से मुक़ाबला करें। संकेत मिलने पर Google Play Games में साइन इन करें।</string>
+    <string name="leaderboard_activity_unavailable">गतिविधि उपलब्ध नहीं है। गेम स्क्रीन से फिर कोशिश करें।</string>
+    <string name="leaderboard_opening">Google Play Games खुल रहा है…</string>
+    <string name="leaderboard_open_failed">Play Games नहीं खुला: %1$s</string>
+    <string name="leaderboard_not_configured_short">ऑनलाइन लीडरबोर्ड अभी कॉन्फ़िगर नहीं किया गया है।</string>
+    <string name="leaderboard_sign_in_hint">वैश्विक रैंकिंग देखने के लिए Google Play Games में साइन इन करें।</string>
+
+    <string name="status_game_over">गेम  समाप्त</string>
+    <string name="status_split">दो हिस्सों में बँट गया।</string>
+    <string name="status_frame_opened">फ़्रेम खुल गया!</string>
+    <string name="status_hint_match_or_split">मैच पर टैप · बाँटने के लिए दो बार टैप</string>
+    <string name="status_hint_match">पास वाले मैच पर टैप करें</string>
+
+    <string name="hazard_fire_subtitle">आग %1$dt</string>
+    <string name="hazard_ice_subtitle">बर्फ़ %1$dt</string>
+    <string name="hazard_poison_subtitle">ज़हर %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="one">%d ख़तरा साफ़ हुआ!</item>
+        <item quantity="other">%d ख़तरे साफ़ हुए!</item>
+    </plurals>
+</resources>

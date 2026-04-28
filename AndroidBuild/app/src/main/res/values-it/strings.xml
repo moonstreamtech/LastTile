@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">unisci · dividi · espandi</string>
+
+    <string name="stat_score">PUNTI</string>
+    <string name="stat_turn">TURNO</string>
+    <string name="stat_combo">COMBO</string>
+
+    <string name="btn_play_again">Gioca ancora</string>
+    <string name="btn_restart">Ricomincia</string>
+    <string name="btn_leaderboard">Classifica</string>
+    <string name="btn_close">Chiudi</string>
+    <string name="btn_clear">Cancella</string>
+    <string name="btn_view_online_leaderboard">Vedi classifica online</string>
+
+    <string name="leaderboard_title">CLASSIFICA</string>
+    <string name="leaderboard_tab_global">Globale</string>
+    <string name="leaderboard_tab_local">Locale</string>
+    <string name="leaderboard_local_subtitle">Top 10 · questo dispositivo</string>
+    <string name="leaderboard_empty">Ancora nessuna partita. Completane una per entrare in classifica.</string>
+    <string name="leaderboard_powered_by">Powered by Google Play Games</string>
+    <string name="leaderboard_not_configured_long">La classifica online non è ancora configurata. La prossima versione attiverà le classifiche Google Play Games.</string>
+    <string name="leaderboard_compete">Sfida giocatori da tutto il mondo. Accedi a Google Play Games quando richiesto.</string>
+    <string name="leaderboard_activity_unavailable">Attività non disponibile. Riprova dalla schermata di gioco.</string>
+    <string name="leaderboard_opening">Apertura di Google Play Games…</string>
+    <string name="leaderboard_open_failed">Impossibile aprire Play Games: %1$s</string>
+    <string name="leaderboard_not_configured_short">La classifica online non è ancora configurata.</string>
+    <string name="leaderboard_sign_in_hint">Accedi a Google Play Games per vedere le classifiche globali.</string>
+
+    <string name="status_game_over">PARTITA  FINITA</string>
+    <string name="status_split">Divisa a metà.</string>
+    <string name="status_frame_opened">Cornice aperta!</string>
+    <string name="status_hint_match_or_split">Tocca una coppia · doppio tocco per dividere</string>
+    <string name="status_hint_match">Tocca una coppia adiacente</string>
+
+    <string name="hazard_fire_subtitle">FUOCO %1$dt</string>
+    <string name="hazard_ice_subtitle">GHIA %1$dt</string>
+    <string name="hazard_poison_subtitle">VEL %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="one">%d pericolo eliminato!</item>
+        <item quantity="other">%d pericoli eliminati!</item>
+    </plurals>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">합치기 · 나누기 · 확장</string>
+
+    <string name="stat_score">점수</string>
+    <string name="stat_turn">턴</string>
+    <string name="stat_combo">콤보</string>
+
+    <string name="btn_play_again">다시 시작</string>
+    <string name="btn_restart">재시작</string>
+    <string name="btn_leaderboard">순위표</string>
+    <string name="btn_close">닫기</string>
+    <string name="btn_clear">지우기</string>
+    <string name="btn_view_online_leaderboard">온라인 순위표 보기</string>
+
+    <string name="leaderboard_title">순위표</string>
+    <string name="leaderboard_tab_global">글로벌</string>
+    <string name="leaderboard_tab_local">로컬</string>
+    <string name="leaderboard_local_subtitle">상위 10 · 이 기기</string>
+    <string name="leaderboard_empty">아직 기록이 없습니다. 한 판을 끝내면 순위에 오릅니다.</string>
+    <string name="leaderboard_powered_by">Powered by Google Play Games</string>
+    <string name="leaderboard_not_configured_long">온라인 순위표는 아직 설정되지 않았습니다. 다음 버전에서 Google Play Games 순위가 활성화됩니다.</string>
+    <string name="leaderboard_compete">전 세계 플레이어와 경쟁하세요. 안내가 나오면 Google Play Games에 로그인하세요.</string>
+    <string name="leaderboard_activity_unavailable">액티비티를 사용할 수 없습니다. 게임 화면에서 다시 시도하세요.</string>
+    <string name="leaderboard_opening">Google Play Games 여는 중…</string>
+    <string name="leaderboard_open_failed">Play Games를 열 수 없습니다: %1$s</string>
+    <string name="leaderboard_not_configured_short">온라인 순위표는 아직 설정되지 않았습니다.</string>
+    <string name="leaderboard_sign_in_hint">글로벌 순위를 보려면 Google Play Games에 로그인하세요.</string>
+
+    <string name="status_game_over">게임  종료</string>
+    <string name="status_split">반으로 나눴습니다.</string>
+    <string name="status_frame_opened">프레임 열림!</string>
+    <string name="status_hint_match_or_split">같은 숫자 탭 · 더블 탭으로 분할</string>
+    <string name="status_hint_match">인접한 같은 숫자를 탭</string>
+
+    <string name="hazard_fire_subtitle">불 %1$dt</string>
+    <string name="hazard_ice_subtitle">얼음 %1$dt</string>
+    <string name="hazard_poison_subtitle">독 %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="other">위험 %d개 정화!</item>
+    </plurals>
+</resources>

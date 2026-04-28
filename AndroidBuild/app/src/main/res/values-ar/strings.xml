@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">ادمج · قسّم · وسّع</string>
+
+    <string name="stat_score">النتيجة</string>
+    <string name="stat_turn">الدور</string>
+    <string name="stat_combo">كومبو</string>
+
+    <string name="btn_play_again">العب مجددًا</string>
+    <string name="btn_restart">إعادة التشغيل</string>
+    <string name="btn_leaderboard">المتصدرون</string>
+    <string name="btn_close">إغلاق</string>
+    <string name="btn_clear">مسح</string>
+    <string name="btn_view_online_leaderboard">عرض المتصدرين عبر الإنترنت</string>
+
+    <string name="leaderboard_title">المتصدرون</string>
+    <string name="leaderboard_tab_global">عالمي</string>
+    <string name="leaderboard_tab_local">محلي</string>
+    <string name="leaderboard_local_subtitle">أفضل 10 · هذا الجهاز</string>
+    <string name="leaderboard_empty">لا توجد جولات بعد. أكمل جولة لتدخل قائمة المتصدرين.</string>
+    <string name="leaderboard_powered_by">مدعوم من Google Play Games</string>
+    <string name="leaderboard_not_configured_long">قائمة المتصدرين عبر الإنترنت لم تُعدّ بعد. ستُفعِّل النسخة التالية تصنيفات Google Play Games.</string>
+    <string name="leaderboard_compete">نافس لاعبين من حول العالم. سجّل الدخول إلى Google Play Games عند الطلب.</string>
+    <string name="leaderboard_activity_unavailable">النشاط غير متاح. حاول مجددًا من شاشة اللعبة.</string>
+    <string name="leaderboard_opening">جارٍ فتح Google Play Games…</string>
+    <string name="leaderboard_open_failed">تعذّر فتح Play Games: %1$s</string>
+    <string name="leaderboard_not_configured_short">قائمة المتصدرين عبر الإنترنت لم تُعدّ بعد.</string>
+    <string name="leaderboard_sign_in_hint">سجّل الدخول إلى Google Play Games لرؤية التصنيفات العالمية.</string>
+
+    <string name="status_game_over">انتهت  اللعبة</string>
+    <string name="status_split">قُسّمت إلى نصفين.</string>
+    <string name="status_frame_opened">فُتح الإطار!</string>
+    <string name="status_hint_match_or_split">انقر على المطابق · انقر مرتين للتقسيم</string>
+    <string name="status_hint_match">انقر على مطابق مجاور</string>
+
+    <string name="hazard_fire_subtitle">نار %1$dt</string>
+    <string name="hazard_ice_subtitle">جليد %1$dt</string>
+    <string name="hazard_poison_subtitle">سم %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="zero">لا أخطار للتطهير!</item>
+        <item quantity="one">طُهِّر خطر واحد!</item>
+        <item quantity="two">طُهِّرت خطران!</item>
+        <item quantity="few">طُهِّرت %d أخطار!</item>
+        <item quantity="many">طُهِّر %d خطرًا!</item>
+        <item quantity="other">طُهِّر %d خطر!</item>
+    </plurals>
+</resources>

@@ -1,0 +1,15 @@
+:root {
+  --bg: #0d1220;
+  --panel: #171f36;
+  --text: #e8edff;
+  --accent: #7ce2ff;
+  --muted: #9db0d8;
+}
+* { box-sizing: border-box; }
+body { margin: 0; font-family: Inter, Arial, sans-serif; background: var(--bg); color: var(--text); }
+header, main, footer { max-width: 960px; margin: 0 auto; padding: 20px; }
+nav a { color: var(--accent); margin-right: 16px; text-decoration: none; }
+.card { background: var(--panel); border-radius: 12px; padding: 20px; margin: 16px 0; }
+h1, h2 { margin-top: 0; }
+p, li { color: var(--muted); line-height: 1.6; }
+.badge { display: inline-block; background: #243052; color: var(--accent); padding: 6px 10px; border-radius: 999px; }

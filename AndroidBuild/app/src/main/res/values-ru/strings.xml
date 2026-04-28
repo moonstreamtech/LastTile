@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">объединяй · дели · расширяй</string>
+
+    <string name="stat_score">ОЧКИ</string>
+    <string name="stat_turn">ХОД</string>
+    <string name="stat_combo">КОМБО</string>
+
+    <string name="btn_play_again">Играть снова</string>
+    <string name="btn_restart">Перезапуск</string>
+    <string name="btn_leaderboard">Рейтинг</string>
+    <string name="btn_close">Закрыть</string>
+    <string name="btn_clear">Очистить</string>
+    <string name="btn_view_online_leaderboard">Открыть онлайн-рейтинг</string>
+
+    <string name="leaderboard_title">РЕЙТИНГ</string>
+    <string name="leaderboard_tab_global">Глобальный</string>
+    <string name="leaderboard_tab_local">Локальный</string>
+    <string name="leaderboard_local_subtitle">Топ-10 · это устройство</string>
+    <string name="leaderboard_empty">Игр ещё нет. Заверши одну партию, чтобы попасть в рейтинг.</string>
+    <string name="leaderboard_powered_by">При поддержке Google Play Games</string>
+    <string name="leaderboard_not_configured_long">Онлайн-рейтинг ещё не настроен. В следующей версии появятся рейтинги Google Play Games.</string>
+    <string name="leaderboard_compete">Соревнуйся с игроками со всего мира. Войди в Google Play Games, когда появится запрос.</string>
+    <string name="leaderboard_activity_unavailable">Активность недоступна. Попробуй снова с экрана игры.</string>
+    <string name="leaderboard_opening">Открываем Google Play Games…</string>
+    <string name="leaderboard_open_failed">Не удалось открыть Play Games: %1$s</string>
+    <string name="leaderboard_not_configured_short">Онлайн-рейтинг ещё не настроен.</string>
+    <string name="leaderboard_sign_in_hint">Войди в Google Play Games, чтобы увидеть глобальный рейтинг.</string>
+
+    <string name="status_game_over">ИГРА  ОКОНЧЕНА</string>
+    <string name="status_split">Разделено пополам.</string>
+    <string name="status_frame_opened">Рамка открыта!</string>
+    <string name="status_hint_match_or_split">Коснись пары · двойное касание — разделить</string>
+    <string name="status_hint_match">Коснись соседней пары</string>
+
+    <string name="hazard_fire_subtitle">ОГОНЬ %1$dt</string>
+    <string name="hazard_ice_subtitle">ЛЁД %1$dt</string>
+    <string name="hazard_poison_subtitle">ЯД %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="one">Снято %d угроза!</item>
+        <item quantity="few">Снято %d угрозы!</item>
+        <item quantity="many">Снято %d угроз!</item>
+        <item quantity="other">Снято %d угроз!</item>
+    </plurals>
+</resources>

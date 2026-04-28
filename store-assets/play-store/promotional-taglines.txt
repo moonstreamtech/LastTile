@@ -1,0 +1,5 @@
+- Merge. Split. Outgrow the board.
+- Every merge costs a turn.
+- One wrong move and the board wins.
+- Grow the grid, keep control.
+- Fast runs. Deep planning.

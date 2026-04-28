@@ -1,0 +1,6 @@
+1. Merge matching tiles to clear space
+2. Drag-to-merge or double-tap to split
+3. Slide a tile one step — it cools down until it changes
+4. Unlock the frame and watch your board grow
+5. 7×7 viewport with edge pan once the grid expands
+6. Chase your best score on the local leaderboard

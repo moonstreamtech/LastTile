@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">birleştir · böl · genişlet</string>
+
+    <string name="stat_score">PUAN</string>
+    <string name="stat_turn">TUR</string>
+    <string name="stat_combo">KOMBO</string>
+
+    <string name="btn_play_again">Tekrar Oyna</string>
+    <string name="btn_restart">Yeniden Başlat</string>
+    <string name="btn_leaderboard">Skor Tablosu</string>
+    <string name="btn_close">Kapat</string>
+    <string name="btn_clear">Temizle</string>
+    <string name="btn_view_online_leaderboard">Çevrimiçi Skorları Gör</string>
+
+    <string name="leaderboard_title">SKOR TABLOSU</string>
+    <string name="leaderboard_tab_global">Küresel</string>
+    <string name="leaderboard_tab_local">Yerel</string>
+    <string name="leaderboard_local_subtitle">İlk 10 · bu cihaz</string>
+    <string name="leaderboard_empty">Henüz oyun yok. Tablodaki yerini almak için bir tur tamamla.</string>
+    <string name="leaderboard_powered_by">Google Play Games tarafından sağlanır</string>
+    <string name="leaderboard_not_configured_long">Çevrimiçi skor tablosu henüz yapılandırılmadı. Bir sonraki sürüm Google Play Games sıralamalarını etkinleştirecek.</string>
+    <string name="leaderboard_compete">Dünyanın her yerinden oyuncularla yarış. İstendiğinde Google Play Games\'e giriş yap.</string>
+    <string name="leaderboard_activity_unavailable">Etkinlik kullanılamıyor. Oyun ekranından tekrar dene.</string>
+    <string name="leaderboard_opening">Google Play Games açılıyor…</string>
+    <string name="leaderboard_open_failed">Play Games açılamadı: %1$s</string>
+    <string name="leaderboard_not_configured_short">Çevrimiçi skor tablosu henüz yapılandırılmadı.</string>
+    <string name="leaderboard_sign_in_hint">Küresel sıralamaları görmek için Google Play Games\'e giriş yap.</string>
+
+    <string name="status_game_over">OYUN  BİTTİ</string>
+    <string name="status_split">İkiye bölündü.</string>
+    <string name="status_frame_opened">Çerçeve açıldı!</string>
+    <string name="status_hint_match_or_split">Eşleşmeye dokun · bölmek için çift dokun</string>
+    <string name="status_hint_match">Bitişik bir eşleşmeye dokun</string>
+
+    <string name="hazard_fire_subtitle">ATEŞ %1$dt</string>
+    <string name="hazard_ice_subtitle">BUZ %1$dt</string>
+    <string name="hazard_poison_subtitle">ZEH %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="one">%d tehlike temizlendi!</item>
+        <item quantity="other">%d tehlike temizlendi!</item>
+    </plurals>
+</resources>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tagline">gabungkan · bagi · perluas</string>
+
+    <string name="stat_score">SKOR</string>
+    <string name="stat_turn">GILIRAN</string>
+    <string name="stat_combo">COMBO</string>
+
+    <string name="btn_play_again">Main Lagi</string>
+    <string name="btn_restart">Mulai Ulang</string>
+    <string name="btn_leaderboard">Papan Skor</string>
+    <string name="btn_close">Tutup</string>
+    <string name="btn_clear">Hapus</string>
+    <string name="btn_view_online_leaderboard">Lihat Papan Skor Online</string>
+
+    <string name="leaderboard_title">PAPAN SKOR</string>
+    <string name="leaderboard_tab_global">Global</string>
+    <string name="leaderboard_tab_local">Lokal</string>
+    <string name="leaderboard_local_subtitle">10 Teratas · perangkat ini</string>
+    <string name="leaderboard_empty">Belum ada permainan. Selesaikan satu permainan untuk masuk papan skor.</string>
+    <string name="leaderboard_powered_by">Didukung oleh Google Play Games</string>
+    <string name="leaderboard_not_configured_long">Papan skor online belum dikonfigurasi. Rilis berikutnya akan mengaktifkan peringkat Google Play Games.</string>
+    <string name="leaderboard_compete">Bersaing dengan pemain di seluruh dunia. Masuk ke Google Play Games saat diminta.</string>
+    <string name="leaderboard_activity_unavailable">Aktivitas tidak tersedia. Coba lagi dari layar permainan.</string>
+    <string name="leaderboard_opening">Membuka Google Play Games…</string>
+    <string name="leaderboard_open_failed">Tidak dapat membuka Play Games: %1$s</string>
+    <string name="leaderboard_not_configured_short">Papan skor online belum dikonfigurasi.</string>
+    <string name="leaderboard_sign_in_hint">Masuk ke Google Play Games untuk melihat peringkat global.</string>
+
+    <string name="status_game_over">PERMAINAN  USAI</string>
+    <string name="status_split">Dibelah dua.</string>
+    <string name="status_frame_opened">Bingkai terbuka!</string>
+    <string name="status_hint_match_or_split">Ketuk pasangan · ketuk dua kali untuk membagi</string>
+    <string name="status_hint_match">Ketuk pasangan yang berdekatan</string>
+
+    <string name="hazard_fire_subtitle">API %1$dt</string>
+    <string name="hazard_ice_subtitle">ES %1$dt</string>
+    <string name="hazard_poison_subtitle">RAC %1$dt</string>
+
+    <plurals name="cleansed_hazards">
+        <item quantity="other">%d bahaya dibersihkan!</item>
+    </plurals>
+</resources>
