@@ -1,0 +1,92 @@
+name: Android APK & AAB
+
+on:
+  push:
+    branches: [main, master, 'claude/**', 'codex/**']
+  pull_request:
+    branches: [main, master]
+  workflow_dispatch:
+
+concurrency:
+  group: android-native-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build debug APK + release AAB
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+        with:
+          packages: 'platforms;android-34 build-tools;34.0.0 platform-tools'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: "8.4"
+
+      - name: Build debug APK
+        working-directory: AndroidBuild
+        run: gradle :app:assembleDebug --no-daemon --stacktrace
+
+      - name: Build release AAB (unsigned)
+        working-directory: AndroidBuild
+        run: gradle :app:bundleRelease --no-daemon --stacktrace
+
+      - name: Stage build outputs
+        working-directory: AndroidBuild
+        run: |
+          set -e
+          apk_src="app/build/outputs/apk/debug/app-debug.apk"
+          apk_dst="app/build/outputs/apk/debug/lasttile-debug.apk"
+          aab_src="app/build/outputs/bundle/release/app-release.aab"
+          aab_dst="app/build/outputs/bundle/release/lasttile-release.aab"
+
+          if [ ! -f "$apk_src" ]; then
+            echo "Expected debug APK not found at $apk_src"
+            exit 1
+          fi
+          cp "$apk_src" "$apk_dst"
+
+          if [ ! -f "$aab_src" ]; then
+            echo "Expected release AAB not found at $aab_src"
+            exit 1
+          fi
+          cp "$aab_src" "$aab_dst"
+
+          ls -la app/build/outputs/apk/debug/
+          ls -la app/build/outputs/bundle/release/
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: lasttile-native-apk
+          path: AndroidBuild/app/build/outputs/apk/debug/lasttile-debug.apk
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Upload release AAB (unsigned)
+        uses: actions/upload-artifact@v4
+        with:
+          name: lasttile-release-aab-unsigned
+          path: AndroidBuild/app/build/outputs/bundle/release/lasttile-release.aab
+          retention-days: 14
+          if-no-files-found: error
+
+      - name: Summary
+        run: |
+          echo "Debug APK and release AAB built. No secrets required."
+          echo "Artifacts on this run:"
+          echo "  - lasttile-native-apk          (sideload-installable debug APK)"
+          echo "  - lasttile-release-aab-unsigned (release-mode AAB; needs Play App Signing or a keystore before Play upload)"
+          echo "On your phone: enable 'Install unknown apps' for your browser/file manager, then open the APK."
