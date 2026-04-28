@@ -4,8 +4,9 @@
 
 ### Data collected
 - **App activity → Game scores** — submitted to Google Play Games Services
-  on every new in-run personal best and when the player finishes a run, so
-  the score can appear on the global leaderboard.
+  on every new in-run personal best, when the player finishes a run, and
+  when the player taps Restart, so the score can appear on the global
+  leaderboard.
 - **User IDs → Google Play Games player ID** — handled by Google. The app
   itself never reads or stores it.
 - **Device or other IDs → Advertising ID** — read by Google AdMob to serve

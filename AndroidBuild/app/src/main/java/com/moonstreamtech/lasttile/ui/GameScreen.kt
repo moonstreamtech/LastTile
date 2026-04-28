@@ -13,12 +13,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,6 +30,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -104,16 +106,33 @@ fun GameScreen() {
     }
     var showLeaderboard by remember { mutableStateOf(false) }
 
+    // Trace safeDrawing insets across recompositions so that future
+    // reports of touch / layout drift can be diagnosed from logcat alone.
+    // Cheap (one Log.d per recomposition where insets actually change).
+    val density = LocalDensity.current
+    val safeInsets = WindowInsets.safeDrawing
+    SideEffect {
+        val l = safeInsets.getLeft(density, androidx.compose.ui.unit.LayoutDirection.Ltr)
+        val t = safeInsets.getTop(density)
+        val r = safeInsets.getRight(density, androidx.compose.ui.unit.LayoutDirection.Ltr)
+        val b = safeInsets.getBottom(density)
+        Log.d("LastTile-window", "safeDrawing px L=$l T=$t R=$r B=$b")
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(BgTop, BgBottom)))
             // Activity is edge-to-edge (see MainActivity); pad the entire
-            // game UI inside the system bars so the status bar and gesture
-            // pill never overlap content. Without this, touch coordinates
-            // and rendered tile positions can drift on devices whose nav
-            // bar appears/disappears at runtime.
-            .windowInsetsPadding(WindowInsets.systemBars)
+            // game UI inside the safe-drawing region so the status bar,
+            // gesture pill and any display cutout never overlap touchable
+            // content. safeDrawing is a superset of systemBars (covers
+            // displayCutout + IME too) and is the most defensive choice
+            // for a single-screen game where every dp is touchable.
+            // consumeWindowInsets prevents any nested layout from double-
+            // padding when it queries WindowInsets again.
+            .windowInsetsPadding(WindowInsets.safeDrawing)
+            .consumeWindowInsets(WindowInsets.safeDrawing)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(

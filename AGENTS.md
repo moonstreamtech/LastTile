@@ -20,12 +20,16 @@ that `legal/privacy-policy.md`, `docs/privacy-policy/index.html`, and
 and update them in the same commit if not.
 
 ## Score submission semantics
-- LOCAL leaderboard: submit only on game-over (one entry per run)
-- GPGS (online) leaderboard: submit on game-over AND on every new
-  in-run personal best
-This dual-track approach keeps the local "top 10 finished runs" display
-clean while ensuring online scores reflect live progress (important
-because growBoard makes game-over rare).
+- LOCAL leaderboard: submit on natural game-over AND on manual Restart
+  (one entry per run). Restart counts because growBoard makes natural
+  game-over rare; pressing Restart is the player's deliberate "this run
+  is done" signal.
+- GPGS (online) leaderboard: submit on game-over, on Restart, AND on
+  every new in-run personal best. GPGS keeps the max-per-player so
+  duplicate / lower submissions are server-side no-ops.
+- The submittedThisRun flag prevents double-submission within a single
+  run regardless of how the run ends. bestThisRun is the per-run high-
+  water mark for the live PB tracker.
 
 ## Branch policy
 All AI-driven work happens on a `claude/...` or `codex/...` branch and is
