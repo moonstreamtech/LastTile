@@ -24,7 +24,7 @@ object GpgsLeaderboard {
      * [getLeaderboardIntent] returns null so the UI shows a "not configured"
      * notice instead of opening a broken Google sheet.
      */
-    const val LEADERBOARD_ID: String = "PLACEHOLDER_LEADERBOARD_ID"
+    const val LEADERBOARD_ID: String = "CgkIrZ-Ng5IHEAIQAQ"
 
     private const val TAG = "GpgsLeaderboard"
 

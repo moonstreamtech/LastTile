@@ -142,12 +142,11 @@ Published web versions:
 - `applicationId` is `com.moonstreamtech.lasttile` (canonical Play Store identity — never change after first publish)
 - Production keystore/signing credentials and a signed-release CI job
 - Google Play Console publisher account
-- Google Play Games Services entry (Project ID + Leaderboard ID). Until
-  configured, both `app/src/main/res/values/strings.xml`
-  (`game_services_app_id`) and
-  `app/src/main/java/com/moonstreamtech/lasttile/GpgsLeaderboard.kt`
-  (`LEADERBOARD_ID`) hold `PLACEHOLDER_*` values. Sign-in fails gracefully
-  in that state and only the local leaderboard works.
+- Google Play Games Services entry: both `game_services_app_id` (in
+  `app/src/main/res/values/strings.xml`) and `LEADERBOARD_ID` (in
+  `app/src/main/java/com/moonstreamtech/lasttile/GpgsLeaderboard.kt`)
+  are wired to the Last Tile Play Games Services project. Sign-in works
+  for testers added in Play Console.
 - Final support email/company identity replacements
 - Final branding assets (icon, screenshots, feature graphic)
 
