@@ -1,6 +1,7 @@
 package com.moonstreamtech.lasttile
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,10 +18,15 @@ class MainActivity : ComponentActivity() {
         // Run edge-to-edge so the window has a single deterministic mode
         // across stock Android and OEM skins (Huawei, Xiaomi, etc. that
         // sometimes mis-report system bar insets). The Compose root then
-        // consumes systemBars insets explicitly, keeping touch coordinates
+        // consumes safeDrawing insets explicitly, keeping touch coordinates
         // and rendered tile positions aligned even when the gesture pill
         // shows or hides at runtime.
         WindowCompat.setDecorFitsSystemWindows(window, false)
+        Log.d(
+            "LastTile-window",
+            "edge-to-edge enabled: decorFitsSystemWindows=false; controller=" +
+                WindowCompat.getInsetsController(window, window.decorView)
+        )
         setContent {
             LastTileTheme {
                 Surface(

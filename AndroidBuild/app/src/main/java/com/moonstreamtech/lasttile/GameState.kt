@@ -115,6 +115,14 @@ class GameState(
     }
 
     fun restart() {
+        // Manual Restart counts as a completed run — push the current
+        // score to the local + online leaderboards before wiping state,
+        // so the player's deliberate "I'm done with this run" gesture
+        // doesn't lose their score. Endless runs (where natural game-
+        // over rarely fires) rely on this entirely. submittedThisRun
+        // gates against double-submitting if the player tapped Restart
+        // after already hitting game-over.
+        submitRunOnce()
         size = INITIAL_SIZE
         unlocked = initialUnlocked(INITIAL_SIZE)
         val b = mutableBoard(INITIAL_SIZE)
@@ -157,14 +165,16 @@ class GameState(
         save()
     }
 
-    // Local leaderboard captures one entry per finished run ("top 10
-    // finished runs" stays meaningful). The GPGS submit here is kept as a
-    // safety net for the rare case a final merge bumps the score AND ends
-    // the run in the same action — the live PB tracker in mergeTiles also
-    // forwards it, but GPGS dedupes so a double submit is harmless.
-    private fun recordRunIfOver() {
-        if (!gameOver || submittedThisRun) return
+    // One-shot per-run submission to local + GPGS leaderboards. Used by
+    // both natural game-over (recordRunIfOver) and manual Restart, so a
+    // run's score lands on the leaderboards exactly once regardless of
+    // how the player ends it. GPGS is forwarded unconditionally — server-
+    // side dedup keeps it cheap, and we want the "final" score to land
+    // on the global board even when an earlier in-run PB already did.
+    private fun submitRunOnce() {
+        if (submittedThisRun) return
         val lb = leaderboard ?: return
+        if (score <= 0) return
         submittedThisRun = true
         lastSubmittedRank = lb.submit(
             LeaderboardEntry(
@@ -174,10 +184,13 @@ class GameState(
                 timestamp = System.currentTimeMillis()
             )
         )
-        if (score > 0 && score > bestThisRun) {
-            bestThisRun = score
-            runCatching { onRunSubmitted?.invoke(score) }
-        }
+        if (score > bestThisRun) bestThisRun = score
+        runCatching { onRunSubmitted?.invoke(score) }
+    }
+
+    private fun recordRunIfOver() {
+        if (!gameOver) return
+        submitRunOnce()
     }
 
     fun tryDragMerge(from: Pair<Int, Int>, to: Pair<Int, Int>): Boolean {
