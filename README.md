@@ -41,7 +41,7 @@ Highlights:
 - Value-tier unlocks open 1–6 random frame cells; filling the whole active area triggers a board-size growth. Splits at threshold values queue up an "unlock debt" the next threshold-merges have to clear before new cells open.
 - Run state (board, unlocks, score, turn, combo, pressed tile) persists in `SharedPreferences`, so cold restarts resume the exact run.
 - Local leaderboard: top-10 runs (score / turn / max board size / timestamp) are stored on-device and surfaced from the in-game **Leaderboard** button. `LeaderboardProvider` is interface-driven so an online provider can be dropped in later.
-- Online leaderboard via Google Play Games Services: every finished run is forwarded to GPGS in addition to the local store, and the in-game Leaderboard dialog has a **Global** tab that opens the GPGS leaderboard UI. Sign-out / no-internet keeps the Local tab fully functional.
+- Online leaderboard via Google Play Games Services: scores are submitted to the global GPGS leaderboard on every new in-run personal best (live update) and on game-over. The local on-device leaderboard records only completed runs (game-over). The in-game Leaderboard dialog has a **Global** tab that opens the GPGS leaderboard UI. Sign-out / no-internet keeps the Local tab fully functional.
 - Bottom banner ad (320×50, fixed 50 dp full-width) served by Google AdMob via the Google Mobile Ads SDK. The ad slot fails gracefully on devices without Google Play Services and during dev/CI builds (which use Google's official test ad IDs).
 - Hazards (Fire / Ice / Poison) are active, persisted, and capped per board size. Spawn rates ramp from 2–4% in the early game to 13–15% in the collapse stage. See `release-info/balancing-guide.md` for the full table.
 

@@ -93,6 +93,11 @@ class GameState(
     var lastSubmittedRank by mutableStateOf(-1)
         private set
 
+    // Highest score already pushed to the online leaderboard during this
+    // run. We forward every new in-run personal best to GPGS so growBoard's
+    // effectively-endless runs still produce live online scores. GPGS keeps
+    // the max-per-player so duplicate / lower submissions are no-ops.
+    private var bestThisRun: Int = 0
     private var submittedThisRun = false
     private var lastTapTime = 0L
     private var lastTapPos: Pair<Int, Int>? = null
@@ -141,6 +146,7 @@ class GameState(
         lastTapTime = 0L
         lastTapPos = null
         submittedThisRun = false
+        bestThisRun = 0
         lastSubmittedRank = -1
         actionCount = 0
         lastFireDeathAction = -HAZARD_RESPAWN_COOLDOWN
@@ -151,6 +157,11 @@ class GameState(
         save()
     }
 
+    // Local leaderboard captures one entry per finished run ("top 10
+    // finished runs" stays meaningful). The GPGS submit here is kept as a
+    // safety net for the rare case a final merge bumps the score AND ends
+    // the run in the same action — the live PB tracker in mergeTiles also
+    // forwards it, but GPGS dedupes so a double submit is harmless.
     private fun recordRunIfOver() {
         if (!gameOver || submittedThisRun) return
         val lb = leaderboard ?: return
@@ -163,7 +174,8 @@ class GameState(
                 timestamp = System.currentTimeMillis()
             )
         )
-        if (score > 0) {
+        if (score > 0 && score > bestThisRun) {
+            bestThisRun = score
             runCatching { onRunSubmitted?.invoke(score) }
         }
     }
@@ -291,6 +303,15 @@ class GameState(
         val baseGain = (merged * multiplier).toInt()
         val hazardBonus = cleared * merged / 2
         score += baseGain + hazardBonus
+
+        // Live online PB push. GPGS keeps max-per-player so it's safe to
+        // call frequently; bestThisRun guards against re-submitting the
+        // same value when the score didn't actually increase past our
+        // last push.
+        if (score > bestThisRun) {
+            bestThisRun = score
+            runCatching { onRunSubmitted?.invoke(score) }
+        }
 
         selected = null
         lastTapPos = null
@@ -929,6 +950,10 @@ class GameState(
             unlockDebt = json.optInt("debt", 0).coerceAtLeast(0)
             lastFocus = null
             submittedThisRun = gameOver
+            // Seed the live-PB tracker with the saved score so resumed runs
+            // don't re-push values GPGS has already received in a previous
+            // session. Subsequent merges only forward strictly higher scores.
+            bestThisRun = score.coerceAtLeast(0)
             lastSubmittedRank = -1
             pressedTiles = if (json.has("pressed")) {
                 val arr = json.getJSONArray("pressed")

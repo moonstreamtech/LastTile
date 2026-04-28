@@ -12,11 +12,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -105,6 +108,12 @@ fun GameScreen() {
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(BgTop, BgBottom)))
+            // Activity is edge-to-edge (see MainActivity); pad the entire
+            // game UI inside the system bars so the status bar and gesture
+            // pill never overlap content. Without this, touch coordinates
+            // and rendered tile positions can drift on devices whose nav
+            // bar appears/disappears at runtime.
+            .windowInsetsPadding(WindowInsets.systemBars)
     ) {
         Column(modifier = Modifier.fillMaxSize()) {
             Column(
