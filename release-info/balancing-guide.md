@@ -26,28 +26,36 @@ removed (whether by cleanse or natural expiry).
 
 ### Per-turn spawn rates
 
-Rates are evaluated per spawn roll, by stage. Curves are linear-ish
-between the start and end values:
+Every successful action **always** spawns exactly one Normal(2) in a
+random empty cell. Hazard rates below are evaluated as **independent**
+per-roll probabilities on top of that guaranteed Normal(2) — they are
+**not** mutually exclusive and they never replace the Normal(2). On a
+given turn zero, one, two, or all three hazards can fire; each that
+fires drops a fresh value-2 hazard into a separate empty cell. If no
+empty cell remains, the hazard skips silently (the Normal(2) takes
+priority for the last empty cell).
 
-| Stage         | Buz (Ice) | Ateş (Fire) | Poison |
-| ------------- | :-------: | :---------: | :----: |
-| Stable        |    4%     |     3%      |   2%   |
-| RisingThreat  |    8%     |     7%      |   6%   |
-| Critical      |   12%     |    11%      |  10%   |
-| Collapse      |   15%     |    14%      |  13%   |
+| Stage         | Ateş (Fire) | Buz (Ice) | Poison |
+| ------------- | :---------: | :-------: | :----: |
+| Stable        |     0%      |    0%     |   0%   |
+| RisingThreat  |     8%      |    4%     |   4%   |
+| Critical      |    12%      |    8%     |   8%   |
+| Collapse      |    15%      |   10%     |  10%   |
+
+Stages map to turn counts: Stable `turn < 8`, RisingThreat `turn < 20`,
+Critical `turn < 40`, Collapse otherwise.
 
 ### Lifetimes and on-expiry behavior
 
 | Hazard | Fuse     | What happens when the fuse runs out                                                                                           |
 | ------ | -------- | ----------------------------------------------------------------------------------------------------------------------------- |
 | Buz    | 3 turns  | Tile returns to Normal with its original value.                                                                               |
-| Poison | 7 turns  | Tile returns to Normal with its value **halved**. Poison never spawns on a value-2 tile (would drop it to 1).                 |
+| Poison | 7 turns  | Tile returns to Normal with its value **halved**. A value-2 poison releases the cell as empty (halving would drop it to 1).   |
 | Ateş   | 5 turns  | **Never dies naturally.** Jumps to the highest-value Normal tile that has a same-value Normal neighbor (the player's most valuable pending merge), inherits that tile's value, and burns there for another full cycle. Falls back to a random Normal tile if no mergeable pair exists. The original spot is released as Normal carrying the fire's previous value. |
 
-If poison can't find an eligible target on a roll (e.g. every Normal
-tile is value 2 or already infected) it falls back once to a random
-fire/ice spawn. If fire can't find any Normal tile at all on a jump it
-stays in place and restarts its 5-turn timer.
+Hazards spawn at value 2. Fire's jump mechanic still inherits the
+target's value when it relocates. If fire can't find any Normal tile
+on a jump it stays in place and restarts its 5-turn timer.
 
 ### Cleanse — global, board-wide
 

@@ -31,6 +31,24 @@ and update them in the same commit if not.
   run regardless of how the run ends. bestThisRun is the per-run high-
   water mark for the live PB tracker.
 
+## Spawn semantics
+Every successful player action (merge, slide, swap, split) spawns
+exactly one Normal value=2 tile in a random empty cell. Hazards
+(Fire, Ice, Poison) spawn ADDITIONALLY with independent
+probabilities — they NEVER replace the Normal 2 spawn. If the
+board has insufficient empty cells, the Normal 2 takes priority.
+
+The current per-phase hazard rates are independent percentages
+(see `phaseFor` in `GameState.kt`): Phase 1 (turn < 8) is
+hazard-free; Phase 2 (turn < 20) is fire 8% / ice 4% / poison 4%;
+Phase 3 (turn < 40) is 12% / 8% / 8%; Phase 4 (turn ≥ 40) is
+15% / 10% / 10%. Each kind also respects a per-board-size cap
+and a 3-turn post-death respawn cooldown.
+
+When changing spawn balance, update `phaseFor`,
+`release-info/balancing-guide.md`, the README spawn note, and
+this section together.
+
 ## Compose pointerInput correctness rule
 Modifier.pointerInput must NEVER be keyed on Unit when its callbacks
 capture state values that can change during the lifetime of the
