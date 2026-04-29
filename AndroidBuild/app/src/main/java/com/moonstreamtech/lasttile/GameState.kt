@@ -574,19 +574,10 @@ class GameState(
     }
 
     private fun shouldSpawnThisTurn(b: List<List<Tile>>): Boolean {
-        var hazardCount = 0
-        var emptyCount = 0
         for (r in 0 until size) for (c in 0 until size) {
-            if (!unlocked[r][c]) continue
-            when (b[r][c]) {
-                Tile.Empty -> emptyCount++
-                is Tile.Fire, is Tile.Ice, is Tile.Poison -> hazardCount++
-                else -> {}
-            }
+            if (unlocked[r][c] && b[r][c] == Tile.Empty) return true
         }
-        if (emptyCount == 0) return false
-        if (hazardCount >= 10 && Random.nextInt(100) < 40) return false
-        return true
+        return false
     }
 
     private fun ageIce(b: MutableList<MutableList<Tile>>) {
@@ -676,7 +667,10 @@ class GameState(
             val p = b[r][c] as Tile.Poison
             if (p.age + 1 >= POISON_FUSE) {
                 val halved = p.value / 2
-                b[r][c] = if (halved >= 1) Tile.Normal(halved) else Tile.Empty
+                // Below value 2 the cell is just released as empty — the
+                // game's smallest playable Normal value is 2, and poison
+                // can now spawn fresh at value 2 (halving would drop to 1).
+                b[r][c] = if (halved >= 2) Tile.Normal(halved) else Tile.Empty
                 lastPoisonDeathAction = actionCount
             } else {
                 b[r][c] = Tile.Poison(p.value, p.age + 1)
@@ -684,70 +678,47 @@ class GameState(
         }
     }
 
-    // Spawn rolls only ever produce value-2 normals (or hazards), never
-    // value-4. The merge ladder is intentionally start-from-2 so the
-    // player owns every doubling step; gifting a 4 short-circuits the
-    // early game's tactical density.
+    // Spawn semantics: every successful action plants exactly one
+    // Normal(2) in a random empty cell. Hazards (Fire / Ice / Poison)
+    // are then rolled INDEPENDENTLY and, on success, spawn ADDITIONAL
+    // value-2 hazard tiles in other empty cells — they never replace
+    // the guaranteed Normal(2). Spawn rolls only ever produce value-2
+    // tiles; the merge ladder is intentionally start-from-2 so the
+    // player owns every doubling step.
     private fun spawnTile(b: MutableList<MutableList<Tile>>) {
         val phase = phaseFor(turn)
-        val roll = Random.nextInt(100)
-        if (roll < phase.normal) {
-            val spot = randomEmpty(b) ?: return
-            b[spot.first][spot.second] = Tile.Normal(2)
-            return
-        }
-        val rest = roll - phase.normal
-        val hazardKind = when {
-            rest < phase.fire -> HazardKind.FIRE
-            rest < phase.fire + phase.ice -> HazardKind.ICE
-            else -> HazardKind.POISON
-        }
-        spawnHazardOrFallback(b, hazardKind, allowAlternateKind = true)
+
+        // 1) Guaranteed Normal(2). Takes priority over any hazard spawn.
+        val normalSpot = randomEmpty(b) ?: return
+        b[normalSpot.first][normalSpot.second] = Tile.Normal(2)
+
+        // 2) Independent hazard rolls. Each rolls separately against
+        // its own per-phase probability; multiple may fire in the same
+        // turn. Hazards that can't find an empty cell skip silently
+        // (the Normal(2) above is preserved).
+        if (Random.nextInt(100) < phase.fire) trySpawnHazard(b, HazardKind.FIRE)
+        if (Random.nextInt(100) < phase.ice) trySpawnHazard(b, HazardKind.ICE)
+        if (Random.nextInt(100) < phase.poison) trySpawnHazard(b, HazardKind.POISON)
     }
 
-    // Per-kind cap based on board size (7×7 grid = 1, 9×9 = 2, 11×11 = 3, ...)
-    // and a per-kind cooldown so a freshly cleared hazard can't immediately
-    // be replaced with another of the same type. Poison can never land on a
-    // value-2 tile (halving would drop it to 1); when no eligible target
-    // exists for poison we retry once with a different hazard kind.
-    private fun spawnHazardOrFallback(
-        b: MutableList<MutableList<Tile>>,
-        kind: HazardKind,
-        allowAlternateKind: Boolean
-    ) {
+    // Spawns a fresh value-2 hazard tile in a random empty cell.
+    // Respects the per-kind board-size cap and the post-death respawn
+    // cooldown. Skips silently when blocked or when no empty cell is
+    // available — the guaranteed Normal(2) spawned earlier in the turn
+    // is never sacrificed for a hazard.
+    private fun trySpawnHazard(b: MutableList<MutableList<Tile>>, kind: HazardKind) {
         val onCooldown = actionCount - lastDeathAction(kind) < HAZARD_RESPAWN_COOLDOWN
-        if (onCooldown || countHazard(b, kind) >= hazardCapPerKind()) {
-            val spot = randomEmpty(b) ?: return
-            b[spot.first][spot.second] = Tile.Normal(2)
-            return
+        if (onCooldown) return
+        if (countHazard(b, kind) >= hazardCapPerKind()) return
+        val spot = randomEmpty(b) ?: return
+        val (r, c) = spot
+        b[r][c] = when (kind) {
+            HazardKind.FIRE -> Tile.Fire(2, 0)
+            HazardKind.ICE -> Tile.Ice(2, 0)
+            HazardKind.POISON -> Tile.Poison(2, 0)
         }
-        val targets = mutableListOf<Pair<Int, Int>>()
-        for (r in 0 until size) for (c in 0 until size) {
-            if (!unlocked[r][c]) continue
-            val tile = b[r][c]
-            if (tile !is Tile.Normal) continue
-            if (kind == HazardKind.POISON && tile.value <= 2) continue
-            targets.add(r to c)
-        }
-        if (targets.isEmpty()) {
-            if (kind == HazardKind.POISON && allowAlternateKind) {
-                val alternate = if (Random.nextBoolean()) HazardKind.FIRE else HazardKind.ICE
-                spawnHazardOrFallback(b, alternate, allowAlternateKind = false)
-                return
-            }
-            val spot = randomEmpty(b) ?: return
-            b[spot.first][spot.second] = Tile.Normal(2)
-            return
-        }
-        val (tr, tc) = targets.random()
-        val victim = b[tr][tc] as Tile.Normal
-        b[tr][tc] = when (kind) {
-            HazardKind.FIRE -> Tile.Fire(victim.value, 0)
-            HazardKind.ICE -> Tile.Ice(victim.value, 0)
-            HazardKind.POISON -> Tile.Poison(victim.value, 0)
-        }
-        if ((tr to tc) in pressedTiles) pressedTiles = pressedTiles - (tr to tc)
-        if (selected == (tr to tc)) selected = null
+        if (spot in pressedTiles) pressedTiles = pressedTiles - spot
+        if (selected == spot) selected = null
     }
 
     private fun hazardCapPerKind(): Int = (size - INITIAL_SIZE) / 2 + 1
@@ -775,20 +746,22 @@ class GameState(
     private enum class HazardKind { FIRE, ICE, POISON }
 
     private data class Phase(
-        val normal: Int,
         val fire: Int,
         val ice: Int,
         val poison: Int
     )
 
-    // Hazard rates per stage are unchanged from the prior tuning; the
-    // former normal2 + normal4 split was collapsed into a single normal
-    // bucket so spawns are always value-2.
+    // Hazard rates are now INDEPENDENT per-roll probabilities (not a
+    // single mutually-exclusive bucket). Every turn always spawns one
+    // Normal(2); these rates only decide whether each hazard kind
+    // additionally spawns its own value-2 tile in a separate empty
+    // cell. Phase 1 is a hazard-free grace period; rates ramp into the
+    // mid- and late-game collapse stages.
     private fun phaseFor(t: Int): Phase = when {
-        t < 8 -> Phase(normal = 91, fire = 3, ice = 4, poison = 2)
-        t < 20 -> Phase(normal = 79, fire = 7, ice = 8, poison = 6)
-        t < 40 -> Phase(normal = 67, fire = 11, ice = 12, poison = 10)
-        else -> Phase(normal = 58, fire = 14, ice = 15, poison = 13)
+        t < 8 -> Phase(fire = 0, ice = 0, poison = 0)
+        t < 20 -> Phase(fire = 8, ice = 4, poison = 4)
+        t < 40 -> Phase(fire = 12, ice = 8, poison = 8)
+        else -> Phase(fire = 15, ice = 10, poison = 10)
     }
 
     private fun isInfected(t: Tile): Boolean =
