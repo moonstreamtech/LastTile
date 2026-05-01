@@ -97,6 +97,26 @@ android {
             keyAlias = "androiddebugkey"
             keyPassword = "android"
         }
+        // RELEASE upload key. CI decodes a base64 keystore from the
+        // RELEASE_KEYSTORE_BASE64 secret into a transient file under the
+        // root project dir (gitignored). When the env var is missing
+        // (every local dev build) we leave storeFile unset and the
+        // release build silently falls back to "no signing" — bundleRelease
+        // still produces an unsigned AAB instead of failing.
+        create("release") {
+            val keystoreBase64 = System.getenv("RELEASE_KEYSTORE_BASE64")
+            val keystoreFile = java.io.File(rootProject.projectDir, "release.keystore")
+            if (!keystoreBase64.isNullOrBlank()) {
+                val bytes = java.util.Base64.getDecoder().decode(keystoreBase64)
+                keystoreFile.writeBytes(bytes)
+            }
+            if (keystoreFile.exists()) {
+                storeFile = keystoreFile
+                storePassword = System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("RELEASE_KEY_ALIAS")
+                keyPassword = System.getenv("RELEASE_KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -105,7 +125,18 @@ android {
             signingConfig = signingConfigs.getByName("debug")
         }
         getByName("release") {
-            isMinifyEnabled = false
+            // Only attach the release signing config when the keystore was
+            // actually materialised (i.e. CI with secrets present). Local
+            // dev builds run without secrets and fall back to an unsigned
+            // AAB rather than failing the build.
+            signingConfig = signingConfigs.findByName("release")
+                ?.takeIf { it.storeFile?.exists() == true }
+            isMinifyEnabled = true
+            isShrinkResources = true
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 

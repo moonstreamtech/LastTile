@@ -12,6 +12,10 @@ local.properties
 
 # Keystores: ignore by default, except the pinned project debug keystore.
 # Release / upload keystores must NEVER be committed and stay outside the repo.
+# `release.keystore` is materialised at CI build time from a base64 secret;
+# pinned explicitly so it stays ignored even if the *.keystore wildcard is
+# ever removed.
 *.keystore
 *.jks
+release.keystore
 !AndroidBuild/app/debug.keystore

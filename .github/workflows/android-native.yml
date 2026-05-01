@@ -42,12 +42,37 @@ jobs:
           ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_BANNER_AD_UNIT_ID }}
         run: gradle :app:assembleDebug --no-daemon --stacktrace
 
-      - name: Build release AAB (unsigned)
+      - name: Build release AAB (signed)
         working-directory: AndroidBuild
         env:
           ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
           ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_BANNER_AD_UNIT_ID }}
+          RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
+          RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
+          RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
+          RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
         run: gradle :app:bundleRelease --no-daemon --stacktrace
+
+      - name: Verify release AAB is signed
+        working-directory: AndroidBuild
+        run: |
+          set -e
+          AAB="app/build/outputs/bundle/release/app-release.aab"
+          if [ ! -f "$AAB" ]; then
+            echo "AAB not found at $AAB"
+            exit 1
+          fi
+          # MANIFEST.MF lists per-file digests but no key material — safe
+          # to print for diagnostic purposes.
+          unzip -p "$AAB" META-INF/MANIFEST.MF | head -20
+          # Real signature check: the AAB must contain a signature block
+          # (RSA / DSA / EC) and a corresponding .SF file. Without these
+          # the bundle is unsigned and Play would refuse the upload.
+          if ! unzip -l "$AAB" | grep -E "META-INF/.*\.(RSA|DSA|EC|SF)" ; then
+            echo "AAB IS NOT SIGNED"
+            exit 1
+          fi
+          echo "AAB signed: YES"
 
       - name: Stage build outputs
         working-directory: AndroidBuild
@@ -81,18 +106,18 @@ jobs:
           retention-days: 14
           if-no-files-found: error
 
-      - name: Upload release AAB (unsigned)
+      - name: Upload release AAB (signed)
         uses: actions/upload-artifact@v4
         with:
-          name: lasttile-release-aab-unsigned
+          name: lasttile-release-aab-signed
           path: AndroidBuild/app/build/outputs/bundle/release/lasttile-release.aab
           retention-days: 14
           if-no-files-found: error
 
       - name: Summary
         run: |
-          echo "Debug APK and release AAB built. No secrets required."
+          echo "Debug APK and signed release AAB built."
           echo "Artifacts on this run:"
-          echo "  - lasttile-native-apk          (sideload-installable debug APK)"
-          echo "  - lasttile-release-aab-unsigned (release-mode AAB; needs Play App Signing or a keystore before Play upload)"
+          echo "  - lasttile-native-apk         (sideload-installable debug APK)"
+          echo "  - lasttile-release-aab-signed (Play-uploadable AAB, signed with the upload key)"
           echo "On your phone: enable 'Install unknown apps' for your browser/file manager, then open the APK."
