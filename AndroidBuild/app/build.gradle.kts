@@ -1,3 +1,8 @@
+import java.io.File
+import java.io.FileInputStream
+import java.util.Base64
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -105,9 +110,9 @@ android {
         // still produces an unsigned AAB instead of failing.
         create("release") {
             val keystoreBase64 = System.getenv("RELEASE_KEYSTORE_BASE64")
-            val keystoreFile = java.io.File(rootProject.projectDir, "release.keystore")
+            val keystoreFile = File(rootProject.projectDir, "release.keystore")
             if (!keystoreBase64.isNullOrBlank()) {
-                val bytes = java.util.Base64.getDecoder().decode(keystoreBase64)
+                val bytes = Base64.getDecoder().decode(keystoreBase64)
                 keystoreFile.writeBytes(bytes)
             }
             if (keystoreFile.exists()) {
