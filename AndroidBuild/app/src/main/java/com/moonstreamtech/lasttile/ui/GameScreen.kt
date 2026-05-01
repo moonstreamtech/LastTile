@@ -44,6 +44,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.pluralStringResource
@@ -234,21 +235,25 @@ fun GameScreen() {
 
 @Composable
 private fun BottomAdBanner() {
-    // Hosts a 320x50 AdMob banner. Ads only show when MobileAds has
-    // initialised AND inventory is available; otherwise the AdView stays
-    // blank inside the 50dp slot so the layout never jumps. On devices
-    // without Google Play Services (e.g. some Huawei models) AdView
-    // construction or loading fails and we fall back to a transparent
-    // placeholder of the same height for the same reason.
+    // Hosts an anchored adaptive AdMob banner. Width spans the device
+    // (current screen width in dp); the SDK picks a matched height
+    // (typically 50-100dp). The slot reserves that height up front so
+    // the layout never jumps, including before the ad loads or on
+    // devices without Google Play Services where AdView construction
+    // or loading fails and we fall back to a transparent placeholder.
     val context = LocalContext.current
+    val adWidthDp = LocalConfiguration.current.screenWidthDp
+    val adSize = remember(adWidthDp) {
+        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidthDp)
+    }
     val bannerModifier = Modifier
         .fillMaxWidth()
-        .height(50.dp)
+        .height(adSize.height.dp)
 
-    val adView: AdView? = remember(context) {
+    val adView: AdView? = remember(context, adSize) {
         runCatching {
             AdView(context).apply {
-                setAdSize(AdSize.BANNER)
+                setAdSize(adSize)
                 adUnitId = BuildConfig.ADMOB_BANNER_AD_UNIT_ID
                 adListener = object : AdListener() {
                     override fun onAdLoaded() {
