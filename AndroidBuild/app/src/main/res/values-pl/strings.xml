@@ -5,6 +5,7 @@
     <string name="stat_score">WYNIK</string>
     <string name="stat_turn">TURA</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">TARCZA</string>
 
     <string name="btn_play_again">Zagraj ponownie</string>
     <string name="btn_restart">Restart</string>

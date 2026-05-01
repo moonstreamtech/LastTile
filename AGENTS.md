@@ -70,6 +70,24 @@ When changing spawn balance, update `phaseFor`,
 `release-info/balancing-guide.md`, the README spawn note, and
 this section together.
 
+## Shield mechanic
+The player has a per-device `shieldCount` resource (default 1, key
+`shield_count` in `lasttile_state` SharedPreferences). One shield
+cleanses one hazard tile back to a Normal carrying the hazard's
+current value. Two interaction models are supported:
+
+- **Tap-to-arm**: tap the SHIELD HUD card → armed state. The next
+  tap on a hazard tile consumes one shield; the next tap on any
+  other tile cancels the armed state without cost.
+- **Drag-and-drop**: long-press the SHIELD card to start a drag.
+  A floating mini-shield follows the finger; releasing on a hazard
+  consumes one shield, releasing anywhere else is a no-op.
+
+Tapping the SHIELD card while `shieldCount == 0` opens a rewarded-
+video dialog (see `RewardedAdManager`). A successful watch grants
+`SHIELD_REWARD_GRANT` (3) shields. Restart never resets shields —
+only Settings → Apps → Clear data wipes them.
+
 ## Compose pointerInput correctness rule
 Modifier.pointerInput must NEVER be keyed on Unit when its callbacks
 capture state values that can change during the lifetime of the

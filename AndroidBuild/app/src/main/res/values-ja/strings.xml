@@ -5,6 +5,7 @@
     <string name="stat_score">スコア</string>
     <string name="stat_turn">ターン</string>
     <string name="stat_combo">コンボ</string>
+    <string name="stat_shield">シールド</string>
 
     <string name="btn_play_again">もう一度遊ぶ</string>
     <string name="btn_restart">リスタート</string>

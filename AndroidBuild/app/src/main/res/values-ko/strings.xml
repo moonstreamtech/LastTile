@@ -5,6 +5,7 @@
     <string name="stat_score">점수</string>
     <string name="stat_turn">턴</string>
     <string name="stat_combo">콤보</string>
+    <string name="stat_shield">방패</string>
 
     <string name="btn_play_again">다시 시작</string>
     <string name="btn_restart">재시작</string>

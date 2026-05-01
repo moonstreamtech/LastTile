@@ -5,6 +5,7 @@
     <string name="stat_score">SKOR</string>
     <string name="stat_turn">GILIRAN</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">PERISAI</string>
 
     <string name="btn_play_again">Main Lagi</string>
     <string name="btn_restart">Mulai Ulang</string>

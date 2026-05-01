@@ -5,6 +5,7 @@
     <string name="stat_score">PUNKTE</string>
     <string name="stat_turn">ZUG</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">SCHILD</string>
 
     <string name="btn_play_again">Nochmal spielen</string>
     <string name="btn_restart">Neu starten</string>

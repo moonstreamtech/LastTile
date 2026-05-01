@@ -5,6 +5,7 @@
     <string name="stat_score">النتيجة</string>
     <string name="stat_turn">الدور</string>
     <string name="stat_combo">كومبو</string>
+    <string name="stat_shield">درع</string>
 
     <string name="btn_play_again">العب مجددًا</string>
     <string name="btn_restart">إعادة التشغيل</string>

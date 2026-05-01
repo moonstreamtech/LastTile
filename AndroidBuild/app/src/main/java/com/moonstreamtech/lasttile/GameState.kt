@@ -35,6 +35,11 @@ class GameState(
         private const val SPLIT_MIN = 2
         private const val DOUBLE_TAP_MS = 350L
         private const val HAZARD_RESPAWN_COOLDOWN = 3
+        // Shield economy. Initial grant on first launch; each rewarded
+        // video play credits SHIELD_REWARD_GRANT additional shields.
+        const val SHIELD_INITIAL = 1
+        const val SHIELD_REWARD_GRANT = 3
+        private const val SHIELD_PREF_KEY = "shield_count"
     }
 
     var size by mutableStateOf(INITIAL_SIZE)
@@ -93,6 +98,18 @@ class GameState(
     var lastSubmittedRank by mutableStateOf(-1)
         private set
 
+    // Shield economy state. shieldCount is persisted under its own
+    // SharedPreferences key (independent of the run state, so Restart
+    // never wipes it — only Settings → Apps → Clear data does). The
+    // armed flag is purely UI-side: the next tap on a hazard tile
+    // consumes one shield and cures the tile back to a Normal of the
+    // same value.
+    var shieldCount by mutableStateOf(SHIELD_INITIAL)
+        private set
+
+    var shieldArmed by mutableStateOf(false)
+        private set
+
     // Highest score already pushed to the online leaderboard during this
     // run. We forward every new in-run personal best to GPGS so growBoard's
     // effectively-endless runs still produce live online scores. GPGS keeps
@@ -112,6 +129,17 @@ class GameState(
 
     init {
         if (!tryLoad()) restart()
+        loadShieldCount()
+    }
+
+    private fun loadShieldCount() {
+        val p = prefs ?: return
+        shieldCount = p.getInt(SHIELD_PREF_KEY, SHIELD_INITIAL).coerceAtLeast(0)
+    }
+
+    private fun saveShieldCount() {
+        val p = prefs ?: return
+        p.edit().putInt(SHIELD_PREF_KEY, shieldCount).apply()
     }
 
     fun restart() {
@@ -157,6 +185,12 @@ class GameState(
         bestThisRun = 0
         lastSubmittedRank = -1
         actionCount = 0
+        // shieldCount is intentionally NOT reset by Restart — the
+        // shield economy is a meta-progression resource that persists
+        // across runs (only Settings → Apps → Clear data wipes it).
+        // shieldArmed must clear, otherwise a stale armed state could
+        // leak into the new run's first tap.
+        shieldArmed = false
         lastFireDeathAction = -HAZARD_RESPAWN_COOLDOWN
         lastIceDeathAction = -HAZARD_RESPAWN_COOLDOWN
         lastPoisonDeathAction = -HAZARD_RESPAWN_COOLDOWN
@@ -389,6 +423,51 @@ class GameState(
     }
 
     fun unlockBase(): Int = 64 shl (size - INITIAL_SIZE).coerceAtLeast(0)
+
+    // Shield public API. Two interaction models share the same one-
+    // shield-cures-one-hazard primitive: tap-to-arm (set armed via
+    // requestArmShield, then tap a hazard tile) and drag-and-drop
+    // (applyShieldOn called directly with the drop target). Both
+    // paths return whether a shield was actually consumed; if not,
+    // the caller should treat the action as a no-op (no toast, no
+    // counter change).
+    fun requestArmShield(): Boolean {
+        if (shieldCount <= 0) return false
+        shieldArmed = !shieldArmed
+        return true
+    }
+
+    fun cancelArmShield() {
+        shieldArmed = false
+    }
+
+    fun applyShieldOn(row: Int, col: Int): Boolean {
+        if (shieldCount <= 0) return false
+        if (!isInBounds(row, col) || !unlocked[row][col]) return false
+        val tile = board[row][col]
+        if (!isInfected(tile)) return false
+        val cured = when (tile) {
+            is Tile.Fire -> Tile.Normal(tile.value).also { lastFireDeathAction = actionCount }
+            is Tile.Ice -> Tile.Normal(tile.value).also { lastIceDeathAction = actionCount }
+            is Tile.Poison -> Tile.Normal(tile.value).also { lastPoisonDeathAction = actionCount }
+            else -> return false
+        }
+        val b = board.toMutableBoard()
+        b[row][col] = cured
+        board = b.toImmutable()
+        shieldCount = (shieldCount - 1).coerceAtLeast(0)
+        shieldArmed = false
+        lastFocus = row to col
+        saveShieldCount()
+        save()
+        return true
+    }
+
+    fun grantShields(count: Int) {
+        if (count <= 0) return
+        shieldCount += count
+        saveShieldCount()
+    }
 
     fun tryMove(from: Pair<Int, Int>, to: Pair<Int, Int>): Boolean {
         if (gameOver) return false

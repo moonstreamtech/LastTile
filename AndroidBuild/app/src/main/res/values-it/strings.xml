@@ -5,6 +5,7 @@
     <string name="stat_score">PUNTI</string>
     <string name="stat_turn">TURNO</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">SCUDO</string>
 
     <string name="btn_play_again">Gioca ancora</string>
     <string name="btn_restart">Ricomincia</string>
