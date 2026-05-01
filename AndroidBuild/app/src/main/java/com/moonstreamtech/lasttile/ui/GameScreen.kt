@@ -61,7 +61,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.moonstreamtech.lasttile.BuildConfig
+import com.moonstreamtech.lasttile.AdConfig
 import com.moonstreamtech.lasttile.GameState
 import com.moonstreamtech.lasttile.GpgsLeaderboard
 import com.moonstreamtech.lasttile.LeaderboardEntry
@@ -254,7 +254,7 @@ private fun BottomAdBanner() {
         runCatching {
             AdView(context).apply {
                 setAdSize(adSize)
-                adUnitId = BuildConfig.ADMOB_BANNER_AD_UNIT_ID
+                adUnitId = AdConfig.bannerUnitId
                 adListener = object : AdListener() {
                     override fun onAdLoaded() {
                         Log.i("BottomAdBanner", "Banner ad loaded.")

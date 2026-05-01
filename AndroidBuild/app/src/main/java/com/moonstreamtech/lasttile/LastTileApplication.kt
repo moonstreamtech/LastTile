@@ -8,6 +8,14 @@ import com.google.android.gms.games.PlayGamesSdk
 class LastTileApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+
+        // Layer 2 of the test-id security stack. Crashes the process
+        // before MobileAds.initialize is ever invoked if a release build
+        // somehow ships with empty AdMob ids. Layers 1 (gradle), 3 (CI
+        // pre-build) and 4 (post-build AAB scan) catch the same condition
+        // earlier; this one is the last safety net.
+        AdConfig.verifyReleaseIntegrity()
+
         // Safe with a placeholder APP_ID: the SDK initializes locally and
         // sign-in is deferred until a real client call. With the placeholder
         // present, online calls fail gracefully via the GpgsLeaderboard

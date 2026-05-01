@@ -91,12 +91,28 @@ Single workflow: `.github/workflows/android-native.yml`.
 > CI builds both the debug APK and an **unsigned** release AAB (`bundleRelease`) so release-only issues (R8/proguard, manifest stripping, resource shrinking) are caught on every push. The AAB is not yet uploadable to Play directly — wire up a keystore + the corresponding `*_BASE64`, `*_PASSWORD`, `*_ALIAS` secrets to produce a signed AAB, or rely on Play App Signing on upload.
 
 ### AdMob credentials
-AdMob credentials are injected at build time via GitHub Secrets:
-`ADMOB_APP_ID` and `ADMOB_BANNER_AD_UNIT_ID`. Builds without these secrets
-fall back to Google's official test ad IDs (safe for development; never
-serves real ad inventory). The configuration step prints
-`[Last Tile] AdMob mode: TEST` or `... PRODUCTION` so the active mode is
-auditable from CI logs without leaking the real IDs.
+AdMob credentials are injected at build time via three GitHub Secrets:
+`ADMOB_APP_ID`, `ADMOB_BANNER_UNIT_ID`, `ADMOB_REWARDED_UNIT_ID`. DEBUG
+builds always use Google's public test ids regardless of secret
+presence (so local dev and CI debug builds never serve real inventory);
+RELEASE builds require all three secrets and are protected by four
+layers of guards:
+
+1. **Build-time** — gradle `taskGraph` aborts release builds when any
+   real id is empty or contains the test publisher prefix.
+2. **Runtime** — `AdConfig.verifyReleaseIntegrity()` runs in
+   `LastTileApplication.onCreate` before `MobileAds.initialize` and
+   crashes the process if any release-built BuildConfig id is blank.
+   The test-prefix check itself is enforced at build time so the test
+   publisher string is never embedded in a release-variant binary.
+3. **CI pre-build** — workflow step validates each secret before
+   gradle starts, never echoing values.
+4. **CI post-build** — final step decompresses the AAB and rejects the
+   bundle if any byte references the test publisher prefix.
+
+The configuration step prints `[Last Tile] AdMob mode: TEST` or
+`... PRODUCTION` so the active mode is auditable from CI logs without
+leaking the real ids.
 
 ### Download the APK from GitHub Actions
 1. Push to a tracked branch (or run **Actions → Android Native APK → Run workflow** manually).
