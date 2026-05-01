@@ -574,8 +574,15 @@ class GameState(
     }
 
     private fun shouldSpawnThisTurn(b: List<List<Tile>>): Boolean {
+        // Spawn is viable when EITHER an empty cell exists (Normal(2)
+        // outcome can land) OR a Normal tile exists that a hazard
+        // outcome could infect. With mutually-exclusive spawns the
+        // hazard branch tolerates a fully-packed board as long as
+        // there's at least one Normal to convert.
         for (r in 0 until size) for (c in 0 until size) {
-            if (unlocked[r][c] && b[r][c] == Tile.Empty) return true
+            if (!unlocked[r][c]) continue
+            val tile = b[r][c]
+            if (tile == Tile.Empty || tile is Tile.Normal) return true
         }
         return false
     }
@@ -678,47 +685,83 @@ class GameState(
         }
     }
 
-    // Spawn semantics: every successful action plants exactly one
-    // Normal(2) in a random empty cell. Hazards (Fire / Ice / Poison)
-    // are then rolled INDEPENDENTLY and, on success, spawn ADDITIONAL
-    // value-2 hazard tiles in other empty cells — they never replace
-    // the guaranteed Normal(2). Spawn rolls only ever produce value-2
-    // tiles; the merge ladder is intentionally start-from-2 so the
-    // player owns every doubling step.
+    // Spawn semantics: every successful action produces EXACTLY ONE
+    // spawn outcome — either a Normal(2) in a random empty cell, OR a
+    // hazard that infects an existing Normal tile. The two are
+    // mutually exclusive: hazard spawn never coexists with a fresh
+    // Normal(2) on the same turn. Hazard infection preserves the
+    // victim Normal's value (the player loses access to that tile but
+    // the value isn't reset). When no Normal exists to infect, hazard
+    // rolls fall back to spawning a Normal(2) in an empty cell so the
+    // run keeps progressing.
     private fun spawnTile(b: MutableList<MutableList<Tile>>) {
         val phase = phaseFor(turn)
-
-        // 1) Guaranteed Normal(2). Takes priority over any hazard spawn.
-        val normalSpot = randomEmpty(b) ?: return
-        b[normalSpot.first][normalSpot.second] = Tile.Normal(2)
-
-        // 2) Independent hazard rolls. Each rolls separately against
-        // its own per-phase probability; multiple may fire in the same
-        // turn. Hazards that can't find an empty cell skip silently
-        // (the Normal(2) above is preserved).
-        if (Random.nextInt(100) < phase.fire) trySpawnHazard(b, HazardKind.FIRE)
-        if (Random.nextInt(100) < phase.ice) trySpawnHazard(b, HazardKind.ICE)
-        if (Random.nextInt(100) < phase.poison) trySpawnHazard(b, HazardKind.POISON)
+        val roll = Random.nextInt(100)
+        when {
+            roll < phase.normal -> spawnNormalTwo(b)
+            roll < phase.normal + phase.fire -> spawnHazardOnNormal(b, HazardKind.FIRE)
+            roll < phase.normal + phase.fire + phase.ice -> spawnHazardOnNormal(b, HazardKind.ICE)
+            else -> spawnHazardOnNormal(b, HazardKind.POISON)
+        }
     }
 
-    // Spawns a fresh value-2 hazard tile in a random empty cell.
-    // Respects the per-kind board-size cap and the post-death respawn
-    // cooldown. Skips silently when blocked or when no empty cell is
-    // available — the guaranteed Normal(2) spawned earlier in the turn
-    // is never sacrificed for a hazard.
-    private fun trySpawnHazard(b: MutableList<MutableList<Tile>>, kind: HazardKind) {
-        val onCooldown = actionCount - lastDeathAction(kind) < HAZARD_RESPAWN_COOLDOWN
-        if (onCooldown) return
-        if (countHazard(b, kind) >= hazardCapPerKind()) return
+    private fun spawnNormalTwo(b: MutableList<MutableList<Tile>>) {
         val spot = randomEmpty(b) ?: return
-        val (r, c) = spot
-        b[r][c] = when (kind) {
-            HazardKind.FIRE -> Tile.Fire(2, 0)
-            HazardKind.ICE -> Tile.Ice(2, 0)
-            HazardKind.POISON -> Tile.Poison(2, 0)
+        b[spot.first][spot.second] = Tile.Normal(2)
+    }
+
+    // Hazard spawn = INFECTION. Pick the Normal tile that hurts the
+    // player the most: prefer one that has a same-value Normal
+    // neighbour (the player's most valuable pending merge), and among
+    // those candidates prefer the highest-value tile. If no paired
+    // Normal exists, fall back to the highest-value lone Normal.
+    // If no Normal exists at all (board is purely hazards / empties /
+    // locked frame), fall back to a fresh Normal(2) in an empty cell
+    // so the turn isn't a no-op. The per-kind cap and post-death
+    // cooldown still apply; when blocked we also fall back to
+    // Normal(2) rather than skipping silently.
+    private fun spawnHazardOnNormal(b: MutableList<MutableList<Tile>>, kind: HazardKind) {
+        val onCooldown = actionCount - lastDeathAction(kind) < HAZARD_RESPAWN_COOLDOWN
+        if (onCooldown || countHazard(b, kind) >= hazardCapPerKind()) {
+            spawnNormalTwo(b)
+            return
         }
-        if (spot in pressedTiles) pressedTiles = pressedTiles - spot
-        if (selected == spot) selected = null
+
+        val normals = mutableListOf<Pair<Int, Int>>()
+        for (r in 0 until size) for (c in 0 until size) {
+            if (!unlocked[r][c]) continue
+            if (b[r][c] is Tile.Normal) normals.add(r to c)
+        }
+        if (normals.isEmpty()) {
+            spawnNormalTwo(b)
+            return
+        }
+
+        // 1) Prefer Normals that have at least one same-value Normal
+        // neighbour — these are the player's pending merges and the
+        // most painful targets to lose.
+        val paired = normals.filter { (r, c) ->
+            val v = (b[r][c] as Tile.Normal).value
+            neighbors(r, c, size).any { (nr, nc) ->
+                unlocked[nr][nc] && (b[nr][nc] as? Tile.Normal)?.value == v
+            }
+        }
+        val pool = paired.ifEmpty { normals }
+        // 2) Among the chosen pool, take the highest-value tiles and
+        // pick one at random.
+        val maxValue = pool.maxOf { (r, c) -> (b[r][c] as Tile.Normal).value }
+        val candidates = pool.filter { (r, c) -> (b[r][c] as Tile.Normal).value == maxValue }
+        val (vr, vc) = candidates.random()
+
+        val victim = b[vr][vc] as Tile.Normal
+        b[vr][vc] = when (kind) {
+            HazardKind.FIRE -> Tile.Fire(victim.value, 0)
+            HazardKind.ICE -> Tile.Ice(victim.value, 0)
+            HazardKind.POISON -> Tile.Poison(victim.value, 0)
+        }
+        val pos = vr to vc
+        if (pos in pressedTiles) pressedTiles = pressedTiles - pos
+        if (selected == pos) selected = null
     }
 
     private fun hazardCapPerKind(): Int = (size - INITIAL_SIZE) / 2 + 1
@@ -746,22 +789,22 @@ class GameState(
     private enum class HazardKind { FIRE, ICE, POISON }
 
     private data class Phase(
+        val normal: Int,
         val fire: Int,
         val ice: Int,
         val poison: Int
     )
 
-    // Hazard rates are now INDEPENDENT per-roll probabilities (not a
-    // single mutually-exclusive bucket). Every turn always spawns one
-    // Normal(2); these rates only decide whether each hazard kind
-    // additionally spawns its own value-2 tile in a separate empty
-    // cell. Phase 1 is a hazard-free grace period; rates ramp into the
-    // mid- and late-game collapse stages.
+    // Mutually-exclusive per-turn spawn distribution. Each phase's
+    // four percentages always sum to 100 — a single Random.nextInt(100)
+    // roll selects exactly one outcome (Normal(2) OR Fire OR Ice OR
+    // Poison). Phase 1 is a 100% Normal grace period; later phases
+    // bleed Normal share into rising hazard rates.
     private fun phaseFor(t: Int): Phase = when {
-        t < 8 -> Phase(fire = 0, ice = 0, poison = 0)
-        t < 20 -> Phase(fire = 8, ice = 4, poison = 4)
-        t < 40 -> Phase(fire = 12, ice = 8, poison = 8)
-        else -> Phase(fire = 15, ice = 10, poison = 10)
+        t < 8 -> Phase(normal = 91, fire = 3, ice = 4, poison = 2)
+        t < 20 -> Phase(normal = 79, fire = 7, ice = 8, poison = 6)
+        t < 40 -> Phase(normal = 67, fire = 11, ice = 12, poison = 10)
+        else -> Phase(normal = 58, fire = 14, ice = 15, poison = 13)
     }
 
     private fun isInfected(t: Tile): Boolean =
