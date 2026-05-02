@@ -20,8 +20,6 @@
     <string name="stat_shield">SHIELD</string>
 
     <!-- Shield system. -->
-    <string name="shield_armed_hint">Tap a hazard tile to cleanse it</string>
-    <string name="shield_used_hint">Hazard cleansed</string>
     <string name="shield_dialog_title">Earn shields</string>
     <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
     <string name="shield_dialog_watch">Watch</string>
@@ -74,4 +72,23 @@
         <item quantity="one">Cleansed %d hazard!</item>
         <item quantity="other">Cleansed %d hazards!</item>
     </plurals>
+
+    <!-- Leaderboard row formatting. The rank prefix uses "#" which reads
+         the same in most scripts. The entry meta line abbreviates the run
+         length (turns) and reports the board size as N×N. -->
+    <string name="leaderboard_rank_format">#%1$d</string>
+    <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
+
+    <!-- Universal symbols rendered as text. translatable="false" because
+         a "+" sign, the em-dash "—", and the lock emoji read identically
+         in every locale; localising them risks degrading the visual icon. -->
+    <string name="shield_drag_overlay_icon" translatable="false">+</string>
+    <string name="tile_locked_icon" translatable="false">🔒</string>
+    <string name="combo_inactive" translatable="false">—</string>
+
+    <!-- Combo card value when an active combo is displayed: "×3" etc. The
+         multiplication sign is the conventional form for combo notation in
+         most locales; translators may swap it for an "x" letter if their
+         convention differs. -->
+    <string name="combo_value_format">×%1$d</string>
 </resources>
