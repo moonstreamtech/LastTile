@@ -124,7 +124,7 @@ object RewardedAdManager {
                             // calls trigger a fresh attempt.
                             val pending = pendingShow
                             pendingShow = null
-                            pending?.onResult(ShowResult.FAILED)
+                            pending?.onResult?.invoke(ShowResult.FAILED)
                             retryAttempt = 0
                         }
                     }
