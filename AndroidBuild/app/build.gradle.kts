@@ -8,24 +8,62 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
-// AdMob credentials are injected at build time. Real IDs come from GitHub
-// Secrets (ADMOB_APP_ID / ADMOB_BANNER_AD_UNIT_ID) and stay out of the repo.
-// When either env var is missing or blank, the build falls back to Google's
-// official test IDs so local and CI builds never serve real ads.
-val ADMOB_TEST_APP_ID = "ca-app-pub-3940256099942544~3347511713"
-val ADMOB_TEST_BANNER_AD_UNIT_ID = "ca-app-pub-3940256099942544/9214589741"
+// Google's test AdMob ids — used as fallbacks for DEBUG builds when
+// env secrets are absent. They live ONLY in this .kts file (which is
+// not packaged into the APK/AAB) and in BuildConfig fields generated
+// for the DEBUG variant. Release variants never embed these strings,
+// so the post-build AAB content scan (Layer 4) cannot trip on them.
+val ADMOB_TEST_PUBLISHER_PREFIX = "ca-app-pub-3940256099942544"
+val ADMOB_TEST_APP_ID = "$ADMOB_TEST_PUBLISHER_PREFIX~3347511713"
+val ADMOB_TEST_BANNER_UNIT_ID = "$ADMOB_TEST_PUBLISHER_PREFIX/6300978111"
+val ADMOB_TEST_REWARDED_UNIT_ID = "$ADMOB_TEST_PUBLISHER_PREFIX/5224354917"
 
-val resolvedAdmobAppId: String = System.getenv("ADMOB_APP_ID")
-    ?.takeIf { it.isNotBlank() }
-    ?: ADMOB_TEST_APP_ID
-val resolvedAdmobBannerAdUnitId: String = System.getenv("ADMOB_BANNER_AD_UNIT_ID")
-    ?.takeIf { it.isNotBlank() }
-    ?: ADMOB_TEST_BANNER_AD_UNIT_ID
-val admobMode: String = if (
-    resolvedAdmobAppId == ADMOB_TEST_APP_ID ||
-    resolvedAdmobBannerAdUnitId == ADMOB_TEST_BANNER_AD_UNIT_ID
-) "TEST" else "PRODUCTION"
-println("[Last Tile] AdMob mode: $admobMode (real IDs are never logged)")
+// Real ids come exclusively from GitHub Secrets at build time.
+val envAdmobAppId: String = (System.getenv("ADMOB_APP_ID") ?: "").trim()
+val envAdmobBannerUnitId: String = (System.getenv("ADMOB_BANNER_UNIT_ID") ?: "").trim()
+val envAdmobRewardedUnitId: String = (System.getenv("ADMOB_REWARDED_UNIT_ID") ?: "").trim()
+
+// Diagnostic only — never logs the values themselves.
+val admobMode = if (
+    envAdmobAppId.isNotBlank() &&
+    envAdmobBannerUnitId.isNotBlank() &&
+    envAdmobRewardedUnitId.isNotBlank()
+) "PRODUCTION" else "TEST"
+println("[Last Tile] AdMob mode: $admobMode (real ids never logged)")
+
+// LAYER 1 — build-time guard against shipping test ids. Inspects the
+// task graph; if any release task is queued and any of the three real
+// id env vars is blank or contains the test publisher prefix, the
+// build aborts before the AAB/APK is produced.
+gradle.taskGraph.whenReady {
+    val releaseTaskSuffixes = listOf(
+        ":app:bundleRelease",
+        ":app:assembleRelease"
+    )
+    val isReleaseBuild = allTasks.any { task ->
+        releaseTaskSuffixes.any { suffix -> task.path.endsWith(suffix) }
+    }
+    if (!isReleaseBuild) return@whenReady
+    val checks = linkedMapOf(
+        "ADMOB_APP_ID" to envAdmobAppId,
+        "ADMOB_BANNER_UNIT_ID" to envAdmobBannerUnitId,
+        "ADMOB_REWARDED_UNIT_ID" to envAdmobRewardedUnitId
+    )
+    checks.forEach { (name, value) ->
+        if (value.isBlank()) {
+            throw GradleException(
+                "BUILD ABORTED: $name is empty in release build. " +
+                    "Configure GitHub Secrets before running bundleRelease."
+            )
+        }
+        if (value.contains(ADMOB_TEST_PUBLISHER_PREFIX)) {
+            throw GradleException(
+                "BUILD ABORTED: $name contains the test AdMob publisher prefix. " +
+                    "Real AdMob ids are required for release builds."
+            )
+        }
+    }
+}
 
 android {
     namespace = "com.moonstreamtech.lasttile"
@@ -64,13 +102,6 @@ android {
             "pl",
             "nl",
             "uk"
-        )
-
-        manifestPlaceholders["admobAppId"] = resolvedAdmobAppId
-        buildConfigField(
-            "String",
-            "ADMOB_BANNER_AD_UNIT_ID",
-            "\"$resolvedAdmobBannerAdUnitId\""
         )
     }
 
@@ -128,6 +159,17 @@ android {
         getByName("debug") {
             isMinifyEnabled = false
             signingConfig = signingConfigs.getByName("debug")
+            // Debug variant: substitute test ids whenever the env vars
+            // are absent so a local dev or CI debug build always has
+            // working ad placeholders. The TEST_* literals appear ONLY
+            // here — they never end up in release-variant artifacts.
+            val debugAppId = envAdmobAppId.ifBlank { ADMOB_TEST_APP_ID }
+            val debugBannerId = envAdmobBannerUnitId.ifBlank { ADMOB_TEST_BANNER_UNIT_ID }
+            val debugRewardedId = envAdmobRewardedUnitId.ifBlank { ADMOB_TEST_REWARDED_UNIT_ID }
+            manifestPlaceholders["admobAppId"] = debugAppId
+            buildConfigField("String", "ADMOB_APP_ID", "\"$debugAppId\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$debugBannerId\"")
+            buildConfigField("String", "ADMOB_REWARDED_UNIT_ID", "\"$debugRewardedId\"")
         }
         getByName("release") {
             // Only attach the release signing config when the keystore was
@@ -142,6 +184,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Release variant: env values only. The Layer 1 task-graph
+            // guard above guarantees these are real ids when the
+            // release task actually runs; the ifBlank for the manifest
+            // placeholder only matters when the build aborts mid-flight
+            // (it never produces a real release artifact).
+            manifestPlaceholders["admobAppId"] = envAdmobAppId.ifBlank { ADMOB_TEST_APP_ID }
+            buildConfigField("String", "ADMOB_APP_ID", "\"$envAdmobAppId\"")
+            buildConfigField("String", "ADMOB_BANNER_UNIT_ID", "\"$envAdmobBannerUnitId\"")
+            buildConfigField("String", "ADMOB_REWARDED_UNIT_ID", "\"$envAdmobRewardedUnitId\"")
         }
     }
 

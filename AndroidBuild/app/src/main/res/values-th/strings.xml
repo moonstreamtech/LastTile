@@ -5,6 +5,7 @@
     <string name="stat_score">คะแนน</string>
     <string name="stat_turn">ตา</string>
     <string name="stat_combo">คอมโบ</string>
+    <string name="stat_shield">เกราะ</string>
 
     <string name="btn_play_again">เล่นอีกครั้ง</string>
     <string name="btn_restart">เริ่มใหม่</string>

@@ -5,6 +5,7 @@
     <string name="stat_score">SCORE</string>
     <string name="stat_turn">TOUR</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">BOUCLIER</string>
 
     <string name="btn_play_again">Rejouer</string>
     <string name="btn_restart">Recommencer</string>

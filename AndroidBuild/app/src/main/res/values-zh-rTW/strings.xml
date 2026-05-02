@@ -5,6 +5,7 @@
     <string name="stat_score">得分</string>
     <string name="stat_turn">回合</string>
     <string name="stat_combo">連擊</string>
+    <string name="stat_shield">護盾</string>
 
     <string name="btn_play_again">再玩一次</string>
     <string name="btn_restart">重新開始</string>

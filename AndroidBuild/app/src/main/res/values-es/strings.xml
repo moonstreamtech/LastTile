@@ -5,6 +5,7 @@
     <string name="stat_score">PUNTOS</string>
     <string name="stat_turn">TURNO</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">ESCUDO</string>
 
     <string name="btn_play_again">Jugar de nuevo</string>
     <string name="btn_restart">Reiniciar</string>

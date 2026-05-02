@@ -5,6 +5,18 @@
     <string name="stat_score">PUAN</string>
     <string name="stat_turn">TUR</string>
     <string name="stat_combo">KOMBO</string>
+    <string name="stat_shield">KORUMA</string>
+
+    <string name="shield_armed_hint">Bir tehlike kutucuğuna dokunarak temizle</string>
+    <string name="shield_used_hint">Tehlike temizlendi</string>
+    <string name="shield_dialog_title">Kalkan kazan</string>
+    <string name="shield_dialog_body">Kısa bir video izleyerek 3 kalkan kazan. Ateş, Buz ve Zehir kutucuklarını temizlemek için kullan.</string>
+    <string name="shield_dialog_watch">İzle</string>
+    <string name="shield_dialog_cancel">Şimdi değil</string>
+    <string name="shield_ad_unavailable">Reklam şu an mevcut değil, lütfen sonra tekrar dene.</string>
+    <string name="shield_ad_loading">Reklam yükleniyor…</string>
+    <string name="shield_ad_skipped">Kalkan kazanmak için videoyu sonuna kadar izle.</string>
+    <string name="shield_ad_rewarded">3 kalkan eklendi.</string>
 
     <string name="btn_play_again">Tekrar Oyna</string>
     <string name="btn_restart">Yeniden Başlat</string>

@@ -5,6 +5,7 @@
     <string name="stat_score">ОЧКИ</string>
     <string name="stat_turn">ХОД</string>
     <string name="stat_combo">КОМБО</string>
+    <string name="stat_shield">ЩИТ</string>
 
     <string name="btn_play_again">Играть снова</string>
     <string name="btn_restart">Перезапуск</string>

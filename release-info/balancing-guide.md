@@ -26,24 +26,38 @@ removed (whether by cleanse or natural expiry).
 
 ### Per-turn spawn rates
 
-Every successful action **always** spawns exactly one Normal(2) in a
-random empty cell. Hazard rates below are evaluated as **independent**
-per-roll probabilities on top of that guaranteed Normal(2) — they are
-**not** mutually exclusive and they never replace the Normal(2). On a
-given turn zero, one, two, or all three hazards can fire; each that
-fires drops a fresh value-2 hazard into a separate empty cell. If no
-empty cell remains, the hazard skips silently (the Normal(2) takes
-priority for the last empty cell).
+Every successful action produces **exactly one** spawn outcome —
+either a Normal(2) in a random empty cell, or a hazard infection of
+an existing Normal tile. The two outcomes are **mutually exclusive**:
+a single `Random.nextInt(100)` roll selects exactly one bucket and
+the percentages in each row sum to 100.
 
-| Stage         | Ateş (Fire) | Buz (Ice) | Poison |
-| ------------- | :---------: | :-------: | :----: |
-| Stable        |     0%      |    0%     |   0%   |
-| RisingThreat  |     8%      |    4%     |   4%   |
-| Critical      |    12%      |    8%     |   8%   |
-| Collapse      |    15%      |   10%     |  10%   |
+| Stage         | Normal | Ateş (Fire) | Buz (Ice) | Poison |
+| ------------- | :----: | :---------: | :-------: | :----: |
+| Stable        |  91%   |     3%      |    4%     |   2%   |
+| RisingThreat  |  79%   |     7%      |    8%     |   6%   |
+| Critical      |  67%   |    11%      |   12%     |  10%   |
+| Collapse      |  58%   |    14%      |   15%     |  13%   |
 
 Stages map to turn counts: Stable `turn < 8`, RisingThreat `turn < 20`,
 Critical `turn < 40`, Collapse otherwise.
+
+### Hazard target selection
+
+When a hazard outcome wins the roll, `spawnHazardOnNormal` picks the
+victim Normal tile so the spawn lands on the player's most painful
+loss:
+
+1. Filter to Normals that have at least one same-value Normal
+   neighbour (the player's pending merges).
+2. Among that pool — or, if empty, all Normals — pick one of the
+   highest-value tiles uniformly at random.
+
+The infected tile keeps its value: Fire/Ice/Poison inherit
+`victim.value`. Per-kind board-size cap and the 3-turn post-death
+respawn cooldown still apply; when either blocks the spawn, or no
+Normal exists at all, the hazard branch falls back to a fresh
+Normal(2) in a random empty cell so the turn isn't a no-op.
 
 ### Lifetimes and on-expiry behavior
 
@@ -53,9 +67,24 @@ Critical `turn < 40`, Collapse otherwise.
 | Poison | 7 turns  | Tile returns to Normal with its value **halved**. A value-2 poison releases the cell as empty (halving would drop it to 1).   |
 | Ateş   | 5 turns  | **Never dies naturally.** Jumps to the highest-value Normal tile that has a same-value Normal neighbor (the player's most valuable pending merge), inherits that tile's value, and burns there for another full cycle. Falls back to a random Normal tile if no mergeable pair exists. The original spot is released as Normal carrying the fire's previous value. |
 
-Hazards spawn at value 2. Fire's jump mechanic still inherits the
-target's value when it relocates. If fire can't find any Normal tile
-on a jump it stays in place and restarts its 5-turn timer.
+Hazards spawn by infecting an existing Normal tile and inherit its
+value. Fire's jump mechanic also inherits the target's value when it
+relocates. If fire can't find any Normal tile on a jump it stays in
+place and restarts its 5-turn timer.
+
+### Shield (Kalkan) economy
+
+Players start with `1` shield (`SHIELD_INITIAL` in `GameState`).
+Tapping the SHIELD HUD card arms it; the next tap on a hazard tile
+consumes one shield and converts the hazard back to a Normal carrying
+the hazard's current value. Long-pressing the card starts a drag-and-
+drop interaction with the same one-shield-cures-one-hazard cost.
+
+When `shieldCount == 0`, tapping the card opens a rewarded-video
+dialog. A successful watch grants `SHIELD_REWARD_GRANT = 3` shields.
+The shield count is persisted under SharedPreferences key
+`shield_count` and survives Restart — only `Settings → Apps → Clear
+data` resets it.
 
 ### Cleanse — global, board-wide
 

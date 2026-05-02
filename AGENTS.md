@@ -32,22 +32,61 @@ and update them in the same commit if not.
   water mark for the live PB tracker.
 
 ## Spawn semantics
-Every successful player action (merge, slide, swap, split) spawns
-exactly one Normal value=2 tile in a random empty cell. Hazards
-(Fire, Ice, Poison) spawn ADDITIONALLY with independent
-probabilities — they NEVER replace the Normal 2 spawn. If the
-board has insufficient empty cells, the Normal 2 takes priority.
+Every successful player action (merge, slide, swap, split) produces
+exactly ONE spawn outcome — either a Normal value=2 in a random empty
+cell, or a hazard infection of an existing Normal tile. The two are
+**mutually exclusive**: a hazard turn never also drops a fresh Normal,
+and a Normal-spawn turn never converts a tile into a hazard. The
+percentages in `phaseFor` always sum to 100; a single
+`Random.nextInt(100)` roll selects exactly one bucket.
 
-The current per-phase hazard rates are independent percentages
-(see `phaseFor` in `GameState.kt`): Phase 1 (turn < 8) is
-hazard-free; Phase 2 (turn < 20) is fire 8% / ice 4% / poison 4%;
-Phase 3 (turn < 40) is 12% / 8% / 8%; Phase 4 (turn ≥ 40) is
-15% / 10% / 10%. Each kind also respects a per-board-size cap
-and a 3-turn post-death respawn cooldown.
+Phase distribution (sum = 100 per row):
+
+| turn   | normal | fire | ice | poison |
+| -----: | -----: | ---: | --: | -----: |
+| < 8    | 91     | 3    | 4   | 2      |
+| < 20   | 79     | 7    | 8   | 6      |
+| < 40   | 67     | 11   | 12  | 10     |
+| ≥ 40   | 58     | 14   | 15  | 13     |
+
+### Hazard target selection
+When the roll selects a hazard kind, `spawnHazardOnNormal` chooses
+the victim Normal in two passes so the spawn always lands on the
+player's most strategically painful tile:
+
+1. **Paired Normals first.** Filter to Normals that have at least
+   one same-value Normal neighbour (the player's pending merge).
+2. **Highest value among the pool.** From the chosen pool (paired
+   if any, otherwise all Normals) take the maximum-value tiles
+   and pick one uniformly at random.
+
+Hazard infection preserves the victim's value (Fire/Ice/Poison
+inherit `victim.value`). Per-kind board-size cap and 3-turn
+post-death cooldown still apply; when blocked or no Normal exists
+the hazard branch falls back to a fresh Normal(2) so the run never
+stalls on a no-op turn.
 
 When changing spawn balance, update `phaseFor`,
 `release-info/balancing-guide.md`, the README spawn note, and
 this section together.
+
+## Shield mechanic
+The player has a per-device `shieldCount` resource (default 1, key
+`shield_count` in `lasttile_state` SharedPreferences). One shield
+cleanses one hazard tile back to a Normal carrying the hazard's
+current value. Two interaction models are supported:
+
+- **Tap-to-arm**: tap the SHIELD HUD card → armed state. The next
+  tap on a hazard tile consumes one shield; the next tap on any
+  other tile cancels the armed state without cost.
+- **Drag-and-drop**: long-press the SHIELD card to start a drag.
+  A floating mini-shield follows the finger; releasing on a hazard
+  consumes one shield, releasing anywhere else is a no-op.
+
+Tapping the SHIELD card while `shieldCount == 0` opens a rewarded-
+video dialog (see `RewardedAdManager`). A successful watch grants
+`SHIELD_REWARD_GRANT` (3) shields. Restart never resets shields —
+only Settings → Apps → Clear data wipes them.
 
 ## Compose pointerInput correctness rule
 Modifier.pointerInput must NEVER be keyed on Unit when its callbacks
@@ -96,12 +135,21 @@ GitHub Pages copy) must agree with `store-assets/play-store/data-safety.md`.
 If you change one, update the others in the same commit.
 
 ## AdMob secrets sync rule
-AdMob App ID and Banner Ad Unit ID are stored only in GitHub Secrets
-(`ADMOB_APP_ID`, `ADMOB_BANNER_AD_UNIT_ID`). They MUST NEVER be committed
-to the repository. Local development and any build without those secrets
-automatically uses Google's official test IDs via the fallback in
-`AndroidBuild/app/build.gradle.kts`. When adding new ad units, add a new
-secret and a new `BuildConfig` field — do not hardcode IDs.
+AdMob App ID, Banner Unit ID, and Rewarded Unit ID are stored only in
+GitHub Secrets (`ADMOB_APP_ID`, `ADMOB_BANNER_UNIT_ID`,
+`ADMOB_REWARDED_UNIT_ID`). They MUST NEVER be committed to the
+repository. DEBUG builds always serve Google's public test ids via
+`AdConfig.kt` regardless of which secrets are present, so local dev
+work and CI debug builds never serve real ad inventory. RELEASE builds
+require all three secrets — four layers of guards (gradle task graph,
+`AdConfig.verifyReleaseIntegrity` at app start, CI pre-build secret
+check, post-build AAB content scan) refuse to ship a release that
+references the test publisher prefix `ca-app-pub-3940256099942544`.
+
+When adding new ad units: add a new GitHub secret, a new
+`buildConfigField` line in `app/build.gradle.kts`, the corresponding
+TEST constant + accessor in `AdConfig.kt`, and update the gradle Layer
+1 / CI Layer 3 guards so the new id is also verified at release time.
 
 ## Screenshots
 Screenshots in the Play Store listing reflect the actual app. If you change

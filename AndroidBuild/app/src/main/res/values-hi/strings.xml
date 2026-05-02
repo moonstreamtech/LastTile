@@ -5,6 +5,7 @@
     <string name="stat_score">स्कोर</string>
     <string name="stat_turn">चाल</string>
     <string name="stat_combo">कॉम्बो</string>
+    <string name="stat_shield">कवच</string>
 
     <string name="btn_play_again">फिर से खेलें</string>
     <string name="btn_restart">पुनः प्रारंभ</string>

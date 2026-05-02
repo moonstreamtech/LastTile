@@ -35,18 +35,49 @@ jobs:
         with:
           gradle-version: "8.4"
 
+      # LAYER 3 — pre-build secret check. Validates the three real
+      # AdMob ids before any gradle task runs so CI fails fast on
+      # missing or misconfigured secrets. The script never echoes
+      # secret values; only the variable name and a pass/fail
+      # decision are printed.
+      - name: Verify release ad ids are real (pre-build)
+        env:
+          ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
+          ADMOB_BANNER_UNIT_ID: ${{ secrets.ADMOB_BANNER_UNIT_ID }}
+          ADMOB_REWARDED_UNIT_ID: ${{ secrets.ADMOB_REWARDED_UNIT_ID }}
+        run: |
+          set -e
+          check_id() {
+            local name=$1
+            local value=$2
+            if [ -z "$value" ]; then
+              echo "$name: FAIL (empty)"
+              exit 1
+            fi
+            if printf '%s' "$value" | grep -q "3940256099942544"; then
+              echo "$name: FAIL (contains test publisher prefix)"
+              exit 1
+            fi
+            echo "$name: PASS"
+          }
+          check_id ADMOB_APP_ID "$ADMOB_APP_ID"
+          check_id ADMOB_BANNER_UNIT_ID "$ADMOB_BANNER_UNIT_ID"
+          check_id ADMOB_REWARDED_UNIT_ID "$ADMOB_REWARDED_UNIT_ID"
+
       - name: Build debug APK
         working-directory: AndroidBuild
         env:
           ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
-          ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_BANNER_AD_UNIT_ID }}
+          ADMOB_BANNER_UNIT_ID: ${{ secrets.ADMOB_BANNER_UNIT_ID }}
+          ADMOB_REWARDED_UNIT_ID: ${{ secrets.ADMOB_REWARDED_UNIT_ID }}
         run: gradle :app:assembleDebug --no-daemon --stacktrace
 
       - name: Build release AAB (signed)
         working-directory: AndroidBuild
         env:
           ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
-          ADMOB_BANNER_AD_UNIT_ID: ${{ secrets.ADMOB_BANNER_AD_UNIT_ID }}
+          ADMOB_BANNER_UNIT_ID: ${{ secrets.ADMOB_BANNER_UNIT_ID }}
+          ADMOB_REWARDED_UNIT_ID: ${{ secrets.ADMOB_REWARDED_UNIT_ID }}
           RELEASE_KEYSTORE_BASE64: ${{ secrets.RELEASE_KEYSTORE_BASE64 }}
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
@@ -73,6 +104,30 @@ jobs:
             exit 1
           fi
           echo "AAB signed: YES"
+
+      # LAYER 4 — post-build content scan. Decompresses the AAB and
+      # searches every entry for the test AdMob publisher prefix.
+      # If any byte of the bundle still references the test publisher
+      # (manifest, BuildConfig, ProGuard map, anything), the build is
+      # rejected. This catches a misconfigured release variant that
+      # somehow slipped past Layers 1-3.
+      - name: Verify release AAB has REAL ad ids (post-build)
+        working-directory: AndroidBuild
+        run: |
+          set -e
+          AAB="app/build/outputs/bundle/release/app-release.aab"
+          if [ ! -f "$AAB" ]; then
+            echo "AAB missing for post-build scan"
+            exit 1
+          fi
+          # Stream every entry of the AAB through grep without
+          # extracting to disk. Any match aborts the build.
+          if unzip -p "$AAB" '*' | grep -q "3940256099942544"; then
+            echo "FATAL: AAB contains test AdMob publisher prefix"
+            echo "Release build is using test ids — Play Store would reject."
+            exit 1
+          fi
+          echo "AAB ad ids verified: REAL (no test publisher detected)"
 
       - name: Stage build outputs
         working-directory: AndroidBuild
@@ -103,7 +158,7 @@ jobs:
         with:
           name: lasttile-native-apk
           path: AndroidBuild/app/build/outputs/apk/debug/lasttile-debug.apk
-          retention-days: 14
+          retention-days: 1
           if-no-files-found: error
 
       - name: Upload release AAB (signed)
@@ -111,7 +166,7 @@ jobs:
         with:
           name: lasttile-release-aab-signed
           path: AndroidBuild/app/build/outputs/bundle/release/lasttile-release.aab
-          retention-days: 14
+          retention-days: 1
           if-no-files-found: error
 
       - name: Summary

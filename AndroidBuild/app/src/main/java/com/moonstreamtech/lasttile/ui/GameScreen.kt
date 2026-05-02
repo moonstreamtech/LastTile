@@ -7,6 +7,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
@@ -28,6 +30,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
@@ -44,6 +47,8 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
@@ -52,21 +57,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.zIndex
+import android.widget.Toast
 import com.google.android.gms.ads.AdListener
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.AdSize
 import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
-import com.moonstreamtech.lasttile.BuildConfig
+import com.moonstreamtech.lasttile.AdConfig
 import com.moonstreamtech.lasttile.GameState
 import com.moonstreamtech.lasttile.GpgsLeaderboard
 import com.moonstreamtech.lasttile.LeaderboardEntry
 import com.moonstreamtech.lasttile.LocalLeaderboard
 import com.moonstreamtech.lasttile.R
+import com.moonstreamtech.lasttile.RewardedAdManager
 import com.moonstreamtech.lasttile.Tile
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -106,6 +114,75 @@ fun GameScreen() {
         )
     }
     var showLeaderboard by remember { mutableStateOf(false) }
+    var showShieldDialog by remember { mutableStateOf(false) }
+    var adInFlight by remember { mutableStateOf(false) }
+    // Drag-and-drop coordinates for the shield. Captured in window
+    // (root-level) coordinates so the floating overlay and the cell
+    // hit-test on drop both see the same frame as the BoardView's
+    // onGloballyPositioned callback.
+    var shieldDragWindowPos by remember { mutableStateOf<Offset?>(null) }
+    var boardLayout by remember { mutableStateOf<BoardLayout?>(null) }
+
+    val adUnavailableMsg = stringResource(R.string.shield_ad_unavailable)
+    val adLoadingMsg = stringResource(R.string.shield_ad_loading)
+    val adSkippedMsg = stringResource(R.string.shield_ad_skipped)
+    val adRewardedMsg = stringResource(R.string.shield_ad_rewarded)
+
+    fun showToast(text: String) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
+    }
+
+    fun openShieldDialogOrTriggerAd() {
+        showShieldDialog = true
+    }
+
+    fun playRewardedAd() {
+        val act = activity ?: run {
+            showToast(adUnavailableMsg)
+            return
+        }
+        if (adInFlight) return
+        adInFlight = true
+        showToast(adLoadingMsg)
+        RewardedAdManager.show(act) { result ->
+            adInFlight = false
+            when (result) {
+                RewardedAdManager.ShowResult.EARNED -> {
+                    state.grantShields(GameState.SHIELD_REWARD_GRANT)
+                    showToast(adRewardedMsg)
+                }
+                RewardedAdManager.ShowResult.SKIPPED -> showToast(adSkippedMsg)
+                RewardedAdManager.ShowResult.FAILED -> showToast(adUnavailableMsg)
+            }
+        }
+    }
+
+    fun handleShieldCardTap() {
+        if (state.shieldArmed) {
+            state.cancelArmShield()
+            return
+        }
+        if (state.shieldCount > 0) {
+            state.requestArmShield()
+        } else {
+            openShieldDialogOrTriggerAd()
+        }
+    }
+
+    fun handleShieldDragEnd() {
+        val pos = shieldDragWindowPos
+        shieldDragWindowPos = null
+        if (pos == null) return
+        val layout = boardLayout ?: return
+        val cell = layout.cellAt(pos) ?: return
+        if (state.shieldCount <= 0) {
+            openShieldDialogOrTriggerAd()
+            return
+        }
+        // applyShieldOn returns false silently for non-hazard targets;
+        // that matches the spec ("nothing happens, count doesn't drop").
+        state.applyShieldOn(cell.first, cell.second)
+    }
 
     // Trace safeDrawing insets across recompositions so that future
     // reports of touch / layout drift can be diagnosed from logcat alone.
@@ -119,6 +196,12 @@ fun GameScreen() {
         val b = safeInsets.getBottom(density)
         Log.d("LastTile-window", "safeDrawing px L=$l T=$t R=$r B=$b")
     }
+
+    // Window-coordinate origin of the root Box's content area. The
+    // floating shield drag overlay positions itself relative to this
+    // origin so its IntOffset translates directly from window-space
+    // touch positions emitted by the shield card's pointerInput.
+    var rootContentOriginInWindow by remember { mutableStateOf(Offset.Zero) }
 
     Box(
         modifier = Modifier
@@ -135,7 +218,13 @@ fun GameScreen() {
             .windowInsetsPadding(WindowInsets.safeDrawing)
             .consumeWindowInsets(WindowInsets.safeDrawing)
     ) {
-        Column(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .onGloballyPositioned { coords ->
+                    rootContentOriginInWindow = coords.boundsInWindow().topLeft
+                }
+        ) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -172,11 +261,32 @@ fun GameScreen() {
                     if (state.combo > 1) "×${state.combo}" else "—",
                     highlight = state.combo > 1
                 )
+                ShieldStatCard(
+                    count = state.shieldCount,
+                    armed = state.shieldArmed,
+                    onTap = { handleShieldCardTap() },
+                    onDragStart = { startWindow ->
+                        if (state.shieldCount > 0) {
+                            shieldDragWindowPos = startWindow
+                        } else {
+                            openShieldDialogOrTriggerAd()
+                        }
+                    },
+                    onDragChange = { newWindow ->
+                        if (shieldDragWindowPos != null) {
+                            shieldDragWindowPos = newWindow
+                        }
+                    },
+                    onDragFinish = { handleShieldDragEnd() }
+                )
             }
 
             Spacer(Modifier.height(20.dp))
 
-            BoardView(state)
+            BoardView(
+                state = state,
+                onLayoutChange = { boardLayout = it }
+            )
 
             Spacer(Modifier.height(14.dp))
 
@@ -230,6 +340,196 @@ fun GameScreen() {
                 }
             )
         }
+
+        if (showShieldDialog) {
+            ShieldRewardDialog(
+                onDismiss = { showShieldDialog = false },
+                onWatch = {
+                    showShieldDialog = false
+                    playRewardedAd()
+                }
+            )
+        }
+
+        // Floating shield indicator that follows the finger during a
+        // long-press drag on the shield card. The Column above
+        // captures its window origin so we can map the window-space
+        // pointer coordinates back into local Box coordinates without
+        // worrying about safe-drawing insets or scroll offsets.
+        val dragPos = shieldDragWindowPos
+        if (dragPos != null) {
+            val density = LocalDensity.current
+            val halfPx = with(density) { 24.dp.toPx() }
+            val localX = (dragPos.x - rootContentOriginInWindow.x - halfPx).roundToInt()
+            val localY = (dragPos.y - rootContentOriginInWindow.y - halfPx).roundToInt()
+            Box(
+                modifier = Modifier
+                    .zIndex(20f)
+                    .offset { IntOffset(localX, localY) }
+                    .size(48.dp)
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(
+                        Brush.verticalGradient(
+                            listOf(AccentBlue.copy(alpha = 0.95f), AccentPurple.copy(alpha = 0.95f))
+                        )
+                    ),
+                contentAlignment = Alignment.Center
+            ) {
+                Text(
+                    text = "+",
+                    color = Color.White,
+                    fontSize = 28.sp,
+                    fontWeight = FontWeight.Black
+                )
+            }
+        }
+    }
+}
+
+// Layout snapshot of the BoardView so the GameScreen-level shield
+// drag overlay can hit-test cells. originPx + cellSlotPx + viewport
+// state are reported via onGloballyPositioned each time the layout
+// settles (panning, board growth, viewport shifts).
+data class BoardLayout(
+    val rootOriginPx: Offset,
+    val cellSlotPx: Float,
+    val viewCount: Int,
+    val originRow: Int,
+    val originCol: Int,
+    val padding: Float
+) {
+    fun cellAt(windowPos: Offset): Pair<Int, Int>? {
+        val localX = windowPos.x - rootOriginPx.x - padding
+        val localY = windowPos.y - rootOriginPx.y - padding
+        if (localX < 0f || localY < 0f) return null
+        val col = (localX / cellSlotPx).toInt()
+        val row = (localY / cellSlotPx).toInt()
+        if (row !in 0 until viewCount || col !in 0 until viewCount) return null
+        return (originRow + row) to (originCol + col)
+    }
+}
+
+@Composable
+private fun ShieldStatCard(
+    count: Int,
+    armed: Boolean,
+    onTap: () -> Unit,
+    onDragStart: (Offset) -> Unit,
+    onDragChange: (Offset) -> Unit,
+    onDragFinish: () -> Unit
+) {
+    var cardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
+    val container = when {
+        armed -> Brush.verticalGradient(listOf(Color(0xFF1A3A4F), Color(0xFF11202C)))
+        count == 0 -> Brush.verticalGradient(listOf(Color(0xFF2A2A2A), Color(0xFF1A1A1A)))
+        else -> Brush.verticalGradient(listOf(CardAccent, CardBg))
+    }
+    val borderColor = when {
+        armed -> AccentBlue
+        else -> Color.Transparent
+    }
+    val borderWidth = if (armed) 2.dp else 0.dp
+    val valueColor = if (armed) AccentBlue else TextPrimary
+    Box(
+        modifier = Modifier
+            .shadow(if (armed) 6.dp else 4.dp, RoundedCornerShape(14.dp), clip = false)
+            .clip(RoundedCornerShape(14.dp))
+            .background(container)
+            .border(borderWidth, borderColor, RoundedCornerShape(14.dp))
+            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .onGloballyPositioned { coords ->
+                cardWindowOrigin = coords.boundsInWindow().topLeft
+            }
+            // Long-press drag — drop on a hazard tile cures it. Tap
+            // (clickable below) toggles armed mode instead. The two
+            // gestures do not conflict because clickable fires only
+            // on lift without movement past the touch slop, while
+            // detectDragGesturesAfterLongPress requires a hold.
+            .pointerInput(Unit) {
+                detectDragGesturesAfterLongPress(
+                    onDragStart = { localStart ->
+                        onDragStart(cardWindowOrigin + localStart)
+                    },
+                    onDragEnd = { onDragFinish() },
+                    onDragCancel = { onDragFinish() },
+                    onDrag = { change, _ ->
+                        change.consume()
+                        onDragChange(change.position + cardWindowOrigin)
+                    }
+                )
+            }
+            .clickable(onClick = onTap)
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(
+                text = stringResource(R.string.stat_shield),
+                fontSize = 10.sp,
+                color = TextSecondary,
+                letterSpacing = 2.sp,
+                fontWeight = FontWeight.SemiBold
+            )
+            Spacer(Modifier.height(2.dp))
+            Text(
+                text = count.toString(),
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Black,
+                color = valueColor
+            )
+        }
+    }
+}
+
+@Composable
+private fun ShieldRewardDialog(onDismiss: () -> Unit, onWatch: () -> Unit) {
+    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(18.dp))
+                .background(Brush.verticalGradient(listOf(CardAccent, CardBg)))
+                .padding(20.dp)
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Text(
+                    text = stringResource(R.string.shield_dialog_title),
+                    color = TextPrimary,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Black,
+                    letterSpacing = 4.sp
+                )
+                Spacer(Modifier.height(12.dp))
+                Text(
+                    text = stringResource(R.string.shield_dialog_body),
+                    color = TextSecondary,
+                    fontSize = 13.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(18.dp))
+                Row(horizontalArrangement = Arrangement.Center) {
+                    TextButton(onClick = onDismiss) {
+                        Text(
+                            stringResource(R.string.shield_dialog_cancel),
+                            color = TextSecondary,
+                            fontWeight = FontWeight.Bold
+                        )
+                    }
+                    Spacer(Modifier.size(12.dp))
+                    Button(
+                        onClick = onWatch,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AccentAmber,
+                            contentColor = Color(0xFF2B1810)
+                        )
+                    ) {
+                        Text(
+                            stringResource(R.string.shield_dialog_watch),
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -254,7 +554,7 @@ private fun BottomAdBanner() {
         runCatching {
             AdView(context).apply {
                 setAdSize(adSize)
-                adUnitId = BuildConfig.ADMOB_BANNER_AD_UNIT_ID
+                adUnitId = AdConfig.bannerUnitId
                 adListener = object : AdListener() {
                     override fun onAdLoaded() {
                         Log.i("BottomAdBanner", "Banner ad loaded.")
@@ -547,6 +847,7 @@ private fun StatusLine(state: GameState) {
     } else null
     val (text, color) = when {
         state.gameOver -> stringResource(R.string.status_game_over) to Color(0xFFEF5350)
+        state.shieldArmed -> stringResource(R.string.shield_armed_hint) to AccentBlue
         state.lastSplit != null -> stringResource(R.string.status_split) to AccentBlue
         state.unlockedTargets.isNotEmpty() -> stringResource(R.string.status_frame_opened) to AccentPurple
         state.selected != null -> {
@@ -608,16 +909,18 @@ private fun StatCard(label: String, value: String, highlight: Boolean = false) {
 private const val VIEWPORT_SIZE = 7
 
 @Composable
-private fun BoardView(state: GameState) {
+private fun BoardView(state: GameState, onLayoutChange: (BoardLayout) -> Unit = {}) {
     val cellSize: Dp = 48.dp
     val tilePadding = 3.dp
     val cellSlot = cellSize + tilePadding * 2
+    val boardPadding = 8.dp
 
     var draggedFrom by remember { mutableStateOf<Pair<Int, Int>?>(null) }
     var dragOffset by remember { mutableStateOf(Offset.Zero) }
 
     val density = LocalDensity.current
     val cellSlotPx = with(density) { cellSlot.toPx() }
+    val boardPaddingPx = with(density) { boardPadding.toPx() }
 
     val viewCount = VIEWPORT_SIZE
     val needsPan = state.size > viewCount
@@ -628,6 +931,22 @@ private fun BoardView(state: GameState) {
     }
     var originCol by remember(state.size) {
         mutableStateOf(((state.size - viewCount) / 2).coerceIn(0, maxOrigin))
+    }
+
+    // Republish layout whenever viewport state changes so the parent
+    // shield drag overlay knows where to hit-test.
+    var boardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
+    LaunchedEffect(boardWindowOrigin, originRow, originCol, cellSlotPx) {
+        onLayoutChange(
+            BoardLayout(
+                rootOriginPx = boardWindowOrigin,
+                cellSlotPx = cellSlotPx,
+                viewCount = viewCount,
+                originRow = originRow,
+                originCol = originCol,
+                padding = boardPaddingPx
+            )
+        )
     }
 
     // Auto-follow: whenever the engine tags a new focus tile (last merge,
@@ -655,7 +974,10 @@ private fun BoardView(state: GameState) {
                 .shadow(6.dp, RoundedCornerShape(18.dp), clip = false)
                 .clip(RoundedCornerShape(18.dp))
                 .background(Brush.verticalGradient(listOf(Color(0xFF0A1018), Color(0xFF05090D))))
-                .padding(8.dp)
+                .padding(boardPadding)
+                .onGloballyPositioned { coords ->
+                    boardWindowOrigin = coords.boundsInWindow().topLeft
+                }
         ) {
             Column {
                 for (rIdx in 0 until viewCount) {
@@ -667,7 +989,7 @@ private fun BoardView(state: GameState) {
                             val isUnlocked = state.unlocked[r][c]
                             val justOpened = pos in state.unlockedTargets
                             val tile = state.board[r][c]
-                            val isDraggable = tile is Tile.Normal
+                            val isDraggable = tile is Tile.Normal && !state.shieldArmed
                             val isBeingDragged = draggedFrom == pos
                             val isPressed = pos in state.pressedTiles
 
@@ -705,7 +1027,19 @@ private fun BoardView(state: GameState) {
                                     draggedFrom = null
                                     dragOffset = Offset.Zero
                                 },
-                                onClick = { state.tap(r, c) }
+                                onClick = {
+                                    if (state.shieldArmed) {
+                                        // Tap-to-arm flow: a hazard tile under
+                                        // the finger consumes one shield; any
+                                        // other tile cancels the armed state
+                                        // (no penalty, no shield drop).
+                                        if (!state.applyShieldOn(r, c)) {
+                                            state.cancelArmShield()
+                                        }
+                                    } else {
+                                        state.tap(r, c)
+                                    }
+                                }
                             )
                         }
                     }

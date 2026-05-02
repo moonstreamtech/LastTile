@@ -17,6 +17,19 @@
     <string name="stat_score">SCORE</string>
     <string name="stat_turn">TURN</string>
     <string name="stat_combo">COMBO</string>
+    <string name="stat_shield">SHIELD</string>
+
+    <!-- Shield system. -->
+    <string name="shield_armed_hint">Tap a hazard tile to cleanse it</string>
+    <string name="shield_used_hint">Hazard cleansed</string>
+    <string name="shield_dialog_title">Earn shields</string>
+    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
+    <string name="shield_dialog_watch">Watch</string>
+    <string name="shield_dialog_cancel">Not now</string>
+    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
+    <string name="shield_ad_loading">Loading ad…</string>
+    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
+    <string name="shield_ad_rewarded">3 shields added.</string>
 
     <!-- Primary buttons. -->
     <string name="btn_play_again">Play Again</string>
