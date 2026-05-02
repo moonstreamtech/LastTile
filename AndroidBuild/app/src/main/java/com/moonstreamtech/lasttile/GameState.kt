@@ -100,14 +100,11 @@ class GameState(
 
     // Shield economy state. shieldCount is persisted under its own
     // SharedPreferences key (independent of the run state, so Restart
-    // never wipes it — only Settings → Apps → Clear data does). The
-    // armed flag is purely UI-side: the next tap on a hazard tile
-    // consumes one shield and cures the tile back to a Normal of the
-    // same value.
+    // never wipes it — only Settings → Apps → Clear data does). Shields
+    // are applied via drag-and-drop only: drop the shield card onto a
+    // hazard tile to cure it back to a Normal of the same value. Tapping
+    // the shield card always opens the Earn Shield rewarded-ad dialog.
     var shieldCount by mutableStateOf(SHIELD_INITIAL)
-        private set
-
-    var shieldArmed by mutableStateOf(false)
         private set
 
     // Highest score already pushed to the online leaderboard during this
@@ -188,9 +185,6 @@ class GameState(
         // shieldCount is intentionally NOT reset by Restart — the
         // shield economy is a meta-progression resource that persists
         // across runs (only Settings → Apps → Clear data wipes it).
-        // shieldArmed must clear, otherwise a stale armed state could
-        // leak into the new run's first tap.
-        shieldArmed = false
         lastFireDeathAction = -HAZARD_RESPAWN_COOLDOWN
         lastIceDeathAction = -HAZARD_RESPAWN_COOLDOWN
         lastPoisonDeathAction = -HAZARD_RESPAWN_COOLDOWN
@@ -340,6 +334,9 @@ class GameState(
         save()
     }
 
+    // Merge spawn and hazard spawn are independent. Merge always
+    // spawns a 2 on an empty cell (if any). Hazard spawn follows its own
+    // scheduler and targets a non-empty cell.
     private fun mergeTiles(from: Pair<Int, Int>, to: Pair<Int, Int>, value: Int) {
         val merged = value * 2
         val b = board.toMutableBoard()
@@ -424,23 +421,12 @@ class GameState(
 
     fun unlockBase(): Int = 64 shl (size - INITIAL_SIZE).coerceAtLeast(0)
 
-    // Shield public API. Two interaction models share the same one-
-    // shield-cures-one-hazard primitive: tap-to-arm (set armed via
-    // requestArmShield, then tap a hazard tile) and drag-and-drop
-    // (applyShieldOn called directly with the drop target). Both
-    // paths return whether a shield was actually consumed; if not,
-    // the caller should treat the action as a no-op (no toast, no
-    // counter change).
-    fun requestArmShield(): Boolean {
-        if (shieldCount <= 0) return false
-        shieldArmed = !shieldArmed
-        return true
-    }
-
-    fun cancelArmShield() {
-        shieldArmed = false
-    }
-
+    // Shield public API. Drag-and-drop is the only application path:
+    // applyShieldOn is called with the drop target's cell coordinates.
+    // Tapping the shield card opens the Earn Shield rewarded-ad flow
+    // and never enters this method directly. Returns whether a shield
+    // was actually consumed; if not, the caller should treat the
+    // action as a no-op (no toast, no counter change).
     fun applyShieldOn(row: Int, col: Int): Boolean {
         if (shieldCount <= 0) return false
         if (!isInBounds(row, col) || !unlocked[row][col]) return false
@@ -456,7 +442,6 @@ class GameState(
         b[row][col] = cured
         board = b.toImmutable()
         shieldCount = (shieldCount - 1).coerceAtLeast(0)
-        shieldArmed = false
         lastFocus = row to col
         saveShieldCount()
         save()
@@ -643,27 +628,22 @@ class GameState(
         ageIce(working)
         ageFire(working)
         damageWithPoison(working)
-        if (!skipSpawn && shouldSpawnThisTurn(working)) spawnTile(working)
+        if (!skipSpawn) {
+            // Order matters: hazard scheduler runs first so the merge
+            // spawn sees the post-hazard board state. Hazards target
+            // Normal tiles and the merge spawn targets empties, so
+            // they cannot collide on the same cell — sequencing keeps
+            // the contract explicit and lets the merge spawn observe
+            // any cell a hazard happened to release.
+            rollHazardSpawn(working)
+            spawnTwoOnRandomEmptyCell(working)
+        }
         board = working.toImmutable()
         gameOver = checkGameOver(board)
         // recordRunIfOver() is intentionally NOT called here. mergeTiles still
         // has applyExpansion to run after this, which can flip a transient
         // game-over back to false. Each caller records once the post-action
         // state is final.
-    }
-
-    private fun shouldSpawnThisTurn(b: List<List<Tile>>): Boolean {
-        // Spawn is viable when EITHER an empty cell exists (Normal(2)
-        // outcome can land) OR a Normal tile exists that a hazard
-        // outcome could infect. With mutually-exclusive spawns the
-        // hazard branch tolerates a fully-packed board as long as
-        // there's at least one Normal to convert.
-        for (r in 0 until size) for (c in 0 until size) {
-            if (!unlocked[r][c]) continue
-            val tile = b[r][c]
-            if (tile == Tile.Empty || tile is Tile.Normal) return true
-        }
-        return false
     }
 
     private fun ageIce(b: MutableList<MutableList<Tile>>) {
@@ -764,29 +744,32 @@ class GameState(
         }
     }
 
-    // Spawn semantics: every successful action produces EXACTLY ONE
-    // spawn outcome — either a Normal(2) in a random empty cell, OR a
-    // hazard that infects an existing Normal tile. The two are
-    // mutually exclusive: hazard spawn never coexists with a fresh
-    // Normal(2) on the same turn. Hazard infection preserves the
-    // victim Normal's value (the player loses access to that tile but
-    // the value isn't reset). When no Normal exists to infect, hazard
-    // rolls fall back to spawning a Normal(2) in an empty cell so the
-    // run keeps progressing.
-    private fun spawnTile(b: MutableList<MutableList<Tile>>) {
-        val phase = phaseFor(turn)
-        val roll = Random.nextInt(100)
-        when {
-            roll < phase.normal -> spawnNormalTwo(b)
-            roll < phase.normal + phase.fire -> spawnHazardOnNormal(b, HazardKind.FIRE)
-            roll < phase.normal + phase.fire + phase.ice -> spawnHazardOnNormal(b, HazardKind.ICE)
-            else -> spawnHazardOnNormal(b, HazardKind.POISON)
-        }
-    }
-
-    private fun spawnNormalTwo(b: MutableList<MutableList<Tile>>) {
+    // Merge spawn: ALWAYS places one Normal(2) on a randomly chosen
+    // empty cell after a merge. Independent of hazards, level, or any
+    // other system. The only legitimate skip path is when there are
+    // literally zero empty cells on the board (nothing to place onto).
+    private fun spawnTwoOnRandomEmptyCell(b: MutableList<MutableList<Tile>>) {
         val spot = randomEmpty(b) ?: return
         b[spot.first][spot.second] = Tile.Normal(2)
+    }
+
+    // Hazard scheduler. Independent of the merge spawn — runs on its
+    // own per-turn probability, and when it triggers it picks a
+    // hazard kind weighted by the same per-phase mix the game has
+    // always used. Hazards target a non-empty (Normal) tile, so a
+    // hazard appearance never consumes an empty cell that the merge
+    // spawn could have used.
+    private fun rollHazardSpawn(b: MutableList<MutableList<Tile>>) {
+        val phase = phaseFor(turn)
+        val totalHazardRate = phase.fire + phase.ice + phase.poison
+        if (totalHazardRate <= 0) return
+        val roll = Random.nextInt(100)
+        if (roll >= totalHazardRate) return
+        when {
+            roll < phase.fire -> spawnHazardOnNormal(b, HazardKind.FIRE)
+            roll < phase.fire + phase.ice -> spawnHazardOnNormal(b, HazardKind.ICE)
+            else -> spawnHazardOnNormal(b, HazardKind.POISON)
+        }
     }
 
     // Hazard spawn = INFECTION. Pick the Normal tile that hurts the
@@ -794,27 +777,20 @@ class GameState(
     // neighbour (the player's most valuable pending merge), and among
     // those candidates prefer the highest-value tile. If no paired
     // Normal exists, fall back to the highest-value lone Normal.
-    // If no Normal exists at all (board is purely hazards / empties /
-    // locked frame), fall back to a fresh Normal(2) in an empty cell
-    // so the turn isn't a no-op. The per-kind cap and post-death
-    // cooldown still apply; when blocked we also fall back to
-    // Normal(2) rather than skipping silently.
+    // If no Normal exists at all, the per-kind cap is reached, or the
+    // post-death cooldown is still active, the call returns silently
+    // — the merge spawn step that follows is the one that keeps the
+    // board fed with new tiles.
     private fun spawnHazardOnNormal(b: MutableList<MutableList<Tile>>, kind: HazardKind) {
         val onCooldown = actionCount - lastDeathAction(kind) < HAZARD_RESPAWN_COOLDOWN
-        if (onCooldown || countHazard(b, kind) >= hazardCapPerKind()) {
-            spawnNormalTwo(b)
-            return
-        }
+        if (onCooldown || countHazard(b, kind) >= hazardCapPerKind()) return
 
         val normals = mutableListOf<Pair<Int, Int>>()
         for (r in 0 until size) for (c in 0 until size) {
             if (!unlocked[r][c]) continue
             if (b[r][c] is Tile.Normal) normals.add(r to c)
         }
-        if (normals.isEmpty()) {
-            spawnNormalTwo(b)
-            return
-        }
+        if (normals.isEmpty()) return
 
         // 1) Prefer Normals that have at least one same-value Normal
         // neighbour — these are the player's pending merges and the
@@ -868,22 +844,22 @@ class GameState(
     private enum class HazardKind { FIRE, ICE, POISON }
 
     private data class Phase(
-        val normal: Int,
         val fire: Int,
         val ice: Int,
         val poison: Int
     )
 
-    // Mutually-exclusive per-turn spawn distribution. Each phase's
-    // four percentages always sum to 100 — a single Random.nextInt(100)
-    // roll selects exactly one outcome (Normal(2) OR Fire OR Ice OR
-    // Poison). Phase 1 is a 100% Normal grace period; later phases
-    // bleed Normal share into rising hazard rates.
+    // Per-phase hazard spawn distribution. Each field is the percent
+    // chance of that hazard kind landing on a merge turn; their sum
+    // is the total per-turn hazard probability (Phase 1 = 9%, Phase
+    // 4 = 42%). The merge spawn (Normal(2) on an empty cell) runs
+    // independently of these rolls — this distribution governs only
+    // the hazard scheduler.
     private fun phaseFor(t: Int): Phase = when {
-        t < 8 -> Phase(normal = 91, fire = 3, ice = 4, poison = 2)
-        t < 20 -> Phase(normal = 79, fire = 7, ice = 8, poison = 6)
-        t < 40 -> Phase(normal = 67, fire = 11, ice = 12, poison = 10)
-        else -> Phase(normal = 58, fire = 14, ice = 15, poison = 13)
+        t < 8 -> Phase(fire = 3, ice = 4, poison = 2)
+        t < 20 -> Phase(fire = 7, ice = 8, poison = 6)
+        t < 40 -> Phase(fire = 11, ice = 12, poison = 10)
+        else -> Phase(fire = 14, ice = 15, poison = 13)
     }
 
     private fun isInfected(t: Tile): Boolean =

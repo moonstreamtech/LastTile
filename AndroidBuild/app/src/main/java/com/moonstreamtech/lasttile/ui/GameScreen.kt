@@ -10,6 +10,7 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -158,15 +159,10 @@ fun GameScreen() {
     }
 
     fun handleShieldCardTap() {
-        if (state.shieldArmed) {
-            state.cancelArmShield()
-            return
-        }
-        if (state.shieldCount > 0) {
-            state.requestArmShield()
-        } else {
-            openShieldDialogOrTriggerAd()
-        }
+        // The shield card's tap always opens the Earn Shield dialog
+        // regardless of shieldCount. Applying a shield to a hazard is
+        // exclusively a drag-and-drop gesture (handleShieldDragEnd).
+        openShieldDialogOrTriggerAd()
     }
 
     fun handleShieldDragEnd() {
@@ -258,12 +254,15 @@ fun GameScreen() {
                 StatCard(stringResource(R.string.stat_turn), state.turn.toString())
                 StatCard(
                     stringResource(R.string.stat_combo),
-                    if (state.combo > 1) "×${state.combo}" else "—",
+                    if (state.combo > 1) {
+                        stringResource(R.string.combo_value_format, state.combo)
+                    } else {
+                        stringResource(R.string.combo_inactive)
+                    },
                     highlight = state.combo > 1
                 )
                 ShieldStatCard(
                     count = state.shieldCount,
-                    armed = state.shieldArmed,
                     onTap = { handleShieldCardTap() },
                     onDragStart = { startWindow ->
                         if (state.shieldCount > 0) {
@@ -376,7 +375,7 @@ fun GameScreen() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "+",
+                    text = stringResource(R.string.shield_drag_overlay_icon),
                     color = Color.White,
                     fontSize = 28.sp,
                     fontWeight = FontWeight.Black
@@ -412,39 +411,32 @@ data class BoardLayout(
 @Composable
 private fun ShieldStatCard(
     count: Int,
-    armed: Boolean,
     onTap: () -> Unit,
     onDragStart: (Offset) -> Unit,
     onDragChange: (Offset) -> Unit,
     onDragFinish: () -> Unit
 ) {
     var cardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
-    val container = when {
-        armed -> Brush.verticalGradient(listOf(Color(0xFF1A3A4F), Color(0xFF11202C)))
-        count == 0 -> Brush.verticalGradient(listOf(Color(0xFF2A2A2A), Color(0xFF1A1A1A)))
-        else -> Brush.verticalGradient(listOf(CardAccent, CardBg))
+    val container = if (count == 0) {
+        Brush.verticalGradient(listOf(Color(0xFF2A2A2A), Color(0xFF1A1A1A)))
+    } else {
+        Brush.verticalGradient(listOf(CardAccent, CardBg))
     }
-    val borderColor = when {
-        armed -> AccentBlue
-        else -> Color.Transparent
-    }
-    val borderWidth = if (armed) 2.dp else 0.dp
-    val valueColor = if (armed) AccentBlue else TextPrimary
     Box(
         modifier = Modifier
-            .shadow(if (armed) 6.dp else 4.dp, RoundedCornerShape(14.dp), clip = false)
+            .shadow(4.dp, RoundedCornerShape(14.dp), clip = false)
             .clip(RoundedCornerShape(14.dp))
             .background(container)
-            .border(borderWidth, borderColor, RoundedCornerShape(14.dp))
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .onGloballyPositioned { coords ->
                 cardWindowOrigin = coords.boundsInWindow().topLeft
             }
             // Long-press drag — drop on a hazard tile cures it. Tap
-            // (clickable below) toggles armed mode instead. The two
-            // gestures do not conflict because clickable fires only
-            // on lift without movement past the touch slop, while
-            // detectDragGesturesAfterLongPress requires a hold.
+            // (clickable below) opens the Earn Shield rewarded-ad
+            // dialog. The two gestures do not conflict because
+            // clickable fires only on lift without movement past the
+            // touch slop, while detectDragGesturesAfterLongPress
+            // requires a hold.
             .pointerInput(Unit) {
                 detectDragGesturesAfterLongPress(
                     onDragStart = { localStart ->
@@ -473,7 +465,7 @@ private fun ShieldStatCard(
                 text = count.toString(),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Black,
-                color = valueColor
+                color = TextPrimary
             )
         }
     }
@@ -535,51 +527,74 @@ private fun ShieldRewardDialog(onDismiss: () -> Unit, onWatch: () -> Unit) {
 
 @Composable
 private fun BottomAdBanner() {
-    // Hosts an anchored adaptive AdMob banner. Width spans the device
-    // (current screen width in dp); the SDK picks a matched height
-    // (typically 50-100dp). The slot reserves that height up front so
-    // the layout never jumps, including before the ad loads or on
-    // devices without Google Play Services where AdView construction
-    // or loading fails and we fall back to a transparent placeholder.
+    // Hosts an anchored adaptive AdMob banner. The slot reserves the
+    // SDK-recommended height up front so the layout never jumps,
+    // including before the ad loads or on devices without Google Play
+    // Services where AdView construction fails and we fall back to a
+    // transparent placeholder.
+    //
+    // Banner width is computed from the *container's* measured width,
+    // not the screen width. On devices with display cutouts, foldables,
+    // and any layout where the bottom row is narrower than the display,
+    // feeding the SDK the screen width returns a creative wider than
+    // the rendered slot — the SDK then letterboxes it with empty bands
+    // on the sides. BoxWithConstraints exposes the parent-granted width
+    // in dp, which is the actual container width after WindowInsets
+    // padding has been consumed by the surrounding Column.
     val context = LocalContext.current
-    val adWidthDp = LocalConfiguration.current.screenWidthDp
-    val adSize = remember(adWidthDp) {
-        AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(context, adWidthDp)
-    }
-    val bannerModifier = Modifier
-        .fillMaxWidth()
-        .height(adSize.height.dp)
+    val activity = context as? Activity
+    val displayWidthDpFallback = LocalConfiguration.current.screenWidthDp
 
-    val adView: AdView? = remember(context, adSize) {
-        runCatching {
-            AdView(context).apply {
-                setAdSize(adSize)
-                adUnitId = AdConfig.bannerUnitId
-                adListener = object : AdListener() {
-                    override fun onAdLoaded() {
-                        Log.i("BottomAdBanner", "Banner ad loaded.")
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val containerWidthDp = if (maxWidth.value > 0f) {
+            maxWidth.value.toInt()
+        } else {
+            displayWidthDpFallback
+        }
+
+        val adSize = remember(containerWidthDp, activity) {
+            val ctx = activity ?: context
+            AdSize.getCurrentOrientationAnchoredAdaptiveBannerAdSize(ctx, containerWidthDp)
+        }
+        val bannerModifier = Modifier
+            .fillMaxWidth()
+            .height(adSize.height.dp)
+
+        val adView: AdView? = remember(context, adSize) {
+            runCatching {
+                AdView(context).apply {
+                    // setAdSize MUST run before loadAd — the SDK captures
+                    // the size at request time, so a later size change
+                    // would leave the served creative out of sync with
+                    // the reserved slot.
+                    setAdSize(adSize)
+                    adUnitId = AdConfig.bannerUnitId
+                    adListener = object : AdListener() {
+                        override fun onAdLoaded() {
+                            Log.i("BottomAdBanner", "Banner ad loaded.")
+                        }
+                        override fun onAdFailedToLoad(error: LoadAdError) {
+                            Log.w(
+                                "BottomAdBanner",
+                                "Banner ad failed to load: ${error.code} ${error.message}"
+                            )
+                        }
                     }
-                    override fun onAdFailedToLoad(error: LoadAdError) {
-                        Log.w(
-                            "BottomAdBanner",
-                            "Banner ad failed to load: ${error.code} ${error.message}"
-                        )
-                    }
+                    loadAd(AdRequest.Builder().build())
                 }
-                loadAd(AdRequest.Builder().build())
-            }
-        }.onFailure { e ->
-            Log.w("BottomAdBanner", "AdView creation failed", e)
-        }.getOrNull()
-    }
+            }.onFailure { e ->
+                Log.w("BottomAdBanner", "AdView creation failed", e)
+            }.getOrNull()
+        }
 
-    if (adView != null) {
-        AndroidView(
-            modifier = bannerModifier,
-            factory = { adView }
-        )
-    } else {
-        Box(modifier = bannerModifier)
+        if (adView != null) {
+            AndroidView(
+                modifier = bannerModifier,
+                factory = { adView }
+            )
+        } else {
+            Box(modifier = bannerModifier)
+        }
     }
 }
 
@@ -809,7 +824,7 @@ private fun LeaderboardRow(rank: Int, entry: LeaderboardEntry) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = "#$rank",
+            text = stringResource(R.string.leaderboard_rank_format, rank),
             color = accent,
             fontSize = 12.sp,
             fontWeight = FontWeight.Black,
@@ -824,7 +839,11 @@ private fun LeaderboardRow(rank: Int, entry: LeaderboardEntry) {
                 fontWeight = FontWeight.Black
             )
             Text(
-                text = "t${entry.turn} · ${entry.maxSize}×${entry.maxSize}",
+                text = stringResource(
+                    R.string.leaderboard_entry_meta,
+                    entry.turn,
+                    entry.maxSize
+                ),
                 color = TextSecondary,
                 fontSize = 10.sp,
                 letterSpacing = 1.sp
@@ -847,7 +866,6 @@ private fun StatusLine(state: GameState) {
     } else null
     val (text, color) = when {
         state.gameOver -> stringResource(R.string.status_game_over) to Color(0xFFEF5350)
-        state.shieldArmed -> stringResource(R.string.shield_armed_hint) to AccentBlue
         state.lastSplit != null -> stringResource(R.string.status_split) to AccentBlue
         state.unlockedTargets.isNotEmpty() -> stringResource(R.string.status_frame_opened) to AccentPurple
         state.selected != null -> {
@@ -989,7 +1007,7 @@ private fun BoardView(state: GameState, onLayoutChange: (BoardLayout) -> Unit = 
                             val isUnlocked = state.unlocked[r][c]
                             val justOpened = pos in state.unlockedTargets
                             val tile = state.board[r][c]
-                            val isDraggable = tile is Tile.Normal && !state.shieldArmed
+                            val isDraggable = tile is Tile.Normal
                             val isBeingDragged = draggedFrom == pos
                             val isPressed = pos in state.pressedTiles
 
@@ -1027,19 +1045,7 @@ private fun BoardView(state: GameState, onLayoutChange: (BoardLayout) -> Unit = 
                                     draggedFrom = null
                                     dragOffset = Offset.Zero
                                 },
-                                onClick = {
-                                    if (state.shieldArmed) {
-                                        // Tap-to-arm flow: a hazard tile under
-                                        // the finger consumes one shield; any
-                                        // other tile cancels the armed state
-                                        // (no penalty, no shield drop).
-                                        if (!state.applyShieldOn(r, c)) {
-                                            state.cancelArmShield()
-                                        }
-                                    } else {
-                                        state.tap(r, c)
-                                    }
-                                }
+                                onClick = { state.tap(r, c) }
                             )
                         }
                     }
@@ -1255,7 +1261,7 @@ private fun TileView(
     ) {
         if (!unlocked) {
             Text(
-                text = "🔒",
+                text = stringResource(R.string.tile_locked_icon),
                 color = Color.White.copy(alpha = 0.1f),
                 fontSize = 11.sp
             )

@@ -42,4 +42,28 @@
         <item quantity="one">%d pericolo eliminato!</item>
         <item quantity="other">%d pericoli eliminati!</item>
     </plurals>
+
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_dialog_title">Earn shields</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_dialog_watch">Watch</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_dialog_cancel">Not now</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_ad_loading">Loading ad…</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="shield_ad_rewarded">3 shields added.</string>
+
+    <string name="leaderboard_rank_format">#%1$d</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
+
+    <!-- TODO i18n: needs translation -->
+    <string name="combo_value_format">×%1$d</string>
 </resources>

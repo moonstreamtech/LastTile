@@ -73,8 +73,8 @@ android {
         applicationId = "com.moonstreamtech.lasttile"
         minSdk = 24
         targetSdk = 35
-        versionCode = 2
-        versionName = "0.1.1"
+        versionCode = 3
+        versionName = "0.1.2"
 
         // Lock the APK to the locales we ship translations for. Android still
         // auto-picks the closest match for the device language at runtime, so
