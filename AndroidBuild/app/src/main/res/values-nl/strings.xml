@@ -28,6 +28,15 @@
     <string name="leaderboard_not_configured_short">De online ranglijst is nog niet ingesteld.</string>
     <string name="leaderboard_sign_in_hint">Meld je aan bij Google Play Games om wereldwijde rankings te zien.</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_retry">Retry</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_loading">Loading…</string>
+
     <string name="status_game_over">GAME  OVER</string>
     <string name="status_split">In tweeën gesplitst.</string>
     <string name="status_frame_opened">Frame geopend!</string>

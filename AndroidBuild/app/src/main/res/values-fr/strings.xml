@@ -28,6 +28,15 @@
     <string name="leaderboard_not_configured_short">Le classement en ligne n\'est pas encore configuré.</string>
     <string name="leaderboard_sign_in_hint">Connecte-toi à Google Play Games pour voir les classements mondiaux.</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_retry">Retry</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_loading">Loading…</string>
+
     <string name="status_game_over">PARTIE  TERMINÉE</string>
     <string name="status_split">Divisée en deux.</string>
     <string name="status_frame_opened">Cadre ouvert !</string>

@@ -52,6 +52,19 @@
     <string name="leaderboard_not_configured_short">Online leaderboard isn\'t configured yet.</string>
     <string name="leaderboard_sign_in_hint">Sign in to Google Play Games to see global rankings.</string>
 
+    <!-- v0.1.4: in-app fetched Global tab. The static descriptive copy
+         above (leaderboard_compete, leaderboard_opening, leaderboard_open_failed,
+         leaderboard_activity_unavailable, leaderboard_not_configured_short,
+         btn_view_online_leaderboard) is intentionally retained even
+         though no Kotlin call site references it any more — translators
+         shipped versions in 19 locales and we keep the resources around
+         to avoid resurrecting broken non-English builds if a future
+         feature needs similar copy. -->
+    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
+    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
+    <string name="leaderboard_retry">Retry</string>
+    <string name="leaderboard_loading">Loading…</string>
+
     <!-- Status line. -->
     <string name="status_game_over">GAME  OVER</string>
     <string name="status_split">Split into halves.</string>

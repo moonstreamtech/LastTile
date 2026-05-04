@@ -213,4 +213,9 @@ dependencies {
     implementation("com.google.android.gms:play-services-games-v2:20.1.2")
     implementation("com.google.android.gms:play-services-tasks:18.0.2")
     implementation("com.google.android.gms:play-services-ads:23.6.0")
+    // Bridges play-services Tasks into kotlinx coroutines (.await()) so
+    // GpgsLeaderboard.loadTopScores can be a suspend function. Version
+    // matches the coroutines core that Compose BOM 2024.02.02 transitively
+    // pulls in; bumping the BOM later may require bumping this in lockstep.
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 }

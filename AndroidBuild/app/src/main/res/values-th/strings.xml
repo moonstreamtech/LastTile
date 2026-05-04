@@ -28,6 +28,15 @@
     <string name="leaderboard_not_configured_short">ยังไม่ได้ตั้งค่ากระดานผู้นำออนไลน์</string>
     <string name="leaderboard_sign_in_hint">ลงชื่อเข้าใช้ Google Play Games เพื่อดูอันดับทั่วโลก</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_retry">Retry</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_loading">Loading…</string>
+
     <string name="status_game_over">เกม  จบ</string>
     <string name="status_split">แยกเป็นสองส่วนแล้ว</string>
     <string name="status_frame_opened">เปิดกรอบแล้ว!</string>
