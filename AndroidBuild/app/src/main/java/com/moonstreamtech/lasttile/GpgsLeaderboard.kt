@@ -5,7 +5,6 @@ import android.content.Context
 import android.util.Log
 import com.google.android.gms.games.GamesSignInClient
 import com.google.android.gms.games.PlayGames
-import com.google.android.gms.games.leaderboard.LeaderboardScores
 import com.google.android.gms.games.leaderboard.LeaderboardVariant
 import kotlinx.coroutines.tasks.await
 
@@ -151,8 +150,12 @@ object GpgsLeaderboard {
      * [submitScore], but bridges the SDK's Task<AnnotatedData<...>>
      * into a coroutine via .await().
      *
-     * Always releases the underlying [LeaderboardScores] buffer in a
-     * finally block to avoid the Play Games SDK leak warning.
+     * The LeaderboardScores result type is left to Kotlin inference
+     * because its package path differs between the legacy
+     * play-services-games artifact and play-services-games-v2; using
+     * inference keeps this file working across both. The underlying
+     * buffer is always released in a finally block to avoid the
+     * Play Games SDK leak warning.
      */
     suspend fun loadTopScores(
         context: Context,
@@ -179,7 +182,7 @@ object GpgsLeaderboard {
                     false
                 )
                 .await()
-            val scores: LeaderboardScores = annotated.get()
+            val scores = annotated.get()
                 ?: return LoadResult.Failure("no_scores_response")
             try {
                 val buffer = scores.scores
