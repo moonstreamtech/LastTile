@@ -2,10 +2,11 @@ package com.moonstreamtech.lasttile
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import com.google.android.gms.games.GamesSignInClient
 import com.google.android.gms.games.PlayGames
+import com.google.android.gms.games.leaderboard.LeaderboardVariant
+import kotlinx.coroutines.tasks.await
 
 /**
  * Online leaderboard wrapper around Google Play Games Services v2.
@@ -13,8 +14,8 @@ import com.google.android.gms.games.PlayGames
  * Every public call gates on an isAuthenticated check first; if the
  * session isn't authenticated, signIn() is attempted once and the
  * call retries. Failures are logged with TAG="GpgsLeaderboard" and
- * surfaced through the typed Result so the UI can display the
- * existing leaderboard_sign_in_hint toast without crashing.
+ * surfaced through the typed Result so the UI can render an inline
+ * error state without crashing.
  *
  * Sign-in is never auto-prompted at launch — it only fires when a
  * user-driven action (game-over, restart, opening the leaderboard
@@ -24,12 +25,13 @@ object GpgsLeaderboard {
     /**
      * Leaderboard ID issued by Play Console > Play Games Services > Leaderboards.
      * While this is the placeholder, [submitScore] short-circuits and
-     * [getLeaderboardIntent] returns null so the UI shows a "not configured"
+     * [loadTopScores] returns a Failure so the UI shows a "not configured"
      * notice instead of opening a broken Google sheet.
      */
     const val LEADERBOARD_ID: String = "CgkIrZ-Ng5IHEAIQAQ"
 
     private const val TAG = "GpgsLeaderboard"
+    private const val DEFAULT_DISPLAY_NAME = "Player"
 
     sealed class SubmitResult {
         data object Success : SubmitResult()
@@ -37,11 +39,17 @@ object GpgsLeaderboard {
         data class Failed(val reason: String) : SubmitResult()
     }
 
-    sealed class IntentResult {
-        data class Ready(val intent: Intent) : IntentResult()
-        data object NotConfigured : IntentResult()
-        data class Failed(val reason: String) : IntentResult()
+    sealed class LoadResult {
+        data class Success(val entries: List<GlobalEntry>) : LoadResult()
+        data class Failure(val reason: String) : LoadResult()
     }
+
+    data class GlobalEntry(
+        val rank: Long,
+        val displayName: String,
+        val score: Long,
+        val isCurrentPlayer: Boolean
+    )
 
     fun isConfigured(): Boolean = LEADERBOARD_ID != "PLACEHOLDER_LEADERBOARD_ID"
 
@@ -137,78 +145,94 @@ object GpgsLeaderboard {
     }
 
     /**
-     * Resolves the GPGS leaderboard activity intent, signing the user
-     * in first if needed. Caller still has to handle a Failed return —
-     * the user may dismiss the sign-in prompt.
+     * Suspend-friendly fetch of the top [maxResults] all-time public
+     * scores. Reuses the same isAuthenticated → signIn handshake as
+     * [submitScore], but bridges the SDK's Task<AnnotatedData<...>>
+     * into a coroutine via .await().
+     *
+     * The LeaderboardScores result type is left to Kotlin inference
+     * because its package path differs between the legacy
+     * play-services-games artifact and play-services-games-v2; using
+     * inference keeps this file working across both. The underlying
+     * buffer is always released in a finally block to avoid the
+     * Play Games SDK leak warning.
      */
-    fun getLeaderboardIntent(
-        activity: Activity,
-        onResult: (IntentResult) -> Unit
-    ) {
-        if (!isConfigured()) {
-            onResult(IntentResult.NotConfigured)
-            return
+    suspend fun loadTopScores(
+        context: Context,
+        maxResults: Int = 10
+    ): LoadResult {
+        if (!isConfigured()) return LoadResult.Failure("not_configured")
+        val activity = context.toActivityOrNull()
+        if (activity == null) {
+            Log.w(TAG, "loadTopScores: no Activity, skipping")
+            return LoadResult.Failure("no_activity")
         }
         val signInClient = PlayGames.getGamesSignInClient(activity)
-        runCatching {
-            signInClient.isAuthenticated
-                .addOnSuccessListener { authResult ->
-                    if (authResult.isAuthenticated) {
-                        Log.i(TAG, "isAuthenticated: true")
-                        getLeaderboardIntentInternal(activity, onResult)
-                    } else {
-                        attemptSignInThenIntent(signInClient, activity, onResult)
-                    }
+        return try {
+            if (!ensureAuthenticated(signInClient)) {
+                Log.w(TAG, "loadTopScores: sign-in failed")
+                return LoadResult.Failure("sign_in_failed")
+            }
+            val annotated = PlayGames.getLeaderboardsClient(activity)
+                .loadTopScores(
+                    LEADERBOARD_ID,
+                    LeaderboardVariant.TIME_SPAN_ALL_TIME,
+                    LeaderboardVariant.COLLECTION_PUBLIC,
+                    maxResults,
+                    false
+                )
+                .await()
+            val scores = annotated.get()
+                ?: return LoadResult.Failure("no_scores_response")
+            try {
+                val buffer = scores.scores
+                val entries = ArrayList<GlobalEntry>(buffer.count)
+                for (i in 0 until buffer.count) {
+                    val s = buffer.get(i)
+                    entries.add(
+                        GlobalEntry(
+                            rank = s.rank,
+                            displayName = s.scoreHolderDisplayName ?: DEFAULT_DISPLAY_NAME,
+                            score = s.rawScore,
+                            // TODO: highlight the current player's row by
+                            // comparing s.scoreHolder?.playerId against the
+                            // current player's ID (PlayGames.getPlayersClient
+                            // .getCurrentPlayer). Skipped for now to keep
+                            // this PR scoped to the fetch + render flow.
+                            isCurrentPlayer = false
+                        )
+                    )
                 }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "isAuthenticated check failed", e)
-                    onResult(IntentResult.Failed(e.message ?: "auth_check_failed"))
-                }
-        }.onFailure { e ->
-            Log.w(TAG, "getLeaderboardIntent threw", e)
-            onResult(IntentResult.Failed(e.message ?: "unknown"))
+                Log.i(TAG, "loadTopScores success: ${entries.size} entries")
+                LoadResult.Success(entries.toList())
+            } finally {
+                scores.release()
+            }
+        } catch (e: Exception) {
+            Log.w(TAG, "loadTopScores threw", e)
+            LoadResult.Failure("exception: ${e.message ?: "unknown"}")
         }
     }
 
-    private fun attemptSignInThenIntent(
-        signInClient: GamesSignInClient,
-        activity: Activity,
-        onResult: (IntentResult) -> Unit
-    ) {
-        signInClient.signIn()
-            .addOnSuccessListener { signInResult ->
-                Log.i(TAG, "signIn success")
-                if (signInResult.isAuthenticated) {
-                    getLeaderboardIntentInternal(activity, onResult)
-                } else {
-                    onResult(IntentResult.Failed("sign_in_failed"))
-                }
-            }
-            .addOnFailureListener { e ->
-                Log.w(TAG, "signIn failed", e)
-                onResult(IntentResult.Failed("sign_in_failed"))
-            }
-    }
-
-    private fun getLeaderboardIntentInternal(
-        activity: Activity,
-        onResult: (IntentResult) -> Unit
-    ) {
-        runCatching {
-            PlayGames.getLeaderboardsClient(activity)
-                .getLeaderboardIntent(LEADERBOARD_ID)
-                .addOnSuccessListener { intent ->
-                    Log.i(TAG, "getLeaderboardIntent success")
-                    onResult(IntentResult.Ready(intent))
-                }
-                .addOnFailureListener { e ->
-                    Log.w(TAG, "getLeaderboardIntent failed", e)
-                    onResult(IntentResult.Failed(e.message ?: "unknown"))
-                }
-        }.onFailure { e ->
-            Log.w(TAG, "getLeaderboardIntent threw", e)
-            onResult(IntentResult.Failed(e.message ?: "unknown"))
+    private suspend fun ensureAuthenticated(signInClient: GamesSignInClient): Boolean {
+        val authResult = try {
+            signInClient.isAuthenticated.await()
+        } catch (e: Exception) {
+            Log.w(TAG, "isAuthenticated check failed", e)
+            return false
         }
+        if (authResult.isAuthenticated) {
+            Log.i(TAG, "isAuthenticated: true")
+            return true
+        }
+        val signInResult = try {
+            signInClient.signIn().await()
+        } catch (e: Exception) {
+            Log.w(TAG, "signIn failed", e)
+            return false
+        }
+        Log.i(TAG, "signIn success")
+        return signInResult.isAuthenticated
     }
 
     private fun authClientOrNull(context: Context): GamesSignInClient? {

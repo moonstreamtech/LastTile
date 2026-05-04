@@ -37,6 +37,15 @@
     <string name="leaderboard_not_configured_short">Çevrimiçi skor tablosu henüz yapılandırılmadı.</string>
     <string name="leaderboard_sign_in_hint">Küresel sıralamaları görmek için Google Play Games\'e giriş yap.</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_retry">Retry</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_loading">Loading…</string>
+
     <string name="status_game_over">OYUN  BİTTİ</string>
     <string name="status_split">İkiye bölündü.</string>
     <string name="status_frame_opened">Çerçeve açıldı!</string>

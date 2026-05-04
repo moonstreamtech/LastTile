@@ -29,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -331,7 +332,6 @@ fun GameScreen() {
         if (showLeaderboard) {
             LeaderboardDialog(
                 entries = leaderboard.topScores(),
-                activity = activity,
                 onDismiss = { showLeaderboard = false },
                 onClear = {
                     leaderboard.clear()
@@ -603,12 +603,10 @@ private enum class LeaderboardTab { GLOBAL, LOCAL }
 @Composable
 private fun LeaderboardDialog(
     entries: List<LeaderboardEntry>,
-    activity: Activity?,
     onDismiss: () -> Unit,
     onClear: () -> Unit
 ) {
     var tab by remember { mutableStateOf(LeaderboardTab.LOCAL) }
-    var globalStatus by remember { mutableStateOf<String?>(null) }
 
     androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
         Box(
@@ -646,11 +644,7 @@ private fun LeaderboardDialog(
 
                 when (tab) {
                     LeaderboardTab.LOCAL -> LocalLeaderboardContent(entries)
-                    LeaderboardTab.GLOBAL -> GlobalLeaderboardContent(
-                        activity = activity,
-                        status = globalStatus,
-                        onStatusChange = { globalStatus = it }
-                    )
+                    LeaderboardTab.GLOBAL -> GlobalLeaderboardContent()
                 }
 
                 Spacer(Modifier.height(14.dp))
@@ -718,17 +712,29 @@ private fun LocalLeaderboardContent(entries: List<LeaderboardEntry>) {
 }
 
 @Composable
-private fun GlobalLeaderboardContent(
-    activity: Activity?,
-    status: String?,
-    onStatusChange: (String?) -> Unit
-) {
-    val configured = GpgsLeaderboard.isConfigured()
+private fun GlobalLeaderboardContent() {
     val context = LocalContext.current
-    val activityUnavailableMsg = stringResource(R.string.leaderboard_activity_unavailable)
-    val openingMsg = stringResource(R.string.leaderboard_opening)
-    val notConfiguredShortMsg = stringResource(R.string.leaderboard_not_configured_short)
-    val signInHintMsg = stringResource(R.string.leaderboard_sign_in_hint)
+    var entries by remember { mutableStateOf<List<GpgsLeaderboard.GlobalEntry>>(emptyList()) }
+    var isLoading by remember { mutableStateOf(true) }
+    var errorReason by remember { mutableStateOf<String?>(null) }
+    var retryKey by remember { mutableStateOf(0) }
+
+    LaunchedEffect(retryKey) {
+        isLoading = true
+        errorReason = null
+        when (val result = GpgsLeaderboard.loadTopScores(context)) {
+            is GpgsLeaderboard.LoadResult.Success -> {
+                entries = result.entries
+                errorReason = null
+            }
+            is GpgsLeaderboard.LoadResult.Failure -> {
+                entries = emptyList()
+                errorReason = result.reason
+            }
+        }
+        isLoading = false
+    }
+
     Text(
         text = stringResource(R.string.leaderboard_powered_by),
         color = TextSecondary,
@@ -737,70 +743,117 @@ private fun GlobalLeaderboardContent(
     )
     Spacer(Modifier.height(12.dp))
 
-    if (!configured) {
-        Text(
-            text = stringResource(R.string.leaderboard_not_configured_long),
-            color = TextSecondary,
-            fontSize = 12.sp,
-            textAlign = TextAlign.Center
-        )
-        return
+    when {
+        isLoading -> {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator(
+                    color = AccentAmber,
+                    strokeWidth = 3.dp
+                )
+            }
+            Spacer(Modifier.height(6.dp))
+            Text(
+                text = stringResource(R.string.leaderboard_loading),
+                color = TextSecondary,
+                fontSize = 11.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        errorReason != null -> {
+            // sign_in_failed and not_configured map to dedicated copy that
+            // already exists in every locale; everything else (network
+            // hiccup, exception, no_scores_response) falls back to the
+            // generic leaderboard_load_failed string added in v0.1.4.
+            val msgRes = when (errorReason) {
+                "sign_in_failed" -> R.string.leaderboard_sign_in_hint
+                "not_configured" -> R.string.leaderboard_not_configured_long
+                else -> R.string.leaderboard_load_failed
+            }
+            Text(
+                text = stringResource(msgRes),
+                color = TextSecondary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center
+            )
+            Spacer(Modifier.height(10.dp))
+            TextButton(onClick = { retryKey += 1 }) {
+                Text(
+                    text = stringResource(R.string.leaderboard_retry),
+                    color = AccentAmber,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp
+                )
+            }
+        }
+        entries.isEmpty() -> {
+            Text(
+                text = stringResource(R.string.leaderboard_empty_global),
+                color = TextSecondary,
+                fontSize = 12.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        else -> {
+            entries.forEach { e ->
+                GlobalLeaderboardRow(entry = e)
+                Spacer(Modifier.height(6.dp))
+            }
+        }
     }
+}
 
-    Text(
-        text = stringResource(R.string.leaderboard_compete),
-        color = TextSecondary,
-        fontSize = 12.sp,
-        textAlign = TextAlign.Center
-    )
-    Spacer(Modifier.height(12.dp))
-    Button(
-        onClick = {
-            val a = activity
-            if (a == null) {
-                onStatusChange(activityUnavailableMsg)
-                return@Button
-            }
-            onStatusChange(openingMsg)
-            GpgsLeaderboard.getLeaderboardIntent(a) { result ->
-                when (result) {
-                    is GpgsLeaderboard.IntentResult.Ready -> {
-                        onStatusChange(null)
-                        runCatching { a.startActivity(result.intent) }
-                            .onFailure {
-                                onStatusChange(
-                                    context.getString(
-                                        R.string.leaderboard_open_failed,
-                                        it.message ?: ""
-                                    )
-                                )
-                            }
-                    }
-                    GpgsLeaderboard.IntentResult.NotConfigured ->
-                        onStatusChange(notConfiguredShortMsg)
-                    is GpgsLeaderboard.IntentResult.Failed ->
-                        onStatusChange(signInHintMsg)
-                }
-            }
-        },
-        colors = ButtonDefaults.buttonColors(
-            containerColor = AccentBlue,
-            contentColor = Color(0xFF0B1A24)
-        )
+@Composable
+private fun GlobalLeaderboardRow(entry: GpgsLeaderboard.GlobalEntry) {
+    val accent = when (entry.rank) {
+        1L -> AccentGold
+        2L -> Color(0xFFCFD8DC)
+        3L -> Color(0xFFD7A26B)
+        else -> TextSecondary
+    }
+    val container = if (entry.isCurrentPlayer) {
+        Brush.verticalGradient(listOf(Color(0xFF263444), Color(0xFF18222E)))
+    } else {
+        Brush.verticalGradient(listOf(Color(0xFF1F2A38), Color(0xFF141C26)))
+    }
+    val borderWidth = if (entry.isCurrentPlayer) 1.dp else 0.dp
+    val borderColor = if (entry.isCurrentPlayer) AccentAmber else Color.Transparent
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(10.dp))
+            .background(container)
+            .border(borderWidth, borderColor, RoundedCornerShape(10.dp))
+            .padding(horizontal = 12.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            stringResource(R.string.btn_view_online_leaderboard),
-            fontWeight = FontWeight.Bold,
-            letterSpacing = 1.sp
+            text = stringResource(R.string.leaderboard_rank_format, entry.rank.toInt()),
+            color = accent,
+            fontSize = 12.sp,
+            fontWeight = FontWeight.Black,
+            letterSpacing = 1.sp,
+            modifier = Modifier.padding(end = 10.dp)
         )
-    }
-    if (status != null) {
-        Spacer(Modifier.height(10.dp))
         Text(
-            text = status,
-            color = TextSecondary,
-            fontSize = 11.sp,
-            textAlign = TextAlign.Center
+            text = entry.displayName,
+            color = TextPrimary,
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Bold,
+            maxLines = 1,
+            modifier = Modifier
+                .weight(1f)
+                .padding(end = 10.dp)
+        )
+        Text(
+            text = entry.score.toString(),
+            color = TextPrimary,
+            fontSize = 16.sp,
+            fontWeight = FontWeight.Black
         )
     }
 }

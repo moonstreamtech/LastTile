@@ -28,6 +28,15 @@
     <string name="leaderboard_not_configured_short">在线排行榜尚未配置。</string>
     <string name="leaderboard_sign_in_hint">登录 Google Play Games 即可查看全球排行。</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_retry">Retry</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_loading">Loading…</string>
+
     <string name="status_game_over">游戏  结束</string>
     <string name="status_split">已对半分裂。</string>
     <string name="status_frame_opened">边框已开启！</string>
