@@ -30,8 +30,17 @@ class LastTileApplication : Application() {
         // triggered here — GpgsLeaderboard performs the isAuthenticated /
         // signIn handshake on demand from user-driven actions.
         runCatching { PlayGamesSdk.initialize(this) }
-            .onSuccess { Log.i("LastTileApp", "PlayGamesSdk.initialize success") }
-            .onFailure { e -> Log.w("LastTileApp", "PlayGamesSdk.initialize failed", e) }
+            .onSuccess {
+                Log.i("LastTileApp", "PlayGamesSdk.initialize success")
+                GpgsLeaderboard.debugLog(this, "init: PlayGamesSdk.initialize success")
+            }
+            .onFailure { e ->
+                Log.w("LastTileApp", "PlayGamesSdk.initialize failed", e)
+                GpgsLeaderboard.debugLog(
+                    this,
+                    "init: PlayGamesSdk.initialize failed: ${e.message}"
+                )
+            }
 
         // AdMob init is fire-and-forget. If the device has no Play Services
         // (e.g. some Huawei devices) the SDK reports failure via the callback

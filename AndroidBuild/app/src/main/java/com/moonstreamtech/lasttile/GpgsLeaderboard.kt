@@ -20,6 +20,12 @@ import kotlinx.coroutines.tasks.await
  * Sign-in is never auto-prompted at launch — it only fires when a
  * user-driven action (game-over, restart, opening the leaderboard
  * panel) reaches one of these methods.
+ *
+ * v0.1.5 diagnostic: every important branch also writes a one-line
+ * event to gpgs-debug.log under the app-specific external files dir
+ * (`/storage/emulated/0/Android/data/<pkg>/files/gpgs-debug.log`),
+ * which is browsable via the device's Files app without root or USB
+ * debugging. To be reverted once the failure mode is identified.
  */
 object GpgsLeaderboard {
     /**
@@ -32,6 +38,7 @@ object GpgsLeaderboard {
 
     private const val TAG = "GpgsLeaderboard"
     private const val DEFAULT_DISPLAY_NAME = "Player"
+    private const val DEBUG_LOG_FILE = "gpgs-debug.log"
 
     sealed class SubmitResult {
         data object Success : SubmitResult()
@@ -65,18 +72,21 @@ object GpgsLeaderboard {
         onResult: (SubmitResult) -> Unit = {}
     ) {
         if (!isConfigured()) {
+            debugLog(context, "submit: not configured")
             Log.i(TAG, "Skipping submitScore: leaderboard ID is placeholder.")
             onResult(SubmitResult.NotConfigured)
             return
         }
         val activity = context.toActivityOrNull()
         if (activity == null) {
+            debugLog(context, "submit: no Activity")
             Log.w(TAG, "submitScore: no Activity, skipping")
             onResult(SubmitResult.Failed("no_activity"))
             return
         }
         val signInClient = authClientOrNull(context)
         if (signInClient == null) {
+            debugLog(context, "submit: no Activity")
             Log.w(TAG, "submitScore: no GamesSignInClient, skipping")
             onResult(SubmitResult.Failed("no_sign_in_client"))
             return
@@ -85,17 +95,21 @@ object GpgsLeaderboard {
             signInClient.isAuthenticated
                 .addOnSuccessListener { authResult ->
                     if (authResult.isAuthenticated) {
+                        debugLog(activity, "submit: already authenticated, calling submitScoreImmediate")
                         Log.i(TAG, "isAuthenticated: true")
                         submitScoreInternal(activity, score, onResult)
                     } else {
+                        debugLog(activity, "submit: not authenticated, calling signIn")
                         attemptSignInThenSubmit(signInClient, activity, score, onResult)
                     }
                 }
                 .addOnFailureListener { e ->
+                    debugLog(activity, "submit: isAuthenticated failed: ${e.message}")
                     Log.w(TAG, "isAuthenticated check failed", e)
                     onResult(SubmitResult.Failed(e.message ?: "auth_check_failed"))
                 }
         }.onFailure { e ->
+            debugLog(context, "submit: threw: ${e.javaClass.simpleName}: ${e.message}")
             Log.w(TAG, "submitScore threw", e)
             onResult(SubmitResult.Failed(e.message ?: "unknown"))
         }
@@ -111,12 +125,15 @@ object GpgsLeaderboard {
             .addOnSuccessListener { signInResult ->
                 Log.i(TAG, "signIn success")
                 if (signInResult.isAuthenticated) {
+                    debugLog(activity, "submit: signIn success, calling submitScoreImmediate")
                     submitScoreInternal(activity, score, onResult)
                 } else {
+                    debugLog(activity, "submit: signIn returned but still not authenticated")
                     onResult(SubmitResult.Failed("sign_in_failed"))
                 }
             }
             .addOnFailureListener { e ->
+                debugLog(activity, "submit: signIn failed: ${e.message}")
                 Log.w(TAG, "signIn failed", e)
                 onResult(SubmitResult.Failed("sign_in_failed"))
             }
@@ -131,14 +148,17 @@ object GpgsLeaderboard {
             PlayGames.getLeaderboardsClient(activity)
                 .submitScoreImmediate(LEADERBOARD_ID, score)
                 .addOnSuccessListener {
+                    debugLog(activity, "submit: SUCCESS score=$score")
                     Log.i(TAG, "submitScore success: $score")
                     onResult(SubmitResult.Success)
                 }
                 .addOnFailureListener { e ->
+                    debugLog(activity, "submit: submitScoreImmediate failed: ${e.message}")
                     Log.w(TAG, "submitScoreImmediate failed", e)
                     onResult(SubmitResult.Failed(e.message ?: "unknown"))
                 }
         }.onFailure { e ->
+            debugLog(activity, "submit: threw: ${e.javaClass.simpleName}: ${e.message}")
             Log.w(TAG, "submitScoreImmediate threw", e)
             onResult(SubmitResult.Failed(e.message ?: "unknown"))
         }
@@ -161,18 +181,24 @@ object GpgsLeaderboard {
         context: Context,
         maxResults: Int = 10
     ): LoadResult {
-        if (!isConfigured()) return LoadResult.Failure("not_configured")
+        debugLog(context, "load: enter, maxResults=$maxResults")
+        if (!isConfigured()) {
+            debugLog(context, "load: not configured")
+            return LoadResult.Failure("not_configured")
+        }
         val activity = context.toActivityOrNull()
         if (activity == null) {
+            debugLog(context, "load: no Activity")
             Log.w(TAG, "loadTopScores: no Activity, skipping")
             return LoadResult.Failure("no_activity")
         }
         val signInClient = PlayGames.getGamesSignInClient(activity)
         return try {
-            if (!ensureAuthenticated(signInClient)) {
+            if (!ensureAuthenticated(context, signInClient)) {
                 Log.w(TAG, "loadTopScores: sign-in failed")
                 return LoadResult.Failure("sign_in_failed")
             }
+            debugLog(context, "load: authenticated, fetching")
             val annotated = PlayGames.getLeaderboardsClient(activity)
                 .loadTopScores(
                     LEADERBOARD_ID,
@@ -183,7 +209,9 @@ object GpgsLeaderboard {
                 )
                 .await()
             val scores = annotated.get()
-                ?: return LoadResult.Failure("no_scores_response")
+                ?: return LoadResult.Failure("no_scores_response").also {
+                    debugLog(context, "load: SDK call failed: annotated.get() returned null")
+                }
             try {
                 val buffer = scores.scores
                 val entries = ArrayList<GlobalEntry>(buffer.count)
@@ -203,35 +231,51 @@ object GpgsLeaderboard {
                         )
                     )
                 }
+                debugLog(context, "load: SDK returned ${entries.size} entries")
                 Log.i(TAG, "loadTopScores success: ${entries.size} entries")
                 LoadResult.Success(entries.toList())
             } finally {
                 scores.release()
             }
         } catch (e: Exception) {
+            val trace = Log.getStackTraceString(e)
+            debugLog(
+                context,
+                "load: threw: ${e.javaClass.simpleName}: ${e.message}; stacktrace: $trace"
+            )
             Log.w(TAG, "loadTopScores threw", e)
             LoadResult.Failure("exception: ${e.message ?: "unknown"}")
         }
     }
 
-    private suspend fun ensureAuthenticated(signInClient: GamesSignInClient): Boolean {
+    private suspend fun ensureAuthenticated(
+        context: Context,
+        signInClient: GamesSignInClient
+    ): Boolean {
         val authResult = try {
             signInClient.isAuthenticated.await()
         } catch (e: Exception) {
+            debugLog(context, "load: isAuthenticated check failed: ${e.message}")
             Log.w(TAG, "isAuthenticated check failed", e)
             return false
         }
         if (authResult.isAuthenticated) {
+            debugLog(context, "load: authenticated, fetching")
             Log.i(TAG, "isAuthenticated: true")
             return true
         }
+        debugLog(context, "load: not authenticated, attempting sign-in")
         val signInResult = try {
             signInClient.signIn().await()
         } catch (e: Exception) {
+            debugLog(context, "load: sign-in failed: ${e.message}")
             Log.w(TAG, "signIn failed", e)
             return false
         }
         Log.i(TAG, "signIn success")
+        if (!signInResult.isAuthenticated) {
+            debugLog(context, "load: signIn returned but still not authenticated")
+        }
         return signInResult.isAuthenticated
     }
 
@@ -241,4 +285,30 @@ object GpgsLeaderboard {
     }
 
     private fun Context.toActivityOrNull(): Activity? = this as? Activity
+
+    /**
+     * Append a one-line, timestamped diagnostic event to
+     * [DEBUG_LOG_FILE] under the app-specific external files dir
+     * (`/storage/emulated/0/Android/data/<pkg>/files/gpgs-debug.log`)
+     * so the user can review GPGS outcomes via the device's Files app
+     * without root or USB debugging. Wrapped in runCatching — any IO
+     * failure is silently dropped because diagnostics must never
+     * affect the call path they observe. To be removed alongside the
+     * rest of the diagnostic patch once the failure mode is found.
+     *
+     * Visibility is `internal` so LastTileApplication can also write
+     * one-line traces from PlayGamesSdk.initialize without duplicating
+     * the file-append boilerplate.
+     */
+    internal fun debugLog(context: Context, message: String) {
+        runCatching {
+            val dir = context.getExternalFilesDir(null) ?: return@runCatching
+            val file = java.io.File(dir, DEBUG_LOG_FILE)
+            val timestamp = java.text.SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss",
+                java.util.Locale.US
+            ).format(java.util.Date())
+            file.appendText("[$timestamp] $message\n")
+        }
+    }
 }
