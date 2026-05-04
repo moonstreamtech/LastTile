@@ -284,7 +284,22 @@ object GpgsLeaderboard {
         return PlayGames.getGamesSignInClient(activity)
     }
 
-    private fun Context.toActivityOrNull(): Activity? = this as? Activity
+    // Compose's LocalContext.current is not always an Activity directly:
+    // it's typically a ContextWrapper (or a chain of wrappers from theme,
+    // tooling, or library code) wrapping the hosting Activity. A plain
+    // `as? Activity` cast returns null in that case, which is what
+    // produced the v0.1.5 "load: no Activity" failure observed in the
+    // diagnostic log even though the same Compose tree's submitScore
+    // path (called from GameState with the Activity-context already)
+    // worked fine. Walk the wrapper chain to find the Activity.
+    internal fun Context.toActivityOrNull(): Activity? {
+        var ctx: Context? = this
+        while (ctx is android.content.ContextWrapper) {
+            if (ctx is Activity) return ctx
+            ctx = ctx.baseContext
+        }
+        return null
+    }
 
     /**
      * Append a one-line, timestamped diagnostic event to
