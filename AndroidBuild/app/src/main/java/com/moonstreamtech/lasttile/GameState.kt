@@ -16,7 +16,15 @@ class GameState(
     // has accepted the entry. Used by the UI layer to forward the score to
     // an online provider (e.g. Google Play Games Services). Failures here
     // must not affect game state — submission is fire-and-forget.
-    private val onRunSubmitted: ((Int) -> Unit)? = null
+    private val onRunSubmitted: ((Int) -> Unit)? = null,
+    // Returns true while the interactive tutorial is on screen. Used to
+    // suppress local + online leaderboard writes for scripted tutorial
+    // boards (we never want a tutorial run to chart). The lambda is
+    // queried inside [submitRunOnce] and checked again from the live-PB
+    // hook in [mergeTiles] so a manual Restart, a hand-engineered game-
+    // over inside a tutorial step, and the tutorial's own controlled
+    // merges all skip submission deterministically.
+    private val isTutorialActive: () -> Boolean = { false }
 ) {
     companion object {
         const val INITIAL_ACTIVE = 5
@@ -193,6 +201,82 @@ class GameState(
         save()
     }
 
+    /**
+     * Resets the board into a scripted state for [step] of the
+     * interactive tutorial. Active region is the standard 5×5 in the
+     * middle of a 7×7 board (rows 1..5, cols 1..5). Each step places
+     * exactly the tiles the user needs to interact with so the
+     * tutorial overlay's auto-advance hooks (which observe GameState
+     * fields like combo / unlockedTargets / shieldCount) fire on the
+     * correct user action and not on incidental board state.
+     *
+     * Does NOT call submitRunOnce — the tutorial is gated by
+     * isTutorialActive at the submission site, but skipping the call
+     * here keeps a tutorial reset from racing the gate. Persists via
+     * save() so backgrounding mid-step preserves the scripted layout.
+     */
+    fun setupForTutorial(step: TutorialStep) {
+        size = INITIAL_SIZE
+        unlocked = initialUnlocked(INITIAL_SIZE)
+        val b = mutableBoard(INITIAL_SIZE)
+
+        when (step) {
+            TutorialStep.Merge -> {
+                b[3][2] = Tile.Normal(2)
+                b[3][3] = Tile.Normal(2)
+            }
+            TutorialStep.Frame -> {
+                // Merging two 32s yields 64, which on a fresh 7×7 board
+                // (unlockBase = 64) fires applyExpansion → 1 cell unlocks.
+                b[3][2] = Tile.Normal(32)
+                b[3][3] = Tile.Normal(32)
+            }
+            TutorialStep.Hazard -> {
+                b[2][2] = Tile.Fire(2, 0)
+                b[3][3] = Tile.Ice(2, 0)
+                b[4][4] = Tile.Poison(2, 0)
+            }
+            TutorialStep.Shield -> {
+                b[3][3] = Tile.Fire(4, 0)
+            }
+            TutorialStep.Leaderboard -> {
+                b[3][3] = Tile.Normal(2)
+            }
+            TutorialStep.Done -> Unit
+        }
+
+        board = b.toImmutable()
+        score = 0
+        turn = 0
+        selected = null
+        gameOver = false
+        combo = 0
+        lastHazardsCleared = 0
+        lastSplit = null
+        unlockedTargets = emptySet()
+        pressedTiles = emptySet()
+        lastTapTime = 0L
+        lastTapPos = null
+        submittedThisRun = false
+        bestThisRun = 0
+        lastSubmittedRank = -1
+        actionCount = 0
+        lastFireDeathAction = -HAZARD_RESPAWN_COOLDOWN
+        lastIceDeathAction = -HAZARD_RESPAWN_COOLDOWN
+        lastPoisonDeathAction = -HAZARD_RESPAWN_COOLDOWN
+        unlockDebt = 0
+        lastFocus = null
+
+        // Intentionally do NOT touch shieldCount here. SHIELD_INITIAL
+        // is 1 so first-launch users have exactly the shield the Shield
+        // step demonstrates; on tutorial re-watch the user keeps their
+        // real meta-progression shield count and can either drag (auto-
+        // advance) or fall through to the Got it button when they have
+        // no shields available.
+
+        save()
+    }
+
     // One-shot per-run submission to local + GPGS leaderboards. Used by
     // both natural game-over (recordRunIfOver) and manual Restart, so a
     // run's score lands on the leaderboards exactly once regardless of
@@ -201,6 +285,7 @@ class GameState(
     // on the global board even when an earlier in-run PB already did.
     private fun submitRunOnce() {
         if (submittedThisRun) return
+        if (isTutorialActive()) return
         val lb = leaderboard ?: return
         if (score <= 0) return
         submittedThisRun = true
@@ -358,8 +443,9 @@ class GameState(
         // Live online PB push. GPGS keeps max-per-player so it's safe to
         // call frequently; bestThisRun guards against re-submitting the
         // same value when the score didn't actually increase past our
-        // last push.
-        if (score > bestThisRun) {
+        // last push. Suppressed during the tutorial so scripted merges
+        // don't chart.
+        if (score > bestThisRun && !isTutorialActive()) {
             bestThisRun = score
             runCatching { onRunSubmitted?.invoke(score) }
         }

@@ -78,6 +78,9 @@ import com.moonstreamtech.lasttile.LocalLeaderboard
 import com.moonstreamtech.lasttile.R
 import com.moonstreamtech.lasttile.RewardedAdManager
 import com.moonstreamtech.lasttile.Tile
+import com.moonstreamtech.lasttile.TutorialController
+import com.moonstreamtech.lasttile.TutorialState
+import com.moonstreamtech.lasttile.TutorialStep
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -106,14 +109,58 @@ fun GameScreen() {
         context.getSharedPreferences("lasttile_leaderboard", Context.MODE_PRIVATE)
     }
     val leaderboard = remember { LocalLeaderboard(leaderboardPrefs) }
+    val tutorial = remember(prefs) { TutorialController(prefs) }
     val state = remember(activity) {
         GameState(
             prefs = prefs,
             leaderboard = leaderboard,
             onRunSubmitted = { finalScore ->
                 GpgsLeaderboard.submitScore(context, finalScore.toLong())
-            }
+            },
+            isTutorialActive = { tutorial.state.active }
         )
+    }
+    // Auto-start the tutorial on the first launch after install. Small
+    // delay so the GameScreen has rendered before the overlay covers it
+    // — without the delay the dim layer paints into a half-laid-out
+    // tree and the cut-out region misses on the first frame.
+    LaunchedEffect(Unit) {
+        if (!tutorial.hasSeenTutorial) {
+            kotlinx.coroutines.delay(500L)
+            tutorial.start()
+        }
+    }
+    // Whenever the tutorial step changes, script the board for the new
+    // step. Done is the terminal state — when we reach it the user is
+    // back to a normal run, so kick off a fresh restart() so the saved
+    // tutorial layout doesn't bleed into the post-tutorial game. The
+    // tutorialHasBeenActive flag scopes the restart to "tutorial just
+    // ended in this session", preventing a cold launch with active=false
+    // from wiping a legitimate saved game.
+    var tutorialHasBeenActive by remember { mutableStateOf(false) }
+    LaunchedEffect(tutorial.state.currentStep, tutorial.state.active) {
+        if (tutorial.state.active) {
+            state.setupForTutorial(tutorial.state.currentStep)
+            tutorialHasBeenActive = true
+        } else if (tutorialHasBeenActive) {
+            state.restart()
+            tutorialHasBeenActive = false
+        }
+    }
+    // Auto-advance hooks. Each step advances when the user performs the
+    // scripted action: combo > 0 means a merge happened (Merge step);
+    // unlockedTargets non-empty means a frame cell unlocked (Frame
+    // step); shieldCount dropping to 0 from a non-zero start means the
+    // shield was applied (Shield step). The Hazard and Leaderboard
+    // steps are informational and only the Got it button advances them.
+    LaunchedEffect(state.combo, state.unlockedTargets, state.shieldCount, tutorial.state.currentStep) {
+        if (!tutorial.state.active) return@LaunchedEffect
+        when (tutorial.state.currentStep) {
+            TutorialStep.Merge -> if (state.combo > 0) tutorial.next()
+            TutorialStep.Frame -> if (state.unlockedTargets.isNotEmpty()) tutorial.next()
+            TutorialStep.Shield -> if (state.shieldCount == 0) tutorial.next()
+            else -> Unit
+        }
     }
     var showLeaderboard by remember { mutableStateOf(false) }
     var showShieldDialog by remember { mutableStateOf(false) }
@@ -311,7 +358,12 @@ fun GameScreen() {
                 }
                 Spacer(Modifier.size(12.dp))
                 Button(
-                    onClick = { showLeaderboard = true },
+                    onClick = {
+                        // Per spec: opening any dialog mid-tutorial
+                        // dismisses it gracefully so the user can browse.
+                        if (tutorial.state.active) tutorial.skip()
+                        showLeaderboard = true
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = CardAccent,
                         contentColor = TextPrimary
@@ -319,6 +371,20 @@ fun GameScreen() {
                 ) {
                     Text(
                         stringResource(R.string.btn_leaderboard),
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                }
+                Spacer(Modifier.size(12.dp))
+                Button(
+                    onClick = { tutorial.start() },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = CardAccent,
+                        contentColor = TextPrimary
+                    )
+                ) {
+                    Text(
+                        stringResource(R.string.btn_tutorial),
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp
                     )
@@ -381,6 +447,24 @@ fun GameScreen() {
                     fontWeight = FontWeight.Black
                 )
             }
+        }
+
+        // Tutorial overlay. Draws last in the root Box so it sits above
+        // the board, the stat row, and the dialogs. The dim layer is
+        // intentionally applied at low alpha (0.55) covering the whole
+        // screen rather than cut around individual UI elements — the
+        // simpler approach the spec offers when per-element cut-outs
+        // would balloon the implementation. The instruction card sits
+        // at the bottom and shows: step counter, instruction text, the
+        // shield sub-hint when relevant, a Got it CTA, and a Skip text
+        // button. A dialog open during the tutorial calls skip() at
+        // its open site so the overlay doesn't collide with the dialog.
+        if (tutorial.state.active) {
+            TutorialOverlay(
+                state = tutorial.state,
+                onGotIt = { tutorial.next() },
+                onSkip = { tutorial.skip() }
+            )
         }
     }
 }
@@ -1358,4 +1442,105 @@ private fun tileBrush(value: Int): Brush {
         else -> Color(0xFF9575CD) to Color(0xFF311B92)
     }
     return Brush.verticalGradient(listOf(top, bottom))
+}
+
+@Composable
+private fun TutorialOverlay(
+    state: TutorialState,
+    onGotIt: () -> Unit,
+    onSkip: () -> Unit
+) {
+    // Per spec: dim the entire screen at low alpha (0.55) instead of
+    // cutting per-element holes, then float an instruction card at the
+    // bottom. The dim layer does NOT consume clicks — the user can
+    // still drag tiles, tap the shield card, etc. The card surface
+    // does consume clicks within its own bounds.
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .zIndex(50f)
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Black.copy(alpha = 0.55f))
+        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(16.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(18.dp))
+                    .background(Brush.verticalGradient(listOf(CardAccent, CardBg)))
+                    .padding(18.dp)
+                    // Absorb taps so they don't fall through to the
+                    // dimmed game surface underneath the card.
+                    .pointerInput(Unit) {}
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(
+                        text = stringResource(
+                            R.string.tutorial_step_counter,
+                            state.currentStep.index,
+                            TutorialStep.TOTAL_INTERACTIVE_STEPS
+                        ),
+                        color = TextSecondary,
+                        fontSize = 11.sp,
+                        letterSpacing = 2.sp,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                    Spacer(Modifier.height(10.dp))
+                    if (state.instructionTextRes != 0) {
+                        Text(
+                            text = stringResource(state.instructionTextRes),
+                            color = TextPrimary,
+                            fontSize = 14.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    if (state.currentStep == TutorialStep.Shield) {
+                        Spacer(Modifier.height(8.dp))
+                        Text(
+                            text = stringResource(R.string.tutorial_step_shield_subhint),
+                            color = TextSecondary,
+                            fontSize = 11.sp,
+                            textAlign = TextAlign.Center
+                        )
+                    }
+                    Spacer(Modifier.height(14.dp))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        TextButton(onClick = onSkip) {
+                            Text(
+                                stringResource(R.string.tutorial_cta_skip),
+                                color = TextSecondary,
+                                fontWeight = FontWeight.Bold,
+                                letterSpacing = 1.sp
+                            )
+                        }
+                        Spacer(Modifier.size(12.dp))
+                        if (state.ctaTextRes != 0) {
+                            Button(
+                                onClick = onGotIt,
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = AccentAmber,
+                                    contentColor = Color(0xFF2B1810)
+                                )
+                            ) {
+                                Text(
+                                    stringResource(state.ctaTextRes),
+                                    fontWeight = FontWeight.Bold,
+                                    letterSpacing = 1.sp
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

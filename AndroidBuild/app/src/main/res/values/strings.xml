@@ -104,4 +104,23 @@
          most locales; translators may swap it for an "x" letter if their
          convention differs. -->
     <string name="combo_value_format">×%1$d</string>
+
+    <!-- v0.1.7: Interactive 5-step tutorial. Auto-runs on first launch and
+         is re-openable from the menu. Each instruction sits on a card at
+         the bottom of the screen above a dimmed background, with a Got it
+         CTA and a Skip Tutorial text button. The merge and frame steps
+         auto-advance when the user performs the scripted action; the
+         hazard, shield, and leaderboard steps advance on the Got it tap
+         (shield also auto-advances when the shield is consumed). -->
+    <string name="btn_tutorial">How to play</string>
+    <string name="tutorial_step_counter">%1$d / %2$d</string>
+    <string name="tutorial_cta_got_it">Got it</string>
+    <string name="tutorial_cta_skip">Skip Tutorial</string>
+    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
+    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
+    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
+    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
+    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
+    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
+    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
 </resources>
