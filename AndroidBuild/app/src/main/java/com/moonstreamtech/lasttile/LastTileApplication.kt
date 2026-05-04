@@ -26,8 +26,12 @@ class LastTileApplication : Application() {
         // Safe with a placeholder APP_ID: the SDK initializes locally and
         // sign-in is deferred until a real client call. With the placeholder
         // present, online calls fail gracefully via the GpgsLeaderboard
-        // wrapper instead of crashing the app.
+        // wrapper instead of crashing the app. Sign-in itself is never
+        // triggered here — GpgsLeaderboard performs the isAuthenticated /
+        // signIn handshake on demand from user-driven actions.
         runCatching { PlayGamesSdk.initialize(this) }
+            .onSuccess { Log.i("LastTileApp", "PlayGamesSdk.initialize success") }
+            .onFailure { e -> Log.w("LastTileApp", "PlayGamesSdk.initialize failed", e) }
 
         // AdMob init is fire-and-forget. If the device has no Play Services
         // (e.g. some Huawei devices) the SDK reports failure via the callback
