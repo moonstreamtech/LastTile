@@ -74,27 +74,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">Cách chơi</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">Đã hiểu</string>
+    <string name="tutorial_cta_skip">Bỏ qua hướng dẫn</string>
+    <string name="tutorial_step_merge_instruction">Kéo một ô lên ô khớp để hợp nhất chúng.</string>
+    <string name="tutorial_step_frame_instruction">Hợp nhất các ô này để mở khóa ô khung mới.</string>
+    <string name="tutorial_step_hazard_instruction">Nguy hiểm Lửa, Băng và Độc chặn ô và làm hỏng chúng theo thời gian. Đạt giá trị hợp nhất cao hoặc dùng khiên để loại bỏ chúng.</string>
+    <string name="tutorial_step_shield_instruction">Kéo thẻ khiên lên ô nguy hiểm để vô hiệu hóa nó.</string>
+    <string name="tutorial_step_shield_subhint">Chạm vào thẻ khiên để xem video và nhận thêm 3 khiên.</string>
+    <string name="tutorial_step_leaderboard_instruction">Điểm số cao của bạn tự động gửi lên bảng xếp hạng toàn cầu. Mở từ menu để xem thứ hạng.</string>
+    <string name="tutorial_hint_drag_to_merge">Thử kéo các ô lại với nhau…</string>
 
 </resources>

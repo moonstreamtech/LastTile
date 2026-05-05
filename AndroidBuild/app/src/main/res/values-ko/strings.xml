@@ -74,27 +74,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">플레이 방법</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">알겠어요</string>
+    <string name="tutorial_cta_skip">튜토리얼 건너뛰기</string>
+    <string name="tutorial_step_merge_instruction">같은 값의 타일 위로 드래그하여 합치세요.</string>
+    <string name="tutorial_step_frame_instruction">이 타일들을 합쳐 새로운 프레임 칸을 열어보세요.</string>
+    <string name="tutorial_step_hazard_instruction">불, 얼음, 독 위험은 타일을 막고 시간이 지나면 피해를 줍니다. 높은 병합 값을 달성하거나 방패를 사용해 제거하세요.</string>
+    <string name="tutorial_step_shield_instruction">방패 카드를 위험 타일 위로 드래그해 무효화하세요.</string>
+    <string name="tutorial_step_shield_subhint">방패 카드를 탭해 동영상을 시청하면 방패 3개를 더 얻을 수 있습니다.</string>
+    <string name="tutorial_step_leaderboard_instruction">최고 점수는 자동으로 글로벌 리더보드에 제출됩니다. 메뉴에서 열어 순위를 확인하세요.</string>
+    <string name="tutorial_hint_drag_to_merge">타일들을 함께 드래그해 보세요…</string>
 
 </resources>

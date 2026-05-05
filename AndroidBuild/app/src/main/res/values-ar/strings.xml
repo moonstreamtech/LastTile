@@ -79,27 +79,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">كيف تلعب</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">فهمت</string>
+    <string name="tutorial_cta_skip">تخطي البرنامج التعليمي</string>
+    <string name="tutorial_step_merge_instruction">اسحب قطعة فوق قطعة مطابقة لدمجهما.</string>
+    <string name="tutorial_step_frame_instruction">ادمج هذه القطع لفتح خلايا إطار جديدة.</string>
+    <string name="tutorial_step_hazard_instruction">تحجب مخاطر النار والجليد والسم القطع وتُلحق بها الضرر بمرور الوقت. حقق قيم دمج عالية أو استخدم الدروع لإزالتها.</string>
+    <string name="tutorial_step_shield_instruction">اسحب بطاقة الدرع فوق قطعة خطر لإبطال مفعولها.</string>
+    <string name="tutorial_step_shield_subhint">اضغط على بطاقة الدرع لمشاهدة فيديو والحصول على 3 دروع إضافية.</string>
+    <string name="tutorial_step_leaderboard_instruction">تُرسل أعلى نتائجك تلقائيًا إلى لوحة المتصدرين العالمية. افتحها من القائمة لمعرفة ترتيبك.</string>
+    <string name="tutorial_hint_drag_to_merge">جرّب سحب القطع معًا…</string>
 
 </resources>

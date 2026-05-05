@@ -74,27 +74,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">如何玩</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">明白了</string>
+    <string name="tutorial_cta_skip">跳過教學</string>
+    <string name="tutorial_step_merge_instruction">將方塊拖到匹配的方塊上以合併它們。</string>
+    <string name="tutorial_step_frame_instruction">合併這些方塊以解鎖新的邊框單元格。</string>
+    <string name="tutorial_step_hazard_instruction">火焰、冰霜和毒素危險會阻擋方塊並隨時間造成傷害。達到高合併值或使用護盾來清除它們。</string>
+    <string name="tutorial_step_shield_instruction">將護盾卡拖到危險方塊上將其中和。</string>
+    <string name="tutorial_step_shield_subhint">點擊護盾卡觀看影片，再獲得3個護盾。</string>
+    <string name="tutorial_step_leaderboard_instruction">你的高分會自動提交到全球排行榜。從選單開啟以查看你的排名。</string>
+    <string name="tutorial_hint_drag_to_merge">嘗試將方塊拖到一起…</string>
 
 </resources>

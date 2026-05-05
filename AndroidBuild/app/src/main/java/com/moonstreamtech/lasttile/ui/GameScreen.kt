@@ -30,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -54,6 +55,8 @@ import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -341,8 +344,33 @@ fun GameScreen() {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
             ) {
+                // Compact "?" help icon, 48dp Material touch target. Sits
+                // to the left of Restart so the two main CTAs stay where
+                // returning players expect them. Replaces the wide
+                // "How to play" button from v0.1.7 — that button wrapped
+                // its label to three lines because the row was too tight
+                // for three full-width buttons. The "?" character is
+                // inlined (no string resource) because it reads identically
+                // across every supported locale, like the other universal
+                // symbols already inlined in this file.
+                val helpDescription = stringResource(R.string.btn_tutorial)
+                IconButton(
+                    onClick = { tutorial.start() },
+                    modifier = Modifier
+                        .size(48.dp)
+                        .semantics { contentDescription = helpDescription }
+                ) {
+                    Text(
+                        text = "?",
+                        color = TextSecondary,
+                        fontSize = 22.sp,
+                        fontWeight = FontWeight.Black
+                    )
+                }
+                Spacer(Modifier.size(8.dp))
                 Button(
                     onClick = { state.restart() },
                     colors = ButtonDefaults.buttonColors(
@@ -371,20 +399,6 @@ fun GameScreen() {
                 ) {
                     Text(
                         stringResource(R.string.btn_leaderboard),
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
-                }
-                Spacer(Modifier.size(12.dp))
-                Button(
-                    onClick = { tutorial.start() },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = CardAccent,
-                        contentColor = TextPrimary
-                    )
-                ) {
-                    Text(
-                        stringResource(R.string.btn_tutorial),
                         fontWeight = FontWeight.Bold,
                         letterSpacing = 1.sp
                     )
@@ -1450,21 +1464,19 @@ private fun TutorialOverlay(
     onGotIt: () -> Unit,
     onSkip: () -> Unit
 ) {
-    // Per spec: dim the entire screen at low alpha (0.55) instead of
-    // cutting per-element holes, then float an instruction card at the
-    // bottom. The dim layer does NOT consume clicks — the user can
-    // still drag tiles, tap the shield card, etc. The card surface
-    // does consume clicks within its own bounds.
+    // v0.1.8: dim layer removed — full-opacity board + scoreboard read
+    // better against the dark theme than the muddy 0.55-alpha black scrim
+    // we shipped in v0.1.7. The instruction card carries the tutorial UI
+    // alone, anchored at the bottom with safe-area padding so it never
+    // collides with the system nav bar. The Column's fillMaxSize +
+    // verticalArrangement = Bottom keeps the card pinned without consuming
+    // the underlying click surface — pointerInput on the card itself
+    // absorbs taps within its bounds.
     Box(
         modifier = Modifier
             .fillMaxSize()
             .zIndex(50f)
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.Black.copy(alpha = 0.55f))
-        )
         Column(
             modifier = Modifier
                 .fillMaxSize()
