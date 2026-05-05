@@ -75,27 +75,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">Hoe te spelen</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">Begrepen</string>
+    <string name="tutorial_cta_skip">Tutorial overslaan</string>
+    <string name="tutorial_step_merge_instruction">Sleep een tegel op de bijpassende tegel om ze samen te voegen.</string>
+    <string name="tutorial_step_frame_instruction">Voeg deze tegels samen om nieuwe randvakken te ontgrendelen.</string>
+    <string name="tutorial_step_hazard_instruction">Vuur-, IJs- en Gifgevaren blokkeren tegels en beschadigen ze na verloop van tijd. Bereik hoge samenvoegwaarden of gebruik schilden om ze te verwijderen.</string>
+    <string name="tutorial_step_shield_instruction">Sleep de schildkaart op een gevarentegel om deze te neutraliseren.</string>
+    <string name="tutorial_step_shield_subhint">Tik op de schildkaart om een video te bekijken en 3 extra schilden te verdienen.</string>
+    <string name="tutorial_step_leaderboard_instruction">Je hoogste scores worden automatisch verstuurd naar het wereldwijde scorebord. Open het via het menu om je ranking te zien.</string>
+    <string name="tutorial_hint_drag_to_merge">Probeer de tegels samen te slepen…</string>
 
 </resources>

@@ -77,27 +77,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">Как играть</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">Понятно</string>
+    <string name="tutorial_cta_skip">Пропустить обучение</string>
+    <string name="tutorial_step_merge_instruction">Перетащи плитку на совпадающую плитку, чтобы объединить их.</string>
+    <string name="tutorial_step_frame_instruction">Объедини эти плитки, чтобы открыть новые ячейки рамки.</string>
+    <string name="tutorial_step_hazard_instruction">Опасности Огня, Льда и Яда блокируют плитки и наносят им урон со временем. Достигни высоких значений объединения или используй щиты, чтобы убрать их.</string>
+    <string name="tutorial_step_shield_instruction">Перетащи карту щита на опасную плитку, чтобы нейтрализовать её.</string>
+    <string name="tutorial_step_shield_subhint">Нажми на карту щита, чтобы посмотреть видео и получить ещё 3 щита.</string>
+    <string name="tutorial_step_leaderboard_instruction">Твои рекорды автоматически отправляются в глобальную таблицу лидеров. Открой её из меню, чтобы увидеть своё место.</string>
+    <string name="tutorial_hint_drag_to_merge">Попробуй перетащить плитки вместе…</string>
 
 </resources>

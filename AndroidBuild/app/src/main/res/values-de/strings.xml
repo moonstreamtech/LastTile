@@ -75,27 +75,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">Spielanleitung</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">Verstanden</string>
+    <string name="tutorial_cta_skip">Anleitung überspringen</string>
+    <string name="tutorial_step_merge_instruction">Ziehe eine Kachel auf eine passende Kachel, um sie zu verschmelzen.</string>
+    <string name="tutorial_step_frame_instruction">Verschmelze diese Kacheln, um neue Rahmenfelder freizuschalten.</string>
+    <string name="tutorial_step_hazard_instruction">Feuer, Eis und Gift blockieren Kacheln und beschädigen sie mit der Zeit. Erreiche hohe Verschmelzungswerte oder nutze Schilde, um sie zu entfernen.</string>
+    <string name="tutorial_step_shield_instruction">Ziehe die Schildkarte auf eine Gefahrenkachel, um sie zu neutralisieren.</string>
+    <string name="tutorial_step_shield_subhint">Tippe auf die Schildkarte, um ein Video anzusehen und 3 weitere Schilde zu erhalten.</string>
+    <string name="tutorial_step_leaderboard_instruction">Deine Highscores werden automatisch an die globale Bestenliste gesendet. Öffne sie im Menü, um deine Platzierung zu sehen.</string>
+    <string name="tutorial_hint_drag_to_merge">Versuche, die Kacheln zusammenzuziehen…</string>
 
 </resources>

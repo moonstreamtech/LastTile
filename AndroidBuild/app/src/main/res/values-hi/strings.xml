@@ -75,27 +75,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">कैसे खेलें</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">समझ गया</string>
+    <string name="tutorial_cta_skip">ट्यूटोरियल छोड़ें</string>
+    <string name="tutorial_step_merge_instruction">एक टाइल को मिलती-जुलती टाइल पर खींचकर उन्हें मिलाएं।</string>
+    <string name="tutorial_step_frame_instruction">नई फ्रेम सेल अनलॉक करने के लिए इन टाइलों को मिलाएं।</string>
+    <string name="tutorial_step_hazard_instruction">आग, बर्फ और जहर के खतरे टाइलों को रोकते हैं और समय के साथ नुकसान पहुंचाते हैं। उन्हें हटाने के लिए उच्च मर्ज मान तक पहुंचें या कवच का उपयोग करें।</string>
+    <string name="tutorial_step_shield_instruction">खतरे की टाइल को बेअसर करने के लिए कवच कार्ड को उस पर खींचें।</string>
+    <string name="tutorial_step_shield_subhint">वीडियो देखकर 3 और कवच पाने के लिए कवच कार्ड पर टैप करें।</string>
+    <string name="tutorial_step_leaderboard_instruction">आपके उच्चतम स्कोर स्वचालित रूप से वैश्विक लीडरबोर्ड पर भेजे जाते हैं। अपनी रैंक देखने के लिए मेनू से इसे खोलें।</string>
+    <string name="tutorial_hint_drag_to_merge">टाइलों को एक साथ खींचने का प्रयास करें…</string>
 
 </resources>

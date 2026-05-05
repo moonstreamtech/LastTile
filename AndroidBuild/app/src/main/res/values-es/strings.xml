@@ -75,27 +75,17 @@
 
     <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="btn_tutorial">How to play</string>
+    <string name="btn_tutorial">Cómo jugar</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_got_it">Got it</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_cta_skip">Skip Tutorial</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_hazard_instruction">Fire, Ice, and Poison hazards block tiles and damage them over time. Reach high merge values or use shields to clear them.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_instruction">Drag the shield card onto a hazard tile to neutralize it.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+    <string name="tutorial_cta_got_it">Entendido</string>
+    <string name="tutorial_cta_skip">Omitir tutorial</string>
+    <string name="tutorial_step_merge_instruction">Arrastra una pieza sobre la pieza coincidente para fusionarlas.</string>
+    <string name="tutorial_step_frame_instruction">Fusiona estas piezas para desbloquear nuevas celdas del marco.</string>
+    <string name="tutorial_step_hazard_instruction">Los peligros de Fuego, Hielo y Veneno bloquean piezas y las dañan con el tiempo. Alcanza valores de fusión altos o usa escudos para eliminarlos.</string>
+    <string name="tutorial_step_shield_instruction">Arrastra la carta de escudo sobre una pieza de peligro para neutralizarla.</string>
+    <string name="tutorial_step_shield_subhint">Toca la carta de escudo para ver un video y ganar 3 escudos más.</string>
+    <string name="tutorial_step_leaderboard_instruction">Tus puntuaciones más altas se envían automáticamente a la clasificación global. Ábrela desde el menú para ver tu posición.</string>
+    <string name="tutorial_hint_drag_to_merge">Intenta arrastrar las piezas juntas…</string>
 
 </resources>
