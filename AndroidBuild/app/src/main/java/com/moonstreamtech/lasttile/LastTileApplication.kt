@@ -42,6 +42,13 @@ class LastTileApplication : Application() {
                 )
             }
 
+        // Firebase Anonymous Auth + Firestore bootstrap (PR A).
+        // Runs in a background coroutine inside UserBootstrap; any failure
+        // (no network, invalid google-services.json stub) is caught and
+        // sets AuthState.Offline so the game works fully offline.
+        runCatching { UserBootstrap.init(this) }
+            .onFailure { e -> Log.w("LastTileApp", "UserBootstrap.init threw", e) }
+
         // AdMob init is fire-and-forget. If the device has no Play Services
         // (e.g. some Huawei devices) the SDK reports failure via the callback
         // and the bottom banner stays blank — same graceful behaviour as GPGS.
