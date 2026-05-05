@@ -88,4 +88,10 @@
     <string name="tutorial_step_leaderboard_instruction">Tus puntuaciones más altas se envían automáticamente a la clasificación global. Ábrela desde el menú para ver tu posición.</string>
     <string name="tutorial_hint_drag_to_merge">Intenta arrastrar las piezas juntas…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

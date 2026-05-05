@@ -92,4 +92,10 @@
     <string name="tutorial_step_leaderboard_instruction">تُرسل أعلى نتائجك تلقائيًا إلى لوحة المتصدرين العالمية. افتحها من القائمة لمعرفة ترتيبك.</string>
     <string name="tutorial_hint_drag_to_merge">جرّب سحب القطع معًا…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

@@ -87,4 +87,10 @@
     <string name="tutorial_step_leaderboard_instruction">คะแนนสูงของคุณจะถูกส่งไปยังกระดานผู้นำทั่วโลกโดยอัตโนมัติ เปิดจากเมนูเพื่อดูอันดับของคุณ</string>
     <string name="tutorial_hint_drag_to_merge">ลองลากไทล์มาวางใกล้กัน…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>
