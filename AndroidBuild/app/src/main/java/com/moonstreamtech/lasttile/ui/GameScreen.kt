@@ -4,6 +4,11 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -109,6 +114,11 @@ private val AccentPurple = Color(0xFFBA68C8)
 private val AccentBlue = Color(0xFF64B5F6)
 private val AccentGreen = Color(0xFF81C784)
 
+// Warm yellow used for the tutorial spotlight pulse on highlighted
+// board cells and the KORUMA card during step 4. Picked to match the
+// existing Restart button accent in the screenshots.
+private val TutorialSpotlight = Color(0xFFF4C062)
+
 @Composable
 fun GameScreen() {
     val context = LocalContext.current
@@ -128,7 +138,10 @@ fun GameScreen() {
             onRunSubmitted = { finalScore ->
                 GpgsLeaderboard.submitScore(context, finalScore.toLong())
             },
-            isTutorialActive = { tutorial.state.active }
+            isTutorialActive = { tutorial.state.active },
+            currentTutorialStep = {
+                if (tutorial.state.active) tutorial.state.currentStep else null
+            }
         )
     }
     // Auto-start the tutorial on the first launch after install. Small
@@ -243,6 +256,29 @@ fun GameScreen() {
         openShieldDialogOrTriggerAd()
     }
 
+    // Shared pulse alpha for the tutorial spotlight. One transition
+    // drives every glowing cell + the KORUMA card so they breathe in
+    // sync, and the transition runs unconditionally — cheap, and means
+    // the float is always defined for callers that gate on
+    // tutorial.state.active themselves. 1200 ms with LinearEasing +
+    // RepeatMode.Reverse matches the spec and reads as a slow breath.
+    val tutorialPulseTransition = rememberInfiniteTransition(label = "tutorialPulse")
+    val tutorialPulseAlpha by tutorialPulseTransition.animateFloat(
+        initialValue = 0.4f,
+        targetValue = 1.0f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(1200, easing = LinearEasing),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "tutorialPulseAlpha"
+    )
+    val tutorialSpotlightActive = tutorial.state.active &&
+        !tutorial.state.stepCompleted &&
+        tutorial.state.highlightedCells.isNotEmpty()
+    val tutorialShieldCardHighlighted = tutorial.state.active &&
+        !tutorial.state.stepCompleted &&
+        tutorial.state.currentStep == TutorialStep.Shield
+
     fun handleShieldDragEnd() {
         val pos = shieldDragWindowPos
         shieldDragWindowPos = null
@@ -354,7 +390,9 @@ fun GameScreen() {
                             shieldDragWindowPos = newWindow
                         }
                     },
-                    onDragFinish = { handleShieldDragEnd() }
+                    onDragFinish = { handleShieldDragEnd() },
+                    highlighted = tutorialShieldCardHighlighted,
+                    pulseAlpha = tutorialPulseAlpha
                 )
             }
 
@@ -362,7 +400,10 @@ fun GameScreen() {
 
             BoardView(
                 state = state,
-                onLayoutChange = { boardLayout = it }
+                onLayoutChange = { boardLayout = it },
+                highlightedCells = tutorial.state.highlightedCells,
+                spotlightActive = tutorialSpotlightActive,
+                pulseAlpha = tutorialPulseAlpha
             )
 
             Spacer(Modifier.height(14.dp))
@@ -539,7 +580,14 @@ private fun ShieldStatCard(
     onTap: () -> Unit,
     onDragStart: (Offset) -> Unit,
     onDragChange: (Offset) -> Unit,
-    onDragFinish: () -> Unit
+    onDragFinish: () -> Unit,
+    // Tutorial spotlight on the KORUMA card during step 4. When
+    // [highlighted] is true a 3.dp pulsing border is drawn around
+    // the card with [pulseAlpha] driving the alpha. The card otherwise
+    // renders identically — the existing tap and long-press-drag
+    // gestures are unaffected.
+    highlighted: Boolean = false,
+    pulseAlpha: Float = 1f
 ) {
     var cardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
     val container = if (count == 0) {
@@ -547,11 +595,21 @@ private fun ShieldStatCard(
     } else {
         Brush.verticalGradient(listOf(CardAccent, CardBg))
     }
+    val highlightModifier = if (highlighted) {
+        Modifier.border(
+            3.dp,
+            TutorialSpotlight.copy(alpha = pulseAlpha),
+            RoundedCornerShape(14.dp)
+        )
+    } else {
+        Modifier
+    }
     Box(
         modifier = Modifier
             .shadow(4.dp, RoundedCornerShape(14.dp), clip = false)
             .clip(RoundedCornerShape(14.dp))
             .background(container)
+            .then(highlightModifier)
             .padding(horizontal = 20.dp, vertical = 10.dp)
             .onGloballyPositioned { coords ->
                 cardWindowOrigin = coords.boundsInWindow().topLeft
@@ -1105,7 +1163,18 @@ private fun StatCard(label: String, value: String, highlight: Boolean = false) {
 private const val VIEWPORT_SIZE = 7
 
 @Composable
-private fun BoardView(state: GameState, onLayoutChange: (BoardLayout) -> Unit = {}) {
+private fun BoardView(
+    state: GameState,
+    onLayoutChange: (BoardLayout) -> Unit = {},
+    // Tutorial spotlight inputs. When [spotlightActive] is true,
+    // unlocked cells outside [highlightedCells] paint a 0.45-alpha
+    // black overlay on top of their content (dim) and the highlighted
+    // cells render a pulsing yellow border driven by [pulseAlpha].
+    // Default values keep BoardView's existing call sites working.
+    highlightedCells: Set<Pair<Int, Int>> = emptySet(),
+    spotlightActive: Boolean = false,
+    pulseAlpha: Float = 1f
+) {
     val cellSize: Dp = 48.dp
     val tilePadding = 3.dp
     val cellSlot = cellSize + tilePadding * 2
@@ -1189,6 +1258,7 @@ private fun BoardView(state: GameState, onLayoutChange: (BoardLayout) -> Unit = 
                             val isBeingDragged = draggedFrom == pos
                             val isPressed = pos in state.pressedTiles
 
+                            val isHighlighted = pos in highlightedCells
                             TileView(
                                 pos = pos,
                                 tile = tile,
@@ -1223,7 +1293,10 @@ private fun BoardView(state: GameState, onLayoutChange: (BoardLayout) -> Unit = 
                                     draggedFrom = null
                                     dragOffset = Offset.Zero
                                 },
-                                onClick = { state.tap(r, c) }
+                                onClick = { state.tap(r, c) },
+                                tutorialDim = spotlightActive && !isHighlighted,
+                                tutorialHighlighted = spotlightActive && isHighlighted,
+                                tutorialPulseAlpha = pulseAlpha
                             )
                         }
                     }
@@ -1327,7 +1400,15 @@ private fun TileView(
     onDrag: (Offset) -> Unit,
     onDragEnd: () -> Unit,
     onDragCancel: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    // Tutorial spotlight inputs. tutorialHighlighted overrides the
+    // existing border with a pulsing warm-yellow stroke (driven by
+    // tutorialPulseAlpha). tutorialDim paints a 0.45-alpha black scrim
+    // on top of the tile content so non-target cells visually recede.
+    // Both default off so non-tutorial composition is unchanged.
+    tutorialDim: Boolean = false,
+    tutorialHighlighted: Boolean = false,
+    tutorialPulseAlpha: Float = 1f
 ) {
     val brush: Brush
     val label: String
@@ -1367,7 +1448,13 @@ private fun TileView(
         }
     }
 
+    // Tutorial spotlight border takes precedence over the gameplay
+    // borders (selected / justOpened / pressed / draggable). Without
+    // this override the merge-pair cells on Step 1, which are also
+    // draggable, would render the teal "draggable" border alongside
+    // the pulse and the spotlight wouldn't read as the primary cue.
     val borderColor = when {
+        tutorialHighlighted -> TutorialSpotlight.copy(alpha = tutorialPulseAlpha)
         selected -> AccentGold
         justOpened -> AccentPurple
         pressed -> Color(0xFF000000).copy(alpha = 0.55f)
@@ -1375,6 +1462,7 @@ private fun TileView(
         else -> Color.Transparent
     }
     val borderWidth = when {
+        tutorialHighlighted -> 3.dp
         selected -> 4.dp
         justOpened -> 3.dp
         pressed -> 2.dp
@@ -1461,6 +1549,19 @@ private fun TileView(
                     )
                 }
             }
+        }
+        // Tutorial dim scrim. Painted last in the Box content so it
+        // covers the label as well as the gradient — the cells the
+        // player should not interact with read as visibly muted.
+        // Locked cells skip this because the locked gradient is
+        // already darker than the dim layer would make it; a second
+        // overlay would just turn them into solid black squares.
+        if (tutorialDim && unlocked) {
+            Box(
+                modifier = Modifier
+                    .matchParentSize()
+                    .background(Color.Black.copy(alpha = 0.45f))
+            )
         }
     }
 }
@@ -1570,7 +1671,14 @@ private fun TutorialStepContent(
     onGotIt: () -> Unit,
     onSkip: () -> Unit
 ) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    // fillMaxWidth + horizontalAlignment center the column inside the
+    // AnimatedContent slot, which defaults to Alignment.TopStart and
+    // would otherwise hug the leading edge — the "Nice merge!" line
+    // and step counter were rendering left-aligned in v0.1.7-polish.
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = stringResource(
                 R.string.tutorial_step_counter,
@@ -1580,7 +1688,8 @@ private fun TutorialStepContent(
             color = TextSecondary,
             fontSize = 11.sp,
             letterSpacing = 2.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(10.dp))
         if (instructionTextRes != 0) {
@@ -1646,12 +1755,16 @@ private fun TutorialSuccessContent(step: TutorialStep) {
         TutorialStep.Shield -> R.string.tutorial_success_shield
         else -> 0
     }
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Text(
             text = "✓",
             color = AccentAmber,
             fontSize = 28.sp,
-            fontWeight = FontWeight.Black
+            fontWeight = FontWeight.Black,
+            textAlign = TextAlign.Center
         )
         Spacer(Modifier.height(10.dp))
         if (successRes != 0) {

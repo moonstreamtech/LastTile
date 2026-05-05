@@ -24,7 +24,15 @@ class GameState(
     // hook in [mergeTiles] so a manual Restart, a hand-engineered game-
     // over inside a tutorial step, and the tutorial's own controlled
     // merges all skip submission deterministically.
-    private val isTutorialActive: () -> Boolean = { false }
+    private val isTutorialActive: () -> Boolean = { false },
+    // Returns the live tutorial step, or null when the tutorial is
+    // inactive. Distinct from [isTutorialActive] because the shield
+    // gate in [applyShieldOn] only blocks during non-Shield tutorial
+    // steps — Step 4 is the one place during the tutorial where a
+    // shield drag should still fire (against the scripted Fire(4)).
+    // Default { null } keeps tests / preview-only constructions
+    // unchanged.
+    private val currentTutorialStep: () -> TutorialStep? = { null }
 ) {
     companion object {
         const val INITIAL_ACTIVE = 5
@@ -226,6 +234,17 @@ class GameState(
      * save() so backgrounding mid-step preserves the scripted layout.
      */
     fun setupForTutorial(step: TutorialStep) {
+        // Step 4 → Step 5 transition restores the player's real shield
+        // count immediately rather than waiting for the whole tutorial
+        // to end. Otherwise Step 5's instruction card sits on top of a
+        // KORUMA value that was artificially set to 1 during step 4,
+        // and a player who glances at the HUD on step 5 thinks the
+        // tutorial just consumed their shield. Idempotent — the
+        // restore is a no-op when nothing was captured (e.g. the user
+        // skipped before step 4).
+        if (step == TutorialStep.Leaderboard) {
+            restoreSavedShieldForTutorial()
+        }
         size = INITIAL_SIZE
         unlocked = initialUnlocked(INITIAL_SIZE)
         val b = mutableBoard(INITIAL_SIZE)
@@ -549,6 +568,17 @@ class GameState(
     // was actually consumed; if not, the caller should treat the
     // action as a no-op (no toast, no counter change).
     fun applyShieldOn(row: Int, col: Int): Boolean {
+        // Tutorial gate: shields can only be applied during Step 4
+        // (Shield). Earlier steps still show the player's real
+        // shieldCount on the HUD, so without this gate a curious user
+        // could drag onto a hazard during Step 3 and burn a real
+        // shield — and the PR #22 saveShieldCount gate alone would
+        // not undo that until tutorial end. Returning false silently
+        // here makes the drag a no-op (the floating shield overlay
+        // still snaps away because handleShieldDragEnd cleared the
+        // drag pos before calling us).
+        val tutorialStep = currentTutorialStep()
+        if (tutorialStep != null && tutorialStep != TutorialStep.Shield) return false
         if (shieldCount <= 0) return false
         if (!isInBounds(row, col) || !unlocked[row][col]) return false
         val tile = board[row][col]

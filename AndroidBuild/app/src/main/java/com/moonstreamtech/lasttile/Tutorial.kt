@@ -33,7 +33,15 @@ data class TutorialState(
     // beat (checkmark + localized "nice merge / frame opened / hazard
     // cleared" message) and the GameScreen waits ~2s before calling
     // next(), giving the user a moment to register what just happened.
-    val stepCompleted: Boolean = false
+    val stepCompleted: Boolean = false,
+    // Board cells the spotlight overlay should render bright + pulsing
+    // for the current step. Coordinates mirror the tiles
+    // [com.moonstreamtech.lasttile.GameState.setupForTutorial] places —
+    // when one moves, the other has to move with it. Steps that have no
+    // board target (Leaderboard) leave this empty. The shield card
+    // highlight on step 4 is NOT in this set; it's a UI element outside
+    // the board grid and is gated separately on currentStep == Shield.
+    val highlightedCells: Set<Pair<Int, Int>> = emptySet()
 )
 
 /**
@@ -108,11 +116,22 @@ class TutorialController(private val prefs: SharedPreferences) {
             TutorialStep.Leaderboard -> R.string.tutorial_step_leaderboard_instruction
             TutorialStep.Done -> 0
         }
+        // Mirrors GameState.setupForTutorial — keep these tile
+        // coordinates in lockstep with the tiles that get placed on
+        // the scripted board.
+        val cells: Set<Pair<Int, Int>> = when (step) {
+            TutorialStep.Merge -> setOf(3 to 2, 3 to 3)
+            TutorialStep.Frame -> setOf(3 to 2, 3 to 3)
+            TutorialStep.Hazard -> setOf(2 to 2, 3 to 3, 4 to 4)
+            TutorialStep.Shield -> setOf(3 to 3)
+            TutorialStep.Leaderboard, TutorialStep.Done -> emptySet()
+        }
         return TutorialState(
             active = true,
             currentStep = step,
             instructionTextRes = instructionRes,
-            ctaTextRes = R.string.tutorial_cta_got_it
+            ctaTextRes = R.string.tutorial_cta_got_it,
+            highlightedCells = cells
         )
     }
 
