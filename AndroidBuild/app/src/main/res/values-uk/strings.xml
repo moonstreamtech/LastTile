@@ -90,4 +90,10 @@
     <string name="tutorial_step_leaderboard_instruction">Твої рекорди автоматично надсилаються до глобальної таблиці лідерів. Відкрий її з меню, щоб побачити своє місце.</string>
     <string name="tutorial_hint_drag_to_merge">Спробуй перетягнути плитки разом…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

@@ -90,4 +90,10 @@
     <string name="tutorial_step_leaderboard_instruction">Twoje najlepsze wyniki są automatycznie wysyłane do globalnego rankingu. Otwórz go z menu, aby zobaczyć swoją pozycję.</string>
     <string name="tutorial_hint_drag_to_merge">Spróbuj przeciągnąć kafelki razem…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

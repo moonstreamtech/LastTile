@@ -115,6 +115,16 @@ class GameState(
     var shieldCount by mutableStateOf(SHIELD_INITIAL)
         private set
 
+    // Pre-tutorial shieldCount, captured the first time setupForTutorial
+    // is called for the Shield step. Step 4 then forces shieldCount to 1
+    // (in memory only — see saveShieldCount gate below) so the demo is
+    // consistent regardless of the player's actual shield economy. When
+    // the tutorial finishes (Done OR skip) [restoreSavedShieldForTutorial]
+    // writes this value back so the player never loses a shield to the
+    // tutorial. Null when nothing is captured (e.g. user skipped before
+    // ever reaching the Shield step) — restore is a no-op in that case.
+    private var savedShieldCountForTutorial: Int? = null
+
     // Highest score already pushed to the online leaderboard during this
     // run. We forward every new in-run personal best to GPGS so growBoard's
     // effectively-endless runs still produce live online scores. GPGS keeps
@@ -238,6 +248,19 @@ class GameState(
             }
             TutorialStep.Shield -> {
                 b[3][3] = Tile.Fire(4, 0)
+                // Demo shield: capture the player's real shield count
+                // (only on the first entry of this Shield step, so a
+                // re-script doesn't overwrite the saved value with our
+                // own demo 1) and force a single shield for the drag.
+                // restoreSavedShieldForTutorial puts the saved value
+                // back when the tutorial ends. We deliberately do NOT
+                // call saveShieldCount() here — the in-memory override
+                // must not hit disk, otherwise a process kill mid-
+                // tutorial would persist shieldCount = 1.
+                if (savedShieldCountForTutorial == null) {
+                    savedShieldCountForTutorial = shieldCount
+                }
+                shieldCount = 1
             }
             TutorialStep.Leaderboard -> {
                 b[3][3] = Tile.Normal(2)
@@ -267,14 +290,26 @@ class GameState(
         unlockDebt = 0
         lastFocus = null
 
-        // Intentionally do NOT touch shieldCount here. SHIELD_INITIAL
-        // is 1 so first-launch users have exactly the shield the Shield
-        // step demonstrates; on tutorial re-watch the user keeps their
-        // real meta-progression shield count and can either drag (auto-
-        // advance) or fall through to the Got it button when they have
-        // no shields available.
+        // shieldCount is set above for the Shield step only. Other
+        // steps leave the player's real shield count alone — the demo
+        // override is exclusive to step 4 and is restored on tutorial
+        // exit by restoreSavedShieldForTutorial.
 
         save()
+    }
+
+    /**
+     * Restores the pre-tutorial shieldCount captured by
+     * [setupForTutorial] for [TutorialStep.Shield]. Call from the UI
+     * layer when the tutorial transitions to inactive (Done OR skip),
+     * before any restart() that follows. Idempotent and a no-op when
+     * nothing was captured (e.g. user skipped before reaching step 4).
+     */
+    fun restoreSavedShieldForTutorial() {
+        val saved = savedShieldCountForTutorial ?: return
+        shieldCount = saved
+        savedShieldCountForTutorial = null
+        saveShieldCount()
     }
 
     // One-shot per-run submission to local + GPGS leaderboards. Used by
@@ -529,7 +564,13 @@ class GameState(
         board = b.toImmutable()
         shieldCount = (shieldCount - 1).coerceAtLeast(0)
         lastFocus = row to col
-        saveShieldCount()
+        // During the Shield tutorial step the decrement is intentionally
+        // not persisted — setupForTutorial writes shieldCount = 1 in
+        // memory only and restoreSavedShieldForTutorial puts the real
+        // value back when the tutorial ends. Saving here would defeat
+        // the override and let the tutorial consume a real shield if
+        // the process is killed mid-tutorial.
+        if (!isTutorialActive()) saveShieldCount()
         save()
         return true
     }

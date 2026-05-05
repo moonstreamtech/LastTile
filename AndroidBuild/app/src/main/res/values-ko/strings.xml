@@ -87,4 +87,10 @@
     <string name="tutorial_step_leaderboard_instruction">최고 점수는 자동으로 글로벌 리더보드에 제출됩니다. 메뉴에서 열어 순위를 확인하세요.</string>
     <string name="tutorial_hint_drag_to_merge">타일들을 함께 드래그해 보세요…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

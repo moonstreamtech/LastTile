@@ -3,6 +3,14 @@ package com.moonstreamtech.lasttile.ui
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -146,24 +154,43 @@ fun GameScreen() {
             state.setupForTutorial(tutorial.state.currentStep)
             tutorialHasBeenActive = true
         } else if (tutorialHasBeenActive) {
+            // Restore before restart so the player's pre-tutorial
+            // shield count is what survives onto the post-tutorial run
+            // (restart doesn't touch shieldCount, but ordering keeps
+            // the intent obvious).
+            state.restoreSavedShieldForTutorial()
             state.restart()
             tutorialHasBeenActive = false
         }
     }
-    // Auto-advance hooks. Each step advances when the user performs the
-    // scripted action: combo > 0 means a merge happened (Merge step);
-    // unlockedTargets non-empty means a frame cell unlocked (Frame
-    // step); shieldCount dropping to 0 from a non-zero start means the
-    // shield was applied (Shield step). The Hazard and Leaderboard
-    // steps are informational and only the Got it button advances them.
+    // Auto-advance hooks. Two stages so the user gets a "celebrate the
+    // success" beat before the step disappears:
+    //
+    //   1) Trigger detection — when the scripted action fires (combo
+    //      went up for Merge, a frame cell unlocked for Frame, the
+    //      shield count dropped for Shield) we mark the step completed
+    //      but do NOT call next() yet. The overlay reads stepCompleted
+    //      and swaps to a checkmark + localized "Nice merge / Frame
+    //      opened / Hazard cleared" message.
+    //   2) Delayed advance — once stepCompleted flips to true we wait
+    //      ~2s and then advance. Hazard and Leaderboard are not in this
+    //      pipeline; they advance on the explicit Got it tap.
     LaunchedEffect(state.combo, state.unlockedTargets, state.shieldCount, tutorial.state.currentStep) {
         if (!tutorial.state.active) return@LaunchedEffect
-        when (tutorial.state.currentStep) {
-            TutorialStep.Merge -> if (state.combo > 0) tutorial.next()
-            TutorialStep.Frame -> if (state.unlockedTargets.isNotEmpty()) tutorial.next()
-            TutorialStep.Shield -> if (state.shieldCount == 0) tutorial.next()
-            else -> Unit
+        if (tutorial.state.stepCompleted) return@LaunchedEffect
+        val triggered = when (tutorial.state.currentStep) {
+            TutorialStep.Merge -> state.combo > 0
+            TutorialStep.Frame -> state.unlockedTargets.isNotEmpty()
+            TutorialStep.Shield -> state.shieldCount == 0
+            else -> false
         }
+        if (triggered) tutorial.markStepCompleted()
+    }
+    LaunchedEffect(tutorial.state.stepCompleted, tutorial.state.currentStep) {
+        if (!tutorial.state.active) return@LaunchedEffect
+        if (!tutorial.state.stepCompleted) return@LaunchedEffect
+        kotlinx.coroutines.delay(2000L)
+        tutorial.next()
     }
     var showLeaderboard by remember { mutableStateOf(false) }
     var showShieldDialog by remember { mutableStateOf(false) }
@@ -1494,65 +1521,147 @@ private fun TutorialOverlay(
                     // dimmed game surface underneath the card.
                     .pointerInput(Unit) {}
             ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(
-                        text = stringResource(
-                            R.string.tutorial_step_counter,
-                            state.currentStep.index,
-                            TutorialStep.TOTAL_INTERACTIVE_STEPS
-                        ),
-                        color = TextSecondary,
-                        fontSize = 11.sp,
-                        letterSpacing = 2.sp,
-                        fontWeight = FontWeight.SemiBold
-                    )
-                    Spacer(Modifier.height(10.dp))
-                    if (state.instructionTextRes != 0) {
-                        Text(
-                            text = stringResource(state.instructionTextRes),
-                            color = TextPrimary,
-                            fontSize = 14.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    if (state.currentStep == TutorialStep.Shield) {
-                        Spacer(Modifier.height(8.dp))
-                        Text(
-                            text = stringResource(R.string.tutorial_step_shield_subhint),
-                            color = TextSecondary,
-                            fontSize = 11.sp,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-                    Spacer(Modifier.height(14.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        TextButton(onClick = onSkip) {
-                            Text(
-                                stringResource(R.string.tutorial_cta_skip),
-                                color = TextSecondary,
-                                fontWeight = FontWeight.Bold,
-                                letterSpacing = 1.sp
-                            )
+                // Animate the inner content (counter, text, buttons)
+                // between steps and into the success beat. The card
+                // surface itself stays fixed — only the content fades
+                // and slides. Transitions into the success beat use a
+                // scaleIn pop instead of slide so the checkmark feels
+                // like a small celebration; outgoing content always
+                // slides up + fades.
+                AnimatedContent(
+                    targetState = state.currentStep to state.stepCompleted,
+                    transitionSpec = {
+                        val targetIsSuccess = targetState.second
+                        val enter = if (targetIsSuccess) {
+                            fadeIn(tween(250)) +
+                                scaleIn(initialScale = 0.7f, animationSpec = tween(250))
+                        } else {
+                            fadeIn(tween(250)) +
+                                slideInVertically(tween(250)) { it / 4 }
                         }
-                        Spacer(Modifier.size(12.dp))
-                        if (state.ctaTextRes != 0) {
-                            Button(
-                                onClick = onGotIt,
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = AccentAmber,
-                                    contentColor = Color(0xFF2B1810)
-                                )
-                            ) {
-                                Text(
-                                    stringResource(state.ctaTextRes),
-                                    fontWeight = FontWeight.Bold,
-                                    letterSpacing = 1.sp
-                                )
-                            }
-                        }
+                        val exit = fadeOut(tween(200)) +
+                            slideOutVertically(tween(200)) { -it / 4 }
+                        enter togetherWith exit
+                    },
+                    label = "tutorial-content"
+                ) { (step, completed) ->
+                    if (completed) {
+                        TutorialSuccessContent(step = step)
+                    } else {
+                        TutorialStepContent(
+                            step = step,
+                            instructionTextRes = state.instructionTextRes,
+                            ctaTextRes = state.ctaTextRes,
+                            onGotIt = onGotIt,
+                            onSkip = onSkip
+                        )
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+private fun TutorialStepContent(
+    step: TutorialStep,
+    instructionTextRes: Int,
+    ctaTextRes: Int,
+    onGotIt: () -> Unit,
+    onSkip: () -> Unit
+) {
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(
+                R.string.tutorial_step_counter,
+                step.index,
+                TutorialStep.TOTAL_INTERACTIVE_STEPS
+            ),
+            color = TextSecondary,
+            fontSize = 11.sp,
+            letterSpacing = 2.sp,
+            fontWeight = FontWeight.SemiBold
+        )
+        Spacer(Modifier.height(10.dp))
+        if (instructionTextRes != 0) {
+            Text(
+                text = stringResource(instructionTextRes),
+                color = TextPrimary,
+                fontSize = 14.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        if (step == TutorialStep.Shield) {
+            Spacer(Modifier.height(8.dp))
+            Text(
+                text = stringResource(R.string.tutorial_step_shield_subhint),
+                color = TextSecondary,
+                fontSize = 11.sp,
+                textAlign = TextAlign.Center
+            )
+        }
+        Spacer(Modifier.height(14.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            TextButton(onClick = onSkip) {
+                Text(
+                    stringResource(R.string.tutorial_cta_skip),
+                    color = TextSecondary,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp
+                )
+            }
+            Spacer(Modifier.size(12.dp))
+            if (ctaTextRes != 0) {
+                Button(
+                    onClick = onGotIt,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = AccentAmber,
+                        contentColor = Color(0xFF2B1810)
+                    )
+                ) {
+                    Text(
+                        stringResource(ctaTextRes),
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun TutorialSuccessContent(step: TutorialStep) {
+    // Success beat shown for the auto-advanced steps after the user
+    // performs the scripted action. Replaces the step counter with a
+    // checkmark glyph (no material-icons artifact in the dependency
+    // graph, so a tinted Unicode "✓" stands in) and the instruction
+    // line with a localized celebration message. Skip / Got it are
+    // omitted on purpose — the overlay self-advances on a 2s timer
+    // started by GameScreen, so giving the user a button to dismiss
+    // would race the timer.
+    val successRes = when (step) {
+        TutorialStep.Merge -> R.string.tutorial_success_merge
+        TutorialStep.Frame -> R.string.tutorial_success_frame
+        TutorialStep.Shield -> R.string.tutorial_success_shield
+        else -> 0
+    }
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = "✓",
+            color = AccentAmber,
+            fontSize = 28.sp,
+            fontWeight = FontWeight.Black
+        )
+        Spacer(Modifier.height(10.dp))
+        if (successRes != 0) {
+            Text(
+                text = stringResource(successRes),
+                color = TextPrimary,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.SemiBold,
+                textAlign = TextAlign.Center
+            )
         }
     }
 }

@@ -88,4 +88,10 @@
     <string name="tutorial_step_leaderboard_instruction">आपके उच्चतम स्कोर स्वचालित रूप से वैश्विक लीडरबोर्ड पर भेजे जाते हैं। अपनी रैंक देखने के लिए मेनू से इसे खोलें।</string>
     <string name="tutorial_hint_drag_to_merge">टाइलों को एक साथ खींचने का प्रयास करें…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

@@ -87,4 +87,10 @@
     <string name="tutorial_step_leaderboard_instruction">你的高分會自動提交到全球排行榜。從選單開啟以查看你的排名。</string>
     <string name="tutorial_hint_drag_to_merge">嘗試將方塊拖到一起…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

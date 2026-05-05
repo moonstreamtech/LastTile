@@ -88,4 +88,10 @@
     <string name="tutorial_step_leaderboard_instruction">Deine Highscores werden automatisch an die globale Bestenliste gesendet. Öffne sie im Menü, um deine Platzierung zu sehen.</string>
     <string name="tutorial_hint_drag_to_merge">Versuche, die Kacheln zusammenzuziehen…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

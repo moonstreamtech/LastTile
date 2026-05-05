@@ -80,4 +80,8 @@
     <string name="tutorial_step_leaderboard_instruction">En yüksek skorların otomatik olarak küresel skor tablosuna gönderilir. Menüden açarak sıralamadaki yerini gör.</string>
     <string name="tutorial_hint_drag_to_merge">İki taşı üst üste sürüklemeyi dene…</string>
 
+    <string name="tutorial_success_merge">Harika birleşim!</string>
+    <string name="tutorial_success_frame">Hücre açıldı!</string>
+    <string name="tutorial_success_shield">Tehlike temizlendi!</string>
+
 </resources>

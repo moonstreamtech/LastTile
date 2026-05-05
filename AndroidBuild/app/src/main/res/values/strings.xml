@@ -123,4 +123,14 @@
     <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
     <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
     <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
+
+    <!-- v0.1.8 hotfix: success-beat copy shown when an auto-advanced
+         tutorial step (Merge, Frame, Shield) detects the user has
+         completed the scripted action. The overlay swaps the
+         instruction line for one of these and a checkmark glyph,
+         then waits ~2s before advancing so the user has a moment
+         to register that their action worked. -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

@@ -87,4 +87,10 @@
     <string name="tutorial_step_leaderboard_instruction">Skor tertinggi kamu otomatis dikirim ke papan peringkat global. Buka dari menu untuk melihat peringkatmu.</string>
     <string name="tutorial_hint_drag_to_merge">Coba seret ubin-ubin bersama…</string>
 
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_merge">Nice merge!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_frame">Frame opened!</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_success_shield">Hazard cleared!</string>
 </resources>

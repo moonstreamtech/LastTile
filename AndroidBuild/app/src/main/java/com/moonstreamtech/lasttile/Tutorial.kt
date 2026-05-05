@@ -27,7 +27,13 @@ data class TutorialState(
     val active: Boolean,
     val currentStep: TutorialStep,
     val instructionTextRes: Int,
-    val ctaTextRes: Int
+    val ctaTextRes: Int,
+    // Set by [TutorialController.markStepCompleted] when an auto-advanced
+    // step's trigger condition fires. The overlay swaps to a success
+    // beat (checkmark + localized "nice merge / frame opened / hazard
+    // cleared" message) and the GameScreen waits ~2s before calling
+    // next(), giving the user a moment to register what just happened.
+    val stepCompleted: Boolean = false
 )
 
 /**
@@ -69,6 +75,23 @@ class TutorialController(private val prefs: SharedPreferences) {
 
     fun skip() {
         finish()
+    }
+
+    /**
+     * Marks the current step's trigger condition as satisfied without
+     * advancing yet. The overlay reads [TutorialState.stepCompleted] to
+     * swap into the success beat (checkmark + localized success copy);
+     * GameScreen schedules the actual [next] call after a short delay so
+     * the user can register that their action worked.
+     *
+     * No-op when the tutorial isn't active or when the step is already
+     * marked completed (so a second auto-advance trigger firing during
+     * the celebrate beat doesn't reset anything).
+     */
+    fun markStepCompleted() {
+        if (!state.active) return
+        if (state.stepCompleted) return
+        state = state.copy(stepCompleted = true)
     }
 
     private fun finish() {
