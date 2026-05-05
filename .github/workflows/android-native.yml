@@ -14,7 +14,7 @@ concurrency:
 jobs:
   build:
     name: Build debug APK + release AAB
-    runs-on: ubuntu-latest
+    runs-on: [self-hosted, linux, x64, kozmes]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
