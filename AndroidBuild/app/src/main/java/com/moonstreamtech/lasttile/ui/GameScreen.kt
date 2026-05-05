@@ -97,6 +97,7 @@ import com.moonstreamtech.lasttile.Tile
 import com.moonstreamtech.lasttile.TutorialController
 import com.moonstreamtech.lasttile.TutorialState
 import com.moonstreamtech.lasttile.TutorialStep
+import com.moonstreamtech.lasttile.UserBootstrap
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -136,7 +137,10 @@ fun GameScreen() {
             prefs = prefs,
             leaderboard = leaderboard,
             onRunSubmitted = { finalScore ->
+                // Both backends run in parallel during the PR A → PR D transition.
+                // GpgsLeaderboard is removed in PR D; UserBootstrap persists.
                 GpgsLeaderboard.submitScore(context, finalScore.toLong())
+                UserBootstrap.submitBestScore(finalScore.toLong())
             },
             isTutorialActive = { tutorial.state.active },
             currentTutorialStep = {

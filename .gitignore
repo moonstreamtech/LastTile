@@ -19,3 +19,16 @@ local.properties
 *.jks
 release.keystore
 !AndroidBuild/app/debug.keystore
+
+# Firebase configuration.
+# AndroidBuild/app/google-services.json is committed as a build-passable
+# stub (project_id = "stub-placeholder", mobilesdk_app_id all-zeros).
+# CI decodes the real file from the GOOGLE_SERVICES_JSON_BASE64 secret and
+# overwrites the stub before the Gradle build runs.  Local builds compile
+# fine against the stub; Firebase Auth + Firestore calls fail gracefully
+# at runtime (UserBootstrap catches the exception and sets AuthState.Offline).
+# To work with real Firebase locally: download google-services.json from the
+# Firebase Console (mira-city project → Last Tile Android app), place it at
+# AndroidBuild/app/google-services.json, and use
+#   git update-index --assume-unchanged AndroidBuild/app/google-services.json
+# to prevent accidentally committing the real credentials.

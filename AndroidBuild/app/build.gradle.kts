@@ -6,6 +6,7 @@ import java.util.Properties
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.gms.google-services")
 }
 
 // Google's test AdMob ids — used as fallbacks for DEBUG builds when
@@ -214,8 +215,16 @@ dependencies {
     implementation("com.google.android.gms:play-services-tasks:18.0.2")
     implementation("com.google.android.gms:play-services-ads:23.6.0")
     // Bridges play-services Tasks into kotlinx coroutines (.await()) so
-    // GpgsLeaderboard.loadTopScores can be a suspend function. Version
-    // matches the coroutines core that Compose BOM 2024.02.02 transitively
-    // pulls in; bumping the BOM later may require bumping this in lockstep.
+    // GpgsLeaderboard.loadTopScores can be a suspend function. Also used
+    // by UserBootstrap to await Firebase Auth + Firestore Task results.
+    // Version matches the coroutines core that Compose BOM 2024.02.02
+    // transitively pulls in; bumping the BOM later may require bumping this.
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
+
+    // Firebase — PR A: Anonymous Auth + Firestore best-score write.
+    // BOM pins all Firebase library versions; only auth-ktx and
+    // firestore-ktx are needed in this PR (GPGS removed in PR D).
+    implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
+    implementation("com.google.firebase:firebase-auth-ktx")
+    implementation("com.google.firebase:firebase-firestore-ktx")
 }
