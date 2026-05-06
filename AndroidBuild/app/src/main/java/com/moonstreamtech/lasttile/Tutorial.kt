@@ -6,21 +6,24 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 /**
- * Six interactive tutorial steps plus a terminal Done state. The
- * `index` is the 1-based step counter the UI shows ("1 / 6"). Done has
+ * Five interactive tutorial steps plus a terminal Done state. The
+ * `index` is the 1-based step counter the UI shows ("1 / 5"). Done has
  * index 0 because the counter is hidden once the tutorial finishes.
+ *
+ * v0.1.11: the former separate Hazard (intro) and Shield (use)
+ * steps were collapsed into a single combined Hazard step that owns
+ * both moments via an internal sub-phase. See [TutorialState.subPhase].
  */
 sealed class TutorialStep(val index: Int) {
     object Merge : TutorialStep(1)
     object Frame : TutorialStep(2)
     object Hazard : TutorialStep(3)
-    object Shield : TutorialStep(4)
-    object Leaderboard : TutorialStep(5)
-    object Username : TutorialStep(6)
+    object Leaderboard : TutorialStep(4)
+    object Username : TutorialStep(5)
     object Done : TutorialStep(0)
 
     companion object {
-        const val TOTAL_INTERACTIVE_STEPS = 6
+        const val TOTAL_INTERACTIVE_STEPS = 5
     }
 }
 
@@ -39,16 +42,22 @@ data class TutorialState(
     // for the current step. Coordinates mirror the tiles
     // [com.moonstreamtech.lasttile.GameState.setupForTutorial] places —
     // when one moves, the other has to move with it. Steps that have no
-    // board target (Leaderboard, Username) leave this empty. The shield
-    // card highlight on step 4 is NOT in this set; it's a UI element
-    // outside the board grid and is gated separately on
-    // currentStep == Shield.
+    // board target (Leaderboard, Username, and Hazard sub-phase 1)
+    // leave this empty. The shield card highlight is NOT in this set;
+    // it is a UI element outside the board grid and is gated separately
+    // on currentStep == Hazard && subPhase == 1.
     val highlightedCells: Set<Pair<Int, Int>> = emptySet(),
     // First-launch tutorials cannot be skipped or dismissed — Skip is
-    // hidden, hardware back is blocked, and step 6 only completes after
-    // the player commits a username. Re-triggers from the "?" button
-    // run with this off.
-    val mandatory: Boolean = false
+    // hidden, hardware back is blocked, and the Username step only
+    // completes after the player commits a username. Re-triggers from
+    // the "?" button run with this off.
+    val mandatory: Boolean = false,
+    // v0.1.11: only the combined Hazard step uses this. 0 = "these
+    // locked tiles are dangerous" (spotlight on hazards); 1 = "use
+    // your shield to clear one" (spotlight on the KALKAN card). The
+    // sub-phase is internal to the step — the step counter does not
+    // change when it advances.
+    val subPhase: Int = 0
 )
 
 /**
@@ -59,7 +68,9 @@ data class TutorialState(
  * Backgrounding mid-tutorial does NOT persist the current step — on
  * the next process start, if hasSeenTutorial is still false the
  * tutorial restarts from Merge. This is the simpler-of-the-two
- * approaches the spec offered.
+ * approaches the spec offered, and it makes step-index migrations
+ * (e.g., the v0.1.11 merge of Hazard + Shield) a no-op for users who
+ * happened to be mid-tutorial across the upgrade.
  */
 class TutorialController(private val prefs: SharedPreferences) {
     var state: TutorialState by mutableStateOf(IDLE_STATE)
@@ -72,8 +83,8 @@ class TutorialController(private val prefs: SharedPreferences) {
      * Starts the tutorial from step 1.
      *
      * [mandatory] = true on the first-launch path so the overlay hides
-     * Skip, blocks back-press, and refuses to finish until step 6's
-     * username save succeeds. Re-triggers from the "?" help button pass
+     * Skip, blocks back-press, and refuses to finish until the Username
+     * step's save succeeds. Re-triggers from the "?" help button pass
      * false to allow normal dismissal.
      */
     fun start(mandatory: Boolean = false) {
@@ -84,8 +95,7 @@ class TutorialController(private val prefs: SharedPreferences) {
         val nextStep = when (state.currentStep) {
             TutorialStep.Merge -> TutorialStep.Frame
             TutorialStep.Frame -> TutorialStep.Hazard
-            TutorialStep.Hazard -> TutorialStep.Shield
-            TutorialStep.Shield -> TutorialStep.Leaderboard
+            TutorialStep.Hazard -> TutorialStep.Leaderboard
             TutorialStep.Leaderboard -> TutorialStep.Username
             TutorialStep.Username -> TutorialStep.Done
             TutorialStep.Done -> TutorialStep.Done
@@ -100,7 +110,7 @@ class TutorialController(private val prefs: SharedPreferences) {
     /**
      * Optional skip path. Honoured only when the tutorial isn't running
      * in mandatory mode (first launch). Mandatory tutorials can only be
-     * completed by saving a username on step 6.
+     * completed by saving a username on the Username step.
      */
     fun skip() {
         if (state.mandatory) return
@@ -124,6 +134,26 @@ class TutorialController(private val prefs: SharedPreferences) {
         state = state.copy(stepCompleted = true)
     }
 
+    /**
+     * Advances the combined Hazard step from sub-phase 0 (introducing
+     * the locked hazard tiles) to sub-phase 1 (prompting the player to
+     * use the shield). GameScreen calls this after a short delay or on
+     * the player's first board interaction. No-op outside the Hazard
+     * step or when sub-phase 1 is already active.
+     */
+    fun advanceHazardSubPhase() {
+        if (!state.active) return
+        if (state.currentStep != TutorialStep.Hazard) return
+        if (state.subPhase != 0) return
+        state = state.copy(
+            subPhase = 1,
+            instructionTextRes = R.string.tutorial_step_hazards_and_shield_action,
+            // Spotlight shifts off the board (onto the KALKAN card,
+            // gated separately by GameScreen on subPhase == 1).
+            highlightedCells = emptySet()
+        )
+    }
+
     private fun finish() {
         state = IDLE_STATE
         prefs.edit().putBoolean(KEY_COMPLETED_ONCE, true).apply()
@@ -133,16 +163,19 @@ class TutorialController(private val prefs: SharedPreferences) {
         val instructionRes = when (step) {
             TutorialStep.Merge -> R.string.tutorial_step_merge_instruction
             TutorialStep.Frame -> R.string.tutorial_step_frame_instruction
-            TutorialStep.Hazard -> R.string.tutorial_step_hazard_instruction
-            TutorialStep.Shield -> R.string.tutorial_step_shield_instruction
+            // Sub-phase 0 of the combined Hazard step. Sub-phase 1's
+            // string swap happens in [advanceHazardSubPhase].
+            TutorialStep.Hazard -> R.string.tutorial_step_hazards_and_shield_initial
             TutorialStep.Leaderboard -> R.string.tutorial_step_leaderboard_instruction_v2
             TutorialStep.Username -> R.string.tutorial_step_username_instruction
             TutorialStep.Done -> 0
         }
-        // Steps 5 and 6 require a UI tap to advance, so the "Got it"
-        // CTA is hidden — the user must perform the action.
+        // Hazard, Leaderboard, and Username advance on user action
+        // (shield consumed / leaderboard tap / username save), so no
+        // "Got it" CTA. Merge and Frame still show Got it as a manual
+        // escape hatch in case the auto-advance trigger misses.
         val ctaRes = when (step) {
-            TutorialStep.Leaderboard, TutorialStep.Username -> 0
+            TutorialStep.Hazard, TutorialStep.Leaderboard, TutorialStep.Username -> 0
             else -> R.string.tutorial_cta_got_it
         }
         // Mirrors GameState.setupForTutorial — keep these tile
@@ -152,7 +185,6 @@ class TutorialController(private val prefs: SharedPreferences) {
             TutorialStep.Merge -> setOf(3 to 2, 3 to 3)
             TutorialStep.Frame -> setOf(3 to 2, 3 to 3)
             TutorialStep.Hazard -> setOf(2 to 2, 3 to 3, 4 to 4)
-            TutorialStep.Shield -> setOf(3 to 3)
             TutorialStep.Leaderboard, TutorialStep.Username, TutorialStep.Done -> emptySet()
         }
         return TutorialState(
@@ -161,7 +193,10 @@ class TutorialController(private val prefs: SharedPreferences) {
             instructionTextRes = instructionRes,
             ctaTextRes = ctaRes,
             highlightedCells = cells,
-            mandatory = mandatory
+            mandatory = mandatory,
+            // Hazard always starts at sub-phase 0; other steps don't
+            // use the field but default to 0 for tidiness.
+            subPhase = 0
         )
     }
 
@@ -183,9 +218,15 @@ class TutorialController(private val prefs: SharedPreferences) {
         /**
          * One-time migration: users who completed the v0.1.x five-step
          * tutorial (legacy flag tutorial_v1_seen=true) shouldn't be
-         * forced through the new mandatory step 6 flow. We opt them
+         * forced through the new mandatory Username step. We opt them
          * out by promoting the legacy flag to tutorial_completed_once
          * the first time this code runs after install upgrade.
+         *
+         * v0.1.11: no separate migration needed for the Hazard+Shield
+         * merge — backgrounding mid-tutorial does not persist the
+         * step pointer (see class kdoc), so any user mid-tutorial
+         * across the upgrade simply restarts from Merge on next
+         * launch.
          */
         fun migrateLegacyTutorialFlag(prefs: SharedPreferences) {
             if (prefs.contains(KEY_COMPLETED_ONCE)) return

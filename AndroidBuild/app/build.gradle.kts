@@ -74,8 +74,8 @@ android {
         applicationId = "com.moonstreamtech.lasttile"
         minSdk = 24
         targetSdk = 35
-        versionCode = 11
-        versionName = "0.1.10"
+        versionCode = 12
+        versionName = "0.1.11"
 
         // Lock the APK to the locales we ship translations for. Android still
         // auto-picks the closest match for the device language at runtime, so
@@ -226,4 +226,16 @@ dependencies {
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
+
+    // v0.1.11: Google Play Core In-App Updates. Drives the small
+    // "update available" indicator next to the title bar — when the
+    // Play Store has a newer version, [UpdateChecker] flips to
+    // Available and the user can tap to launch the FLEXIBLE update
+    // flow. Both artifacts are required: the core artifact provides
+    // AppUpdateManager + InstallStateUpdatedListener, and -ktx adds
+    // the AppUpdateOptions builder this codebase calls. Devices
+    // without Play Services (some Huawei stock builds) silently fall
+    // back to Idle — see UpdateChecker.kt for the failure path.
+    implementation("com.google.android.play:app-update:2.1.0")
+    implementation("com.google.android.play:app-update-ktx:2.1.0")
 }

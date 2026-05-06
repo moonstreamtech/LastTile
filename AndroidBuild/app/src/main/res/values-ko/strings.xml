@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">튜토리얼 건너뛰기</string>
     <string name="tutorial_step_merge_instruction">같은 값의 타일 위로 드래그하여 합치세요.</string>
     <string name="tutorial_step_frame_instruction">이 타일들을 합쳐 새로운 프레임 칸을 열어보세요.</string>
-    <string name="tutorial_step_hazard_instruction">불, 얼음, 독 위험은 타일을 막고 시간이 지나면 피해를 줍니다. 높은 병합 값을 달성하거나 방패를 사용해 제거하세요.</string>
-    <string name="tutorial_step_shield_instruction">방패 카드를 위험 타일 위로 드래그해 무효화하세요.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">이 잠긴 타일은 위험합니다. 제거 방법을 배우려면 탭하세요.</string>
+    <string name="tutorial_step_hazards_and_shield_action">방패를 사용해 위험을 제거하세요.</string>
     <string name="tutorial_step_shield_subhint">방패 카드를 탭해 동영상을 시청하면 방패 3개를 더 얻을 수 있습니다.</string>
     <string name="tutorial_step_leaderboard_instruction">최고 점수는 자동으로 글로벌 리더보드에 제출됩니다. 메뉴에서 열어 순위를 확인하세요.</string>
     <string name="tutorial_hint_drag_to_merge">타일들을 함께 드래그해 보세요…</string>
@@ -123,4 +123,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">업데이트 가능 — 설치하려면 탭하세요</string>
+    <string name="update_ready_to_install">업데이트 다운로드 완료 — 지금 설치하려면 탭하세요</string>
 </resources>

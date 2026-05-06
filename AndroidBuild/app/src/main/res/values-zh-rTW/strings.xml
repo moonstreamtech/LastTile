@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">跳過教學</string>
     <string name="tutorial_step_merge_instruction">將方塊拖到匹配的方塊上以合併它們。</string>
     <string name="tutorial_step_frame_instruction">合併這些方塊以解鎖新的邊框單元格。</string>
-    <string name="tutorial_step_hazard_instruction">火焰、冰霜和毒素危險會阻擋方塊並隨時間造成傷害。達到高合併值或使用護盾來清除它們。</string>
-    <string name="tutorial_step_shield_instruction">將護盾卡拖到危險方塊上將其中和。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">這些被鎖定的方塊很危險。點擊了解如何清除它們。</string>
+    <string name="tutorial_step_hazards_and_shield_action">使用你的護盾來清除危險。</string>
     <string name="tutorial_step_shield_subhint">點擊護盾卡觀看影片，再獲得3個護盾。</string>
     <string name="tutorial_step_leaderboard_instruction">你的高分會自動提交到全球排行榜。從選單開啟以查看你的排名。</string>
     <string name="tutorial_hint_drag_to_merge">嘗試將方塊拖到一起…</string>
@@ -123,4 +123,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">有可用更新 — 點擊安裝</string>
+    <string name="update_ready_to_install">更新已下載 — 點擊立即安裝</string>
 </resources>

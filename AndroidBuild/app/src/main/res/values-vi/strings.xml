@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">Bỏ qua hướng dẫn</string>
     <string name="tutorial_step_merge_instruction">Kéo một ô lên ô khớp để hợp nhất chúng.</string>
     <string name="tutorial_step_frame_instruction">Hợp nhất các ô này để mở khóa ô khung mới.</string>
-    <string name="tutorial_step_hazard_instruction">Nguy hiểm Lửa, Băng và Độc chặn ô và làm hỏng chúng theo thời gian. Đạt giá trị hợp nhất cao hoặc dùng khiên để loại bỏ chúng.</string>
-    <string name="tutorial_step_shield_instruction">Kéo thẻ khiên lên ô nguy hiểm để vô hiệu hóa nó.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Những ô bị khóa này rất nguy hiểm. Chạm để học cách loại bỏ chúng.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Dùng khiên để loại bỏ nguy hiểm.</string>
     <string name="tutorial_step_shield_subhint">Chạm vào thẻ khiên để xem video và nhận thêm 3 khiên.</string>
     <string name="tutorial_step_leaderboard_instruction">Điểm số cao của bạn tự động gửi lên bảng xếp hạng toàn cầu. Mở từ menu để xem thứ hạng.</string>
     <string name="tutorial_hint_drag_to_merge">Thử kéo các ô lại với nhau…</string>
@@ -123,4 +123,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">Có bản cập nhật — chạm để cài đặt</string>
+    <string name="update_ready_to_install">Đã tải bản cập nhật — chạm để cài đặt ngay</string>
 </resources>

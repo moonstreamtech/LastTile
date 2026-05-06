@@ -80,8 +80,8 @@
     <string name="tutorial_cta_skip">Пропустити навчання</string>
     <string name="tutorial_step_merge_instruction">Перетягни плитку на відповідну плитку, щоб об\'єднати їх.</string>
     <string name="tutorial_step_frame_instruction">Об\'єднай ці плитки, щоб відкрити нові клітинки рамки.</string>
-    <string name="tutorial_step_hazard_instruction">Небезпеки Вогню, Льоду та Отрути блокують плитки та з часом завдають їм шкоди. Досягни високих значень об\'єднання або використай щити, щоб усунути їх.</string>
-    <string name="tutorial_step_shield_instruction">Перетягни картку щита на небезпечну плитку, щоб нейтралізувати її.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ці заблоковані плитки небезпечні. Натисни, щоб дізнатися, як їх усунути.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Використай щит, щоб усунути небезпеку.</string>
     <string name="tutorial_step_shield_subhint">Натисни на картку щита, щоб переглянути відео та отримати ще 3 щити.</string>
     <string name="tutorial_step_leaderboard_instruction">Твої рекорди автоматично надсилаються до глобальної таблиці лідерів. Відкрий її з меню, щоб побачити своє місце.</string>
     <string name="tutorial_hint_drag_to_merge">Спробуй перетягнути плитки разом…</string>
@@ -126,4 +126,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">Доступне оновлення — натисни, щоб встановити</string>
+    <string name="update_ready_to_install">Оновлення завантажено — натисни, щоб встановити зараз</string>
 </resources>

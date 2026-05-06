@@ -68,8 +68,8 @@
     <string name="tutorial_cta_skip">Eğitimi Atla</string>
     <string name="tutorial_step_merge_instruction">Bir taşı eşleşen başka bir taşın üstüne sürükleyerek birleştir.</string>
     <string name="tutorial_step_frame_instruction">Bu taşları birleştirerek yeni hücreleri aç.</string>
-    <string name="tutorial_step_hazard_instruction">Ateş, Buz ve Zehir tehlikeleri taşları kilitler ve zamanla zarar verir. Yüksek değerli birleşmeler yap veya kalkan kullanarak temizle.</string>
-    <string name="tutorial_step_shield_instruction">Kalkanı bir tehlikenin üstüne sürükleyerek etkisiz hale getir. Şimdi dene.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Bu kilitli taşlar tehlikeli. Temizlemeyi öğrenmek için dokun.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Kalkanı kullanarak bir tehlikeli taşı temizle.</string>
     <string name="tutorial_step_shield_subhint">Kalkan kartına dokunarak bir video izle ve 3 kalkan daha kazan.</string>
     <string name="tutorial_step_leaderboard_instruction">En yüksek skorların otomatik olarak küresel skor tablosuna gönderilir. Menüden açarak sıralamadaki yerini gör.</string>
     <string name="tutorial_hint_drag_to_merge">İki taşı üst üste sürüklemeyi dene…</string>
@@ -96,4 +96,6 @@
     <string name="username_change_failed">Kaydedilemedi</string>
     <string name="username_change_saved">İsim kaydedildi</string>
 
+    <string name="update_available">Güncelleme mevcut — yüklemek için dokun</string>
+    <string name="update_ready_to_install">Güncelleme indirildi — şimdi yüklemek için dokun</string>
 </resources>

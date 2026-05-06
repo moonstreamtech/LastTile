@@ -28,8 +28,8 @@ import org.json.JSONObject
  * outside the top 100 and have a non-zero score. Players with score 0
  * (fresh installs that haven't finished a run) get a [LeaderboardEntry]
  * with rank = null so the UI can pin them to the bottom with em-dash
- * placeholders — this keeps tutorial step 6 (tap-your-row-to-rename)
- * unblocked for first-time players.
+ * placeholders — this keeps the Username tutorial step
+ * (tap-your-row-to-rename) unblocked for first-time players.
  *
  * Cache is two-layered to survive process death:
  *   - In-memory `cachedResult` is fastest; populated on every successful
@@ -200,7 +200,7 @@ object FirebaseLeaderboard {
             val playerInTop = topEntries.any { it.uid == uid }
 
             // Player entry is ALWAYS constructed from the user doc (regardless
-            // of bestScore) so that tutorial step 6 — which spotlights the
+            // of bestScore) so that the Username tutorial step — which spotlights the
             // player's row inside the leaderboard dialog — has a target on a
             // fresh install. Players with score 0 get rank = null and are
             // pinned at the bottom with em-dash placeholders in the UI.

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Excludes the entire app data domain from both Android Auto-Backup
+    (cloud-backup) and device-to-device transfer on Android 12+ (API 31+).
+
+    Rationale: Firebase Anonymous Auth tokens are NOT included in either
+    backup channel by default, so a partial restore would leave
+    SharedPreferences (e.g. tutorial flags, pending best-score) intact
+    while wiping the auth state. The next launch would mint a fresh
+    anonymous uid and the user's existing leaderboard entry would be
+    orphaned. Disabling extraction entirely keeps device state and
+    backend state in sync until proper account-linking lands.
+
+    Pre-API-31 devices are covered by android:allowBackup="false" and
+    android:fullBackupContent="false" in the manifest.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <exclude domain="root" />
+    </cloud-backup>
+    <device-transfer>
+        <exclude domain="root" />
+    </device-transfer>
+</data-extraction-rules>

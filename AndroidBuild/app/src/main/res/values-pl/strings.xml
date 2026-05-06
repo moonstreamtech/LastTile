@@ -80,8 +80,8 @@
     <string name="tutorial_cta_skip">Pomiń samouczek</string>
     <string name="tutorial_step_merge_instruction">Przeciągnij kafelek na pasujący kafelek, aby je połączyć.</string>
     <string name="tutorial_step_frame_instruction">Połącz te kafelki, aby odblokować nowe pola ramy.</string>
-    <string name="tutorial_step_hazard_instruction">Zagrożenia Ognia, Lodu i Trucizny blokują kafelki i z czasem je niszczą. Osiągnij wysokie wartości łączenia lub użyj tarcz, aby je usunąć.</string>
-    <string name="tutorial_step_shield_instruction">Przeciągnij kartę tarczy na kafelek zagrożenia, aby go zneutralizować.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Te zablokowane kafelki są niebezpieczne. Dotknij, aby nauczyć się je usuwać.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Użyj tarczy, aby usunąć zagrożenie.</string>
     <string name="tutorial_step_shield_subhint">Dotknij karty tarczy, aby obejrzeć film i zdobyć 3 dodatkowe tarcze.</string>
     <string name="tutorial_step_leaderboard_instruction">Twoje najlepsze wyniki są automatycznie wysyłane do globalnego rankingu. Otwórz go z menu, aby zobaczyć swoją pozycję.</string>
     <string name="tutorial_hint_drag_to_merge">Spróbuj przeciągnąć kafelki razem…</string>
@@ -126,4 +126,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">Dostępna aktualizacja — dotknij, aby zainstalować</string>
+    <string name="update_ready_to_install">Aktualizacja pobrana — dotknij, aby zainstalować teraz</string>
 </resources>
