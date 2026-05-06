@@ -1,9 +1,9 @@
 package com.moonstreamtech.lasttile
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.games.PlayGamesSdk
 
 class LastTileApplication : Application() {
     override fun onCreate() {
@@ -16,6 +16,17 @@ class LastTileApplication : Application() {
         // the same condition earlier; this one is the last safety net.
         AdConfig.verifyReleaseIntegrity()
 
+        // v0.2.0: One-time promotion of the legacy tutorial_v1_seen flag
+        // to tutorial_completed_once so existing players who finished
+        // the v0.1.x tutorial aren't forced through the new mandatory
+        // step 6 username flow. Cheap and idempotent.
+        runCatching {
+            val prefs = getSharedPreferences("lasttile_state", Context.MODE_PRIVATE)
+            TutorialController.migrateLegacyTutorialFlag(prefs)
+        }.onFailure { e ->
+            Log.w("LastTileApp", "tutorial flag migration failed", e)
+        }
+
         // Eager-preload a rewarded ad so the Shield "earn" dialog has
         // something to play instantly when the player taps. Survives
         // the whole Application lifecycle and re-loads itself after
@@ -23,26 +34,7 @@ class LastTileApplication : Application() {
         runCatching { RewardedAdManager.init(this) }
             .onFailure { e -> Log.w("LastTileApp", "RewardedAdManager.init threw", e) }
 
-        // Safe with a placeholder APP_ID: the SDK initializes locally and
-        // sign-in is deferred until a real client call. With the placeholder
-        // present, online calls fail gracefully via the GpgsLeaderboard
-        // wrapper instead of crashing the app. Sign-in itself is never
-        // triggered here — GpgsLeaderboard performs the isAuthenticated /
-        // signIn handshake on demand from user-driven actions.
-        runCatching { PlayGamesSdk.initialize(this) }
-            .onSuccess {
-                Log.i("LastTileApp", "PlayGamesSdk.initialize success")
-                GpgsLeaderboard.debugLog(this, "init: PlayGamesSdk.initialize success")
-            }
-            .onFailure { e ->
-                Log.w("LastTileApp", "PlayGamesSdk.initialize failed", e)
-                GpgsLeaderboard.debugLog(
-                    this,
-                    "init: PlayGamesSdk.initialize failed: ${e.message}"
-                )
-            }
-
-        // Firebase Anonymous Auth + Firestore bootstrap (PR A).
+        // Firebase Anonymous Auth + Firestore bootstrap.
         // Runs in a background coroutine inside UserBootstrap; any failure
         // (no network, invalid google-services.json stub) is caught and
         // sets AuthState.Offline so the game works fully offline.
@@ -51,7 +43,8 @@ class LastTileApplication : Application() {
 
         // AdMob init is fire-and-forget. If the device has no Play Services
         // (e.g. some Huawei devices) the SDK reports failure via the callback
-        // and the bottom banner stays blank — same graceful behaviour as GPGS.
+        // and the bottom banner stays blank — leaderboard and gameplay are
+        // unaffected because Firebase Anonymous Auth works without GPGS.
         val app = this
         runCatching {
             MobileAds.initialize(app) {

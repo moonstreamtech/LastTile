@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">排行榜</string>
     <string name="btn_close">关闭</string>
     <string name="btn_clear">清除</string>
-    <string name="btn_view_online_leaderboard">查看在线排行榜</string>
 
     <string name="leaderboard_title">排行榜</string>
     <string name="leaderboard_tab_global">全球</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">前 10 · 本机</string>
     <string name="leaderboard_empty">暂无记录。完成一局即可上榜。</string>
     <string name="leaderboard_powered_by">由 Google Play Games 提供支持</string>
-    <string name="leaderboard_not_configured_long">在线排行榜尚未配置。下个版本将启用 Google Play Games 排行榜。</string>
-    <string name="leaderboard_compete">与全球玩家一较高下。出现提示时请登录 Google Play Games。</string>
-    <string name="leaderboard_activity_unavailable">活动不可用。请从游戏界面重试。</string>
-    <string name="leaderboard_opening">正在打开 Google Play Games…</string>
-    <string name="leaderboard_open_failed">无法打开 Play Games：%1$s</string>
-    <string name="leaderboard_not_configured_short">在线排行榜尚未配置。</string>
-    <string name="leaderboard_sign_in_hint">登录 Google Play Games 即可查看全球排行。</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
@@ -97,4 +89,38 @@
     <string name="tutorial_success_frame">Frame opened!</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_success_shield">Hazard cleared!</string>
+
+    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_dialog_title_first">Pick your name</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_dialog_title_change">Change your name</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_input_hint">Name</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_too_short">At least 2 characters</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_too_long">Max 20 characters</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_checking">Checking…</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_available">Available</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_taken">Already taken</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_network_error">Connection error</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_save">Save</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_cancel">Cancel</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_cooldown">You can change your name in %d days</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_change_failed">Save failed</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_change_saved">Name saved</string>
 </resources>

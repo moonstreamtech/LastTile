@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Таблиця лідерів</string>
     <string name="btn_close">Закрити</string>
     <string name="btn_clear">Очистити</string>
-    <string name="btn_view_online_leaderboard">Відкрити онлайн-таблицю</string>
 
     <string name="leaderboard_title">ТАБЛИЦЯ ЛІДЕРІВ</string>
     <string name="leaderboard_tab_global">Глобально</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Топ 10 · цей пристрій</string>
     <string name="leaderboard_empty">Ще немає ігор. Заверши партію, щоб потрапити до таблиці.</string>
     <string name="leaderboard_powered_by">За підтримки Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Онлайн-таблицю лідерів ще не налаштовано. Наступна версія активує рейтинги Google Play Games.</string>
-    <string name="leaderboard_compete">Змагайся з гравцями з усього світу. Увійди в Google Play Games, коли з\'явиться запит.</string>
-    <string name="leaderboard_activity_unavailable">Активність недоступна. Спробуй знову з екрана гри.</string>
-    <string name="leaderboard_opening">Відкриваємо Google Play Games…</string>
-    <string name="leaderboard_open_failed">Не вдалося відкрити Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">Онлайн-таблицю лідерів ще не налаштовано.</string>
-    <string name="leaderboard_sign_in_hint">Увійди в Google Play Games, щоб побачити глобальні рейтинги.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
@@ -100,4 +92,38 @@
     <string name="tutorial_success_frame">Frame opened!</string>
     <!-- TODO i18n: needs translation -->
     <string name="tutorial_success_shield">Hazard cleared!</string>
+
+    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_dialog_title_first">Pick your name</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_dialog_title_change">Change your name</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_input_hint">Name</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_too_short">At least 2 characters</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_too_long">Max 20 characters</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_checking">Checking…</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_available">Available</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_taken">Already taken</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_network_error">Connection error</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_save">Save</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_cancel">Cancel</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_cooldown">You can change your name in %d days</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_change_failed">Save failed</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="username_change_saved">Name saved</string>
 </resources>

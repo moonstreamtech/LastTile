@@ -8,7 +8,13 @@ on:
   workflow_dispatch:
 
 concurrency:
-  group: android-native-${{ github.workflow }}-${{ github.ref }}
+  # Dedupe push + pull_request triggers on the same source branch.
+  # github.head_ref is the PR's source branch on pull_request events
+  # and empty on push events; github.ref_name is the branch on push.
+  # Result: a push to claude/foo and a pull_request synchronize from
+  # claude/foo share one group, so cancel-in-progress collapses them
+  # into a single queued run.
+  group: android-native-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
 jobs:

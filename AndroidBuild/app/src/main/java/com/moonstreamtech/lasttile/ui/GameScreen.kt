@@ -3,6 +3,7 @@ package com.moonstreamtech.lasttile.ui
 import android.app.Activity
 import android.content.Context
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -54,6 +55,7 @@ import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -89,7 +91,6 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.moonstreamtech.lasttile.AdConfig
 import com.moonstreamtech.lasttile.GameState
-import com.moonstreamtech.lasttile.GpgsLeaderboard
 import com.moonstreamtech.lasttile.LeaderboardEntry
 import com.moonstreamtech.lasttile.LocalLeaderboard
 import com.moonstreamtech.lasttile.R
@@ -99,11 +100,13 @@ import com.moonstreamtech.lasttile.TutorialController
 import com.moonstreamtech.lasttile.TutorialState
 import com.moonstreamtech.lasttile.TutorialStep
 import com.moonstreamtech.lasttile.UserBootstrap
+import com.moonstreamtech.lasttile.UsernameRepository
 import com.moonstreamtech.lasttile.FirebaseLeaderboard
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import kotlin.math.roundToInt
+import kotlinx.coroutines.launch
 
 private val BgTop = Color(0xFF141B24)
 private val BgBottom = Color(0xFF05070A)
@@ -118,7 +121,7 @@ private val AccentBlue = Color(0xFF64B5F6)
 private val AccentGreen = Color(0xFF81C784)
 
 // Warm yellow used for the tutorial spotlight pulse on highlighted
-// board cells and the KORUMA card during step 4. Picked to match the
+// board cells and the KALKAN card during step 4. Picked to match the
 // existing Restart button accent in the screenshots.
 private val TutorialSpotlight = Color(0xFFF4C062)
 
@@ -139,9 +142,6 @@ fun GameScreen() {
             prefs = prefs,
             leaderboard = leaderboard,
             onRunSubmitted = { finalScore ->
-                // Both backends run in parallel during the PR B → PR D transition.
-                // GpgsLeaderboard removed in PR D; FirebaseLeaderboard persists.
-                GpgsLeaderboard.submitScore(context, finalScore.toLong())
                 FirebaseLeaderboard.submitBestScore(finalScore.toLong())
             },
             isTutorialActive = { tutorial.state.active },
@@ -154,10 +154,13 @@ fun GameScreen() {
     // delay so the GameScreen has rendered before the overlay covers it
     // — without the delay the dim layer paints into a half-laid-out
     // tree and the cut-out region misses on the first frame.
+    //
+    // First-launch tutorials run in mandatory mode so step 6 forces the
+    // user to pick a name before the overlay can be dismissed.
     LaunchedEffect(Unit) {
         if (!tutorial.hasSeenTutorial) {
             kotlinx.coroutines.delay(500L)
-            tutorial.start()
+            tutorial.start(mandatory = true)
         }
     }
     // Whenever the tutorial step changes, script the board for the new
@@ -214,6 +217,19 @@ fun GameScreen() {
     var showLeaderboard by remember { mutableStateOf(false) }
     var showShieldDialog by remember { mutableStateOf(false) }
     var adInFlight by remember { mutableStateOf(false) }
+    // Username dialog state. usernameDialogMandatory mirrors the
+    // tutorial-mandatory mode so the dialog hides Cancel and blocks
+    // outside-tap dismissal during the first-launch flow.
+    var showUsernameDialog by remember { mutableStateOf(false) }
+    var usernameDialogMandatory by remember { mutableStateOf(false) }
+    var usernameDialogCurrent by remember { mutableStateOf("") }
+    var usernameSaving by remember { mutableStateOf(false) }
+    var usernameInlineError by remember { mutableStateOf<String?>(null) }
+    // Bumped by the username-save success handler to force the global
+    // leaderboard tab to refetch, so the new name appears immediately
+    // after the player commits it.
+    var leaderboardRefreshTick by remember { mutableStateOf(0) }
+    val coroutineScope = rememberCoroutineScope()
     // Drag-and-drop coordinates for the shield. Captured in window
     // (root-level) coordinates so the floating overlay and the cell
     // hit-test on drop both see the same frame as the BoardView's
@@ -225,6 +241,10 @@ fun GameScreen() {
     val adLoadingMsg = stringResource(R.string.shield_ad_loading)
     val adSkippedMsg = stringResource(R.string.shield_ad_skipped)
     val adRewardedMsg = stringResource(R.string.shield_ad_rewarded)
+    val usernameSavedMsg = stringResource(R.string.username_change_saved)
+    val usernameFailedMsg = stringResource(R.string.username_change_failed)
+    val usernameTakenMsg = stringResource(R.string.username_taken)
+    val usernameCooldownTemplate = stringResource(R.string.username_cooldown)
 
     fun showToast(text: String) {
         Toast.makeText(context, text, Toast.LENGTH_SHORT).show()
@@ -263,7 +283,7 @@ fun GameScreen() {
     }
 
     // Shared pulse alpha for the tutorial spotlight. One transition
-    // drives every glowing cell + the KORUMA card so they breathe in
+    // drives every glowing cell + the KALKAN card so they breathe in
     // sync, and the transition runs unconditionally — cheap, and means
     // the float is always defined for callers that gate on
     // tutorial.state.active themselves. 1200 ms with LinearEasing +
@@ -318,6 +338,15 @@ fun GameScreen() {
     // origin so its IntOffset translates directly from window-space
     // touch positions emitted by the shield card's pointerInput.
     var rootContentOriginInWindow by remember { mutableStateOf(Offset.Zero) }
+
+    // Hardware back button is swallowed during the mandatory tutorial
+    // so the user can't escape onto a half-bootstrapped game state.
+    // Re-runs from the help button leave the back button working
+    // normally (Android closes the activity).
+    BackHandler(enabled = tutorial.state.active && tutorial.state.mandatory) {
+        // Intentional no-op. The tutorial finishes via username save
+        // on step 6, not via back press.
+    }
 
     Box(
         modifier = Modifier
@@ -461,15 +490,35 @@ fun GameScreen() {
                 Spacer(Modifier.size(12.dp))
                 Button(
                     onClick = {
-                        // Per spec: opening any dialog mid-tutorial
-                        // dismisses it gracefully so the user can browse.
-                        if (tutorial.state.active) tutorial.skip()
+                        // v0.2.0: tutorial step 5 spotlights this button
+                        // and requires a tap to advance to step 6 (which
+                        // spotlights the player's row inside the now-open
+                        // leaderboard). For non-Leaderboard tutorial
+                        // steps in non-mandatory mode, the legacy
+                        // graceful-skip behaviour is preserved.
+                        if (tutorial.state.active) {
+                            when (tutorial.state.currentStep) {
+                                TutorialStep.Leaderboard -> tutorial.next()
+                                TutorialStep.Username -> { /* leave at step 6 */ }
+                                else -> if (!tutorial.state.mandatory) tutorial.skip()
+                            }
+                        }
                         showLeaderboard = true
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = CardAccent,
                         contentColor = TextPrimary
-                    )
+                    ),
+                    modifier = if (tutorial.state.active &&
+                        !tutorial.state.stepCompleted &&
+                        tutorial.state.currentStep == TutorialStep.Leaderboard
+                    ) {
+                        Modifier.border(
+                            3.dp,
+                            TutorialSpotlight.copy(alpha = tutorialPulseAlpha),
+                            RoundedCornerShape(20.dp)
+                        )
+                    } else Modifier
                 ) {
                     Text(
                         stringResource(R.string.btn_leaderboard),
@@ -486,10 +535,121 @@ fun GameScreen() {
         if (showLeaderboard) {
             LeaderboardDialog(
                 entries = leaderboard.topScores(),
-                onDismiss = { showLeaderboard = false },
+                onDismiss = {
+                    // Mandatory tutorial step 6 spotlights the player's
+                    // row inside this dialog. Closing the dialog mid-
+                    // tutorial would orphan the spotlight target, so we
+                    // refuse the dismiss until the user completes step 6.
+                    if (tutorial.state.active &&
+                        tutorial.state.mandatory &&
+                        tutorial.state.currentStep == TutorialStep.Username
+                    ) return@LeaderboardDialog
+                    showLeaderboard = false
+                },
                 onClear = {
                     leaderboard.clear()
                     showLeaderboard = false
+                },
+                spotlightOwnRow = tutorial.state.active &&
+                    !tutorial.state.stepCompleted &&
+                    tutorial.state.currentStep == TutorialStep.Username,
+                pulseAlpha = tutorialPulseAlpha,
+                onOwnRowTap = { entry ->
+                    val mandatory = tutorial.state.active &&
+                        tutorial.state.mandatory &&
+                        tutorial.state.currentStep == TutorialStep.Username
+                    if (mandatory) {
+                        // Tutorial step 6 only fires on a brand-new
+                        // user, so a cooldown can never be active —
+                        // open the dialog without the pre-check.
+                        usernameDialogCurrent = entry.displayName
+                        usernameInlineError = null
+                        usernameDialogMandatory = true
+                        showUsernameDialog = true
+                    } else {
+                        // Manual rename path: pre-check the 30-day
+                        // cooldown so the user gets a toast instead of
+                        // typing into a dialog whose Save will be
+                        // rejected by the transaction.
+                        coroutineScope.launch {
+                            val days = UsernameRepository.cooldownDaysRemaining()
+                            if (days > 0) {
+                                showToast(
+                                    String.format(usernameCooldownTemplate, days)
+                                )
+                            } else {
+                                usernameDialogCurrent = entry.displayName
+                                usernameInlineError = null
+                                usernameDialogMandatory = false
+                                showUsernameDialog = true
+                            }
+                        }
+                    }
+                },
+                refreshTick = leaderboardRefreshTick
+            )
+        }
+
+        if (showUsernameDialog) {
+            UsernameDialog(
+                isMandatory = usernameDialogMandatory,
+                currentName = usernameDialogCurrent,
+                isSaving = usernameSaving,
+                inlineError = usernameInlineError,
+                onDismiss = {
+                    if (!usernameDialogMandatory) {
+                        showUsernameDialog = false
+                        usernameInlineError = null
+                    }
+                },
+                onSave = { newName ->
+                    if (usernameSaving) return@UsernameDialog
+                    usernameInlineError = null
+                    usernameSaving = true
+                    coroutineScope.launch {
+                        val result = UsernameRepository.changeUsername(newName)
+                        usernameSaving = false
+                        when (result) {
+                            is UsernameRepository.ChangeResult.Success -> {
+                                val wasMandatory = usernameDialogMandatory
+                                showUsernameDialog = false
+                                usernameDialogCurrent = newName
+                                // Force a refetch of the global tab so
+                                // the new name is visible immediately.
+                                leaderboardRefreshTick += 1
+                                showToast(usernameSavedMsg)
+                                if (wasMandatory && tutorial.state.active) {
+                                    // Mandatory step 6: give the user
+                                    // ~600ms to see their newly-saved
+                                    // entry land in the leaderboard,
+                                    // then auto-close the panel and
+                                    // mark the step completed. The
+                                    // existing 2s success-beat
+                                    // LaunchedEffect drives next() →
+                                    // finish() → tutorial_completed_once.
+                                    kotlinx.coroutines.delay(600L)
+                                    showLeaderboard = false
+                                    tutorial.markStepCompleted()
+                                }
+                                usernameDialogMandatory = false
+                            }
+                            is UsernameRepository.ChangeResult.Taken -> {
+                                usernameInlineError = usernameTakenMsg
+                            }
+                            is UsernameRepository.ChangeResult.CooldownActive -> {
+                                showToast(
+                                    String.format(
+                                        usernameCooldownTemplate,
+                                        result.daysRemaining
+                                    )
+                                )
+                                showUsernameDialog = false
+                            }
+                            is UsernameRepository.ChangeResult.NetworkError -> {
+                                showToast(usernameFailedMsg)
+                            }
+                        }
+                    }
                 }
             )
         }
@@ -547,11 +707,21 @@ fun GameScreen() {
         // shield sub-hint when relevant, a Got it CTA, and a Skip text
         // button. A dialog open during the tutorial calls skip() at
         // its open site so the overlay doesn't collide with the dialog.
+        //
+        // v0.2.x fix: during step 6 the leaderboard dialog is open and
+        // already shows the inline orange instruction at its top, so
+        // the bottom step card would duplicate that copy. Hide the
+        // card in that exact case; the spotlight on the player's row
+        // is what guides the user, and the inline text in the dialog
+        // is enough.
         if (tutorial.state.active) {
+            val suppressCard = showLeaderboard &&
+                tutorial.state.currentStep == TutorialStep.Username
             TutorialOverlay(
                 state = tutorial.state,
                 onGotIt = { tutorial.next() },
-                onSkip = { tutorial.skip() }
+                onSkip = { tutorial.skip() },
+                suppressCard = suppressCard
             )
         }
     }
@@ -587,7 +757,7 @@ private fun ShieldStatCard(
     onDragStart: (Offset) -> Unit,
     onDragChange: (Offset) -> Unit,
     onDragFinish: () -> Unit,
-    // Tutorial spotlight on the KORUMA card during step 4. When
+    // Tutorial spotlight on the KALKAN card during step 4. When
     // [highlighted] is true a 3.dp pulsing border is drawn around
     // the card with [pulseAlpha] driving the alpha. The card otherwise
     // renders identically — the existing tap and long-press-drag
@@ -793,11 +963,30 @@ private enum class LeaderboardTab { GLOBAL, LOCAL }
 private fun LeaderboardDialog(
     entries: List<LeaderboardEntry>,
     onDismiss: () -> Unit,
-    onClear: () -> Unit
+    onClear: () -> Unit,
+    // v0.2.0: tutorial step 6 spotlights the player's own row inside
+    // this dialog and prompts them to tap it to pick a name. The
+    // spotlight + tap-to-name affordance also stays available for any
+    // post-tutorial change-name action — the difference is whether the
+    // dialog refuses to dismiss.
+    spotlightOwnRow: Boolean = false,
+    pulseAlpha: Float = 1f,
+    onOwnRowTap: (FirebaseLeaderboard.LeaderboardEntry) -> Unit = {},
+    refreshTick: Int = 0
 ) {
-    var tab by remember { mutableStateOf(LeaderboardTab.LOCAL) }
+    // v0.2.0: default tab is GLOBAL so the username spotlight target
+    // (player's own row in the global leaderboard) is visible without
+    // an extra tap. Falls back to LOCAL if the global query is empty
+    // — the user still sees their local scores.
+    var tab by remember { mutableStateOf(LeaderboardTab.GLOBAL) }
 
-    androidx.compose.ui.window.Dialog(onDismissRequest = onDismiss) {
+    androidx.compose.ui.window.Dialog(
+        onDismissRequest = onDismiss,
+        properties = androidx.compose.ui.window.DialogProperties(
+            dismissOnBackPress = !spotlightOwnRow,
+            dismissOnClickOutside = !spotlightOwnRow
+        )
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -831,9 +1020,27 @@ private fun LeaderboardDialog(
                 }
                 Spacer(Modifier.height(14.dp))
 
+                if (spotlightOwnRow) {
+                    Text(
+                        text = stringResource(R.string.tutorial_step_username_instruction),
+                        color = AccentAmber,
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp)
+                    )
+                }
+
                 when (tab) {
                     LeaderboardTab.LOCAL -> LocalLeaderboardContent(entries)
-                    LeaderboardTab.GLOBAL -> GlobalLeaderboardContent()
+                    LeaderboardTab.GLOBAL -> GlobalLeaderboardContent(
+                        spotlightOwnRow = spotlightOwnRow,
+                        pulseAlpha = pulseAlpha,
+                        onOwnRowTap = onOwnRowTap,
+                        refreshTick = refreshTick
+                    )
                 }
 
                 Spacer(Modifier.height(14.dp))
@@ -901,15 +1108,23 @@ private fun LocalLeaderboardContent(entries: List<LeaderboardEntry>) {
 }
 
 @Composable
-private fun GlobalLeaderboardContent() {
-    val context = LocalContext.current
+private fun GlobalLeaderboardContent(
+    spotlightOwnRow: Boolean = false,
+    pulseAlpha: Float = 1f,
+    onOwnRowTap: (FirebaseLeaderboard.LeaderboardEntry) -> Unit = {},
+    refreshTick: Int = 0
+) {
     var loadResult by remember { mutableStateOf<FirebaseLeaderboard.LoadResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var refreshKey by remember { mutableStateOf(0) }
 
-    LaunchedEffect(refreshKey) {
+    // Compose effective key from internal refresh button + external
+    // refreshTick (bumped after a username change committed). Either
+    // source forces a fresh fetch.
+    val effectiveKey = refreshKey + refreshTick
+    LaunchedEffect(effectiveKey) {
         isLoading = true
-        loadResult = FirebaseLeaderboard.loadLeaderboard(context, forceRefresh = refreshKey > 0)
+        loadResult = FirebaseLeaderboard.loadLeaderboard(forceRefresh = effectiveKey > 0)
         isLoading = false
     }
 
@@ -960,6 +1175,10 @@ private fun GlobalLeaderboardContent() {
 
         loadResult is FirebaseLeaderboard.LoadResult.Success -> {
             val success = loadResult as FirebaseLeaderboard.LoadResult.Success
+            // playerEntry is null only when auth is missing or the user
+            // doc is missing; both are exceptional. The empty-state path
+            // is therefore only taken when there are no top entries and
+            // also no player doc to pin.
             if (success.topEntries.isEmpty() && success.playerEntry == null) {
                 Text(
                     text = stringResource(R.string.leaderboard_empty_global),
@@ -972,7 +1191,10 @@ private fun GlobalLeaderboardContent() {
             } else {
                 LeaderboardListWithPinning(
                     success = success,
-                    onRefresh = { refreshKey += 1 }
+                    onRefresh = { refreshKey += 1 },
+                    spotlightOwnRow = spotlightOwnRow,
+                    pulseAlpha = pulseAlpha,
+                    onOwnRowTap = onOwnRowTap
                 )
             }
         }
@@ -992,7 +1214,10 @@ private fun GlobalLeaderboardContent() {
 @Composable
 private fun LeaderboardListWithPinning(
     success: FirebaseLeaderboard.LoadResult.Success,
-    onRefresh: () -> Unit
+    onRefresh: () -> Unit,
+    spotlightOwnRow: Boolean = false,
+    pulseAlpha: Float = 1f,
+    onOwnRowTap: (FirebaseLeaderboard.LeaderboardEntry) -> Unit = {}
 ) {
     val listState = androidx.compose.foundation.lazy.rememberLazyListState()
 
@@ -1009,23 +1234,26 @@ private fun LeaderboardListWithPinning(
                 listState.firstVisibleItemIndex > playerIndexInTop
         }
     }
-    val playerBelowViewport by remember {
-        androidx.compose.runtime.derivedStateOf {
-            if (playerIndexInTop < 0) return@derivedStateOf false
-            val lastVisible = listState.layoutInfo.visibleItemsInfo
-                .lastOrNull()?.index ?: -1
-            lastVisible in 0 until playerIndexInTop
-        }
-    }
 
-    val showTopPin    = success.playerInTop && playerAboveViewport
-    val showBottomPin = (!success.playerInTop && success.playerEntry != null) ||
-                        (success.playerInTop && playerBelowViewport)
+    // v0.2.0: the bottom pinned player row is ALWAYS shown when
+    // playerEntry is non-null. That ensures tutorial step 6 has a
+    // tap target on a fresh install (when the player is not in the
+    // top 100 because their score is still 0). The top pin still
+    // appears only when the player has scrolled past their own row
+    // and that row is in the top 100, so the pinned row at the top
+    // doubles as a "jump back to me" affordance.
+    val showTopPin = success.playerInTop && playerAboveViewport
 
     Column(modifier = Modifier.fillMaxWidth()) {
         // Pinned to top edge when player has scrolled their row above viewport.
         if (showTopPin && success.playerEntry != null) {
-            FirestoreLeaderboardRow(success.playerEntry, isPinned = true)
+            FirestoreLeaderboardRow(
+                entry = success.playerEntry,
+                isPinned = true,
+                spotlightOwnRow = spotlightOwnRow,
+                pulseAlpha = pulseAlpha,
+                onOwnRowTap = onOwnRowTap
+            )
             Spacer(Modifier.height(4.dp))
         }
 
@@ -1041,17 +1269,39 @@ private fun LeaderboardListWithPinning(
                 modifier = Modifier.fillMaxWidth()
             ) {
                 items(success.topEntries.size) { idx ->
-                    FirestoreLeaderboardRow(success.topEntries[idx], isPinned = false)
+                    FirestoreLeaderboardRow(
+                        entry = success.topEntries[idx],
+                        isPinned = false,
+                        spotlightOwnRow = spotlightOwnRow,
+                        pulseAlpha = pulseAlpha,
+                        onOwnRowTap = onOwnRowTap
+                    )
                     Spacer(Modifier.height(6.dp))
                 }
             }
         }
 
-        // Pinned to bottom edge: always when player is outside top 100,
-        // or when player is in top 100 but scrolled their row below viewport.
-        if (showBottomPin && success.playerEntry != null) {
-            Spacer(Modifier.height(4.dp))
-            FirestoreLeaderboardRow(success.playerEntry, isPinned = true)
+        // Always show the player's own row pinned at the bottom. When
+        // the player is in the top 100 they will appear twice — once
+        // in the scrollable list and once pinned — and a thin
+        // separator above the pin makes the duplication read as
+        // intentional.
+        if (success.playerEntry != null) {
+            Spacer(Modifier.height(8.dp))
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(TextSecondary.copy(alpha = 0.25f))
+            )
+            Spacer(Modifier.height(8.dp))
+            FirestoreLeaderboardRow(
+                entry = success.playerEntry,
+                isPinned = true,
+                spotlightOwnRow = spotlightOwnRow,
+                pulseAlpha = pulseAlpha,
+                onOwnRowTap = onOwnRowTap
+            )
         }
 
         Spacer(Modifier.height(8.dp))
@@ -1089,7 +1339,16 @@ private fun RefreshRow(fetchedAtMs: Long, onRefresh: () -> Unit) {
 @Composable
 private fun FirestoreLeaderboardRow(
     entry: FirebaseLeaderboard.LeaderboardEntry,
-    isPinned: Boolean
+    isPinned: Boolean,
+    // v0.2.0: when [spotlightOwnRow] is true and this row belongs to
+    // the current player, render a pulsing highlight border using
+    // [pulseAlpha] from the shared tutorial transition. The row is
+    // also clickable on the player's own line — taps open the rename
+    // dialog regardless of whether the spotlight is active, so the
+    // affordance stays available after the tutorial is done.
+    spotlightOwnRow: Boolean = false,
+    pulseAlpha: Float = 1f,
+    onOwnRowTap: (FirebaseLeaderboard.LeaderboardEntry) -> Unit = {}
 ) {
     val accent = when (entry.rank) {
         1 -> AccentGold
@@ -1102,19 +1361,45 @@ private fun FirestoreLeaderboardRow(
     } else {
         Brush.verticalGradient(listOf(Color(0xFF1F2A38), Color(0xFF141C26)))
     }
-    val borderWidth = if (entry.isCurrentPlayer || isPinned) 1.5.dp else 0.dp
-    val borderColor = if (entry.isCurrentPlayer || isPinned) AccentAmber else Color.Transparent
+    val spotlight = entry.isCurrentPlayer && spotlightOwnRow
+    val borderColor: Color
+    val borderWidth = when {
+        spotlight -> 3.dp
+        entry.isCurrentPlayer || isPinned -> 1.5.dp
+        else -> 0.dp
+    }
+    borderColor = when {
+        spotlight -> TutorialSpotlight.copy(alpha = pulseAlpha)
+        entry.isCurrentPlayer || isPinned -> AccentAmber
+        else -> Color.Transparent
+    }
+    val rowModifier = Modifier
+        .fillMaxWidth()
+        .clip(RoundedCornerShape(10.dp))
+        .background(container)
+        .border(borderWidth, borderColor, RoundedCornerShape(10.dp))
+        .then(
+            if (entry.isCurrentPlayer) {
+                Modifier.clickable { onOwnRowTap(entry) }
+            } else Modifier
+        )
+        .padding(horizontal = 12.dp, vertical = 8.dp)
+    // Em-dash placeholder for ranks the user hasn't yet earned (fresh
+    // install, score == 0). Shown in the rank column AND the score
+    // column so a player without a submitted run reads as "—  Name  —"
+    // rather than "#null  Name  0".
+    val rankText = if (entry.rank != null) {
+        stringResource(R.string.leaderboard_rank_format, entry.rank)
+    } else {
+        "—"
+    }
+    val scoreText = if (entry.bestScore > 0L) entry.bestScore.toString() else "—"
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
-            .background(container)
-            .border(borderWidth, borderColor, RoundedCornerShape(10.dp))
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+        modifier = rowModifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.leaderboard_rank_format, entry.rank),
+            text = rankText,
             color = accent,
             fontSize = 12.sp,
             fontWeight = FontWeight.Black,
@@ -1131,8 +1416,19 @@ private fun FirestoreLeaderboardRow(
                 .weight(1f)
                 .padding(end = 10.dp)
         )
+        if (entry.isCurrentPlayer) {
+            // Trailing pencil glyph hints at the rename affordance.
+            // Plain Unicode "✎" avoids pulling in the material-icons
+            // dependency for a single one-off icon.
+            Text(
+                text = "✎",
+                color = AccentAmber,
+                fontSize = 13.sp,
+                modifier = Modifier.padding(end = 8.dp)
+            )
+        }
         Text(
-            text = entry.bestScore.toString(),
+            text = scoreText,
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Black
@@ -1689,8 +1985,13 @@ private fun tileBrush(value: Int): Brush {
 private fun TutorialOverlay(
     state: TutorialState,
     onGotIt: () -> Unit,
-    onSkip: () -> Unit
+    onSkip: () -> Unit,
+    // v0.2.x: when true, the bottom instruction card is omitted but
+    // the spotlight + dimming logic still runs — used during step 6
+    // where the leaderboard dialog renders its own inline instruction.
+    suppressCard: Boolean = false
 ) {
+    if (suppressCard) return
     // v0.1.8: dim layer removed — full-opacity board + scoreboard read
     // better against the dark theme than the muddy 0.55-alpha black scrim
     // we shipped in v0.1.7. The instruction card carries the tutorial UI
@@ -1752,6 +2053,7 @@ private fun TutorialOverlay(
                             step = step,
                             instructionTextRes = state.instructionTextRes,
                             ctaTextRes = state.ctaTextRes,
+                            mandatory = state.mandatory,
                             onGotIt = onGotIt,
                             onSkip = onSkip
                         )
@@ -1767,6 +2069,7 @@ private fun TutorialStepContent(
     step: TutorialStep,
     instructionTextRes: Int,
     ctaTextRes: Int,
+    mandatory: Boolean,
     onGotIt: () -> Unit,
     onSkip: () -> Unit
 ) {
@@ -1810,15 +2113,19 @@ private fun TutorialStepContent(
         }
         Spacer(Modifier.height(14.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
-            TextButton(onClick = onSkip) {
-                Text(
-                    stringResource(R.string.tutorial_cta_skip),
-                    color = TextSecondary,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
+            // Skip is hidden during the mandatory first-launch flow —
+            // the user has to complete step 6 to dismiss the overlay.
+            if (!mandatory) {
+                TextButton(onClick = onSkip) {
+                    Text(
+                        stringResource(R.string.tutorial_cta_skip),
+                        color = TextSecondary,
+                        fontWeight = FontWeight.Bold,
+                        letterSpacing = 1.sp
+                    )
+                }
+                Spacer(Modifier.size(12.dp))
             }
-            Spacer(Modifier.size(12.dp))
             if (ctaTextRes != 0) {
                 Button(
                     onClick = onGotIt,
@@ -1852,6 +2159,7 @@ private fun TutorialSuccessContent(step: TutorialStep) {
         TutorialStep.Merge -> R.string.tutorial_success_merge
         TutorialStep.Frame -> R.string.tutorial_success_frame
         TutorialStep.Shield -> R.string.tutorial_success_shield
+        TutorialStep.Username -> R.string.username_change_saved
         else -> 0
     }
     Column(
