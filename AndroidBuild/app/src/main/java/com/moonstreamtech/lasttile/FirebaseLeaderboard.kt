@@ -1,5 +1,6 @@
 package com.moonstreamtech.lasttile
 
+import android.content.Context
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.AggregateSource
@@ -11,6 +12,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
+import org.json.JSONArray
+import org.json.JSONObject
 
 /**
  * Score submission and leaderboard fetch from Firestore.
@@ -28,14 +31,26 @@ import kotlinx.coroutines.tasks.await
  * placeholders — this keeps tutorial step 6 (tap-your-row-to-rename)
  * unblocked for first-time players.
  *
- * In-memory cache holds the most recent fetch for [CACHE_TTL_MS] (60
- * minutes per the user requirement). The cache is per-process — kill
- * the app and the cache is gone, which is intentional.
+ * Cache is two-layered to survive process death:
+ *   - In-memory `cachedResult` is fastest; populated on every successful
+ *     fetch and read by every loadLeaderboard call within the same
+ *     process.
+ *   - SharedPreferences-backed disk cache mirrors the same JSON-encoded
+ *     snapshot. On cold start the in-memory cache is empty, so the
+ *     first loadLeaderboard reads from disk; if the disk cache is fresh
+ *     (< [CACHE_TTL_MS]) it is restored and the Firestore fetch is
+ *     skipped entirely. This is the cost-saving path for users who
+ *     reopen the app within an hour.
  */
 object FirebaseLeaderboard {
     private const val TAG = "FirebaseLeaderboard"
     private const val TOP_LIMIT = 100
     private const val CACHE_TTL_MS = 60 * 60 * 1000L  // 60 minutes
+    private const val PREFS_NAME = "lasttile_state"
+    // v1 schema. Bump to _v2 if the JSON shape ever changes — old keys
+    // will simply return null and trigger a fresh fetch.
+    private const val DISK_CACHE_KEY = "leaderboard_cache_v1"
+    private const val DISK_CACHE_AT_KEY = "leaderboard_cache_at_v1"
     private val scope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
 
     data class LeaderboardEntry(
@@ -75,19 +90,20 @@ object FirebaseLeaderboard {
 
     /**
      * Write [score] to Firestore via a monotone-increasing transaction.
-     * Invalidates the in-memory cache on a successful write so the next
-     * leaderboard open reflects the new score immediately.
+     * Invalidates both in-memory and disk caches on a successful write so
+     * the next leaderboard open reflects the new score immediately.
      *
      * No-ops when auth is not ready (uid is null). Failures are logged
      * silently — [UserBootstrap.retryPendingScore] handles any score
      * that was queued during an earlier offline session.
      */
-    fun submitBestScore(score: Long) {
+    fun submitBestScore(context: Context, score: Long) {
         if (score <= 0L) return
         val uid = UserBootstrap.uid ?: run {
             Log.i(TAG, "submit: no auth uid, skipping")
             return
         }
+        val appContext = context.applicationContext
         scope.launch {
             try {
                 val firestore = Firebase.firestore
@@ -102,9 +118,10 @@ object FirebaseLeaderboard {
                     if (score > current) {
                         tx.update(userRef, "bestScore", score)
                         Log.i(TAG, "Updated bestScore $current → $score")
-                        // Invalidate cache so the next leaderboard open
-                        // shows fresh data including this submission.
+                        // Invalidate both caches so the next leaderboard
+                        // open shows fresh data including this submission.
                         cachedResult = null
+                        clearDiskCache(appContext)
                     } else {
                         Log.i(TAG, "Skip submit: score $score <= current $current")
                     }
@@ -117,17 +134,41 @@ object FirebaseLeaderboard {
     }
 
     /**
+     * Drop both caches. Called by username-change success so the new
+     * displayName surfaces on the next panel open even if the process
+     * is killed before the in-flight forceRefresh completes.
+     */
+    fun invalidateCache(context: Context) {
+        cachedResult = null
+        clearDiskCache(context.applicationContext)
+    }
+
+    /**
      * Returns cached result if fresh (< [CACHE_TTL_MS]); otherwise fetches
      * top 100 + player rank from Firestore. Pass [forceRefresh] = true to
      * bypass the cache (e.g. when the user taps the Refresh button).
+     *
+     * Cache lookup order: in-memory → disk → network. On a fresh fetch the
+     * result is written to both layers.
      */
-    suspend fun loadLeaderboard(forceRefresh: Boolean = false): LoadResult {
+    suspend fun loadLeaderboard(
+        context: Context,
+        forceRefresh: Boolean = false
+    ): LoadResult {
+        val appContext = context.applicationContext
         if (!forceRefresh) {
             val cached = cachedResult
-            val ageMs = if (cached != null) System.currentTimeMillis() - cached.fetchedAtMs else -1L
-            if (cached != null && ageMs < CACHE_TTL_MS) {
-                Log.i(TAG, "loadLeaderboard: returning cached result (${cached.topEntries.size} entries)")
+            if (cached != null && isFresh(cached.fetchedAtMs)) {
+                Log.i(TAG, "loadLeaderboard: returning in-memory cache (${cached.topEntries.size} entries)")
                 return cached
+            }
+            // In-memory miss — try disk. On cold start this is the only
+            // place a recent fetch can come from without spending a read.
+            val disk = readDiskCache(appContext)
+            if (disk != null && isFresh(disk.fetchedAtMs)) {
+                cachedResult = disk
+                Log.i(TAG, "loadLeaderboard: returning disk cache (${disk.topEntries.size} entries)")
+                return disk
             }
         }
 
@@ -202,6 +243,7 @@ object FirebaseLeaderboard {
                 fetchedAtMs = System.currentTimeMillis()
             )
             cachedResult = result
+            writeDiskCache(appContext, uid, result)
             Log.i(TAG, "loadLeaderboard: ${topEntries.size} top entries, " +
                 "playerInTop=$playerInTop, playerRank=${playerEntry?.rank}")
             result
@@ -209,5 +251,106 @@ object FirebaseLeaderboard {
             Log.w(TAG, "loadLeaderboard failed", e)
             LoadResult.Failure(e.message ?: "unknown")
         }
+    }
+
+    private fun isFresh(fetchedAtMs: Long): Boolean =
+        System.currentTimeMillis() - fetchedAtMs < CACHE_TTL_MS
+
+    // ── Disk cache helpers ────────────────────────────────────────────────
+    //
+    // Manual JSON via org.json (already on the classpath via GameState's
+    // save format) avoids a serialization-library dependency for what is
+    // a small, schema-stable payload.
+
+    private fun prefs(context: Context) =
+        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+
+    private fun readDiskCache(context: Context): LoadResult.Success? {
+        return try {
+            val p = prefs(context)
+            val json = p.getString(DISK_CACHE_KEY, null) ?: return null
+            val fetchedAtMs = p.getLong(DISK_CACHE_AT_KEY, 0L)
+            if (fetchedAtMs <= 0L) return null
+            val obj = JSONObject(json)
+            // Discard cache snapshots that belong to a different uid.
+            // This can only happen if the user wiped app data and the
+            // disk cache survived (it does not — but defending here keeps
+            // future refactors honest).
+            val cachedUid = obj.optString("uid", "")
+            val currentUid = UserBootstrap.uid
+            if (currentUid != null && cachedUid != currentUid) {
+                Log.i(TAG, "disk cache uid mismatch ($cachedUid vs $currentUid), discarding")
+                return null
+            }
+            val topArr = obj.getJSONArray("topEntries")
+            val topEntries = (0 until topArr.length()).map { i ->
+                entryFromJson(topArr.getJSONObject(i), currentUid)
+            }
+            val playerEntry = if (obj.isNull("playerEntry")) {
+                null
+            } else {
+                entryFromJson(obj.getJSONObject("playerEntry"), currentUid)
+            }
+            LoadResult.Success(
+                topEntries = topEntries,
+                playerEntry = playerEntry,
+                playerInTop = obj.optBoolean("playerInTop", false),
+                fetchedAtMs = fetchedAtMs
+            )
+        } catch (e: Exception) {
+            Log.w(TAG, "readDiskCache failed; ignoring stale entry", e)
+            null
+        }
+    }
+
+    private fun writeDiskCache(context: Context, uid: String, result: LoadResult.Success) {
+        try {
+            val obj = JSONObject().apply {
+                put("uid", uid)
+                put("topEntries", JSONArray().apply {
+                    result.topEntries.forEach { put(entryToJson(it)) }
+                })
+                if (result.playerEntry != null) {
+                    put("playerEntry", entryToJson(result.playerEntry))
+                } else {
+                    put("playerEntry", JSONObject.NULL)
+                }
+                put("playerInTop", result.playerInTop)
+            }
+            prefs(context).edit()
+                .putString(DISK_CACHE_KEY, obj.toString())
+                .putLong(DISK_CACHE_AT_KEY, result.fetchedAtMs)
+                .apply()
+        } catch (e: Exception) {
+            Log.w(TAG, "writeDiskCache failed; cache will refetch next time", e)
+        }
+    }
+
+    private fun clearDiskCache(context: Context) {
+        prefs(context).edit()
+            .remove(DISK_CACHE_KEY)
+            .remove(DISK_CACHE_AT_KEY)
+            .apply()
+    }
+
+    private fun entryToJson(e: LeaderboardEntry): JSONObject = JSONObject().apply {
+        put("uid", e.uid)
+        put("displayName", e.displayName)
+        put("numericId", e.numericId)
+        put("bestScore", e.bestScore)
+        if (e.rank != null) put("rank", e.rank) else put("rank", JSONObject.NULL)
+        // isCurrentPlayer is recomputed at read time from the live uid.
+    }
+
+    private fun entryFromJson(o: JSONObject, currentUid: String?): LeaderboardEntry {
+        val uid = o.getString("uid")
+        return LeaderboardEntry(
+            uid = uid,
+            displayName = o.optString("displayName", "?"),
+            numericId = o.optString("numericId", "#000000"),
+            bestScore = o.optLong("bestScore", 0L),
+            rank = if (o.isNull("rank")) null else o.optInt("rank"),
+            isCurrentPlayer = (currentUid != null && uid == currentUid)
+        )
     }
 }

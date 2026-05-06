@@ -1,3 +1,6 @@
+// DEPLOY MANUALLY via Firebase Console > Firestore > Rules.
+// Order: 1) Push APK to Play internal testing, 2) Verify on device,
+// 3) Then Publish these rules. Roll back to permissive in 1 min if broken.
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {

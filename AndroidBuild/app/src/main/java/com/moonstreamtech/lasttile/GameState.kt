@@ -503,16 +503,6 @@ class GameState(
         val hazardBonus = cleared * merged / 2
         score += baseGain + hazardBonus
 
-        // Live online PB push. GPGS keeps max-per-player so it's safe to
-        // call frequently; bestThisRun guards against re-submitting the
-        // same value when the score didn't actually increase past our
-        // last push. Suppressed during the tutorial so scripted merges
-        // don't chart.
-        if (score > bestThisRun && !isTutorialActive()) {
-            bestThisRun = score
-            runCatching { onRunSubmitted?.invoke(score) }
-        }
-
         selected = null
         lastTapPos = null
         if (from in pressedTiles || to in pressedTiles) {
