@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">ट्यूटोरियल छोड़ें</string>
     <string name="tutorial_step_merge_instruction">एक टाइल को मिलती-जुलती टाइल पर खींचकर उन्हें मिलाएं।</string>
     <string name="tutorial_step_frame_instruction">नई फ्रेम सेल अनलॉक करने के लिए इन टाइलों को मिलाएं।</string>
-    <string name="tutorial_step_hazard_instruction">आग, बर्फ और जहर के खतरे टाइलों को रोकते हैं और समय के साथ नुकसान पहुंचाते हैं। उन्हें हटाने के लिए उच्च मर्ज मान तक पहुंचें या कवच का उपयोग करें।</string>
-    <string name="tutorial_step_shield_instruction">खतरे की टाइल को बेअसर करने के लिए कवच कार्ड को उस पर खींचें।</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ये बंद टाइलें खतरनाक हैं। उन्हें हटाना सीखने के लिए टैप करें।</string>
+    <string name="tutorial_step_hazards_and_shield_action">खतरे को हटाने के लिए अपने कवच का उपयोग करें।</string>
     <string name="tutorial_step_shield_subhint">वीडियो देखकर 3 और कवच पाने के लिए कवच कार्ड पर टैप करें।</string>
     <string name="tutorial_step_leaderboard_instruction">आपके उच्चतम स्कोर स्वचालित रूप से वैश्विक लीडरबोर्ड पर भेजे जाते हैं। अपनी रैंक देखने के लिए मेनू से इसे खोलें।</string>
     <string name="tutorial_hint_drag_to_merge">टाइलों को एक साथ खींचने का प्रयास करें…</string>

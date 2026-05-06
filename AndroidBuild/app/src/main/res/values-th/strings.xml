@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">ข้ามบทช่วยสอน</string>
     <string name="tutorial_step_merge_instruction">ลากไทล์หนึ่งไปวางบนไทล์ที่ตรงกันเพื่อผสานรวม</string>
     <string name="tutorial_step_frame_instruction">ผสานไทล์เหล่านี้เพื่อปลดล็อกเซลล์เฟรมใหม่</string>
-    <string name="tutorial_step_hazard_instruction">อันตรายไฟ น้ำแข็ง และพิษจะบล็อกไทล์และสร้างความเสียหายเมื่อเวลาผ่านไป ทำค่าผสานสูงหรือใช้โล่เพื่อกำจัด</string>
-    <string name="tutorial_step_shield_instruction">ลากการ์ดโล่ไปวางบนไทล์อันตรายเพื่อทำให้เป็นกลาง</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ไทล์ที่ล็อกเหล่านี้อันตราย แตะเพื่อเรียนรู้วิธีกำจัด</string>
+    <string name="tutorial_step_hazards_and_shield_action">ใช้โล่ของคุณเพื่อกำจัดอันตราย</string>
     <string name="tutorial_step_shield_subhint">แตะการ์ดโล่เพื่อดูวิดีโอและรับโล่เพิ่มอีก 3 ชิ้น</string>
     <string name="tutorial_step_leaderboard_instruction">คะแนนสูงของคุณจะถูกส่งไปยังกระดานผู้นำทั่วโลกโดยอัตโนมัติ เปิดจากเมนูเพื่อดูอันดับของคุณ</string>
     <string name="tutorial_hint_drag_to_merge">ลองลากไทล์มาวางใกล้กัน…</string>

@@ -82,8 +82,8 @@
     <string name="tutorial_cta_skip">تخطي البرنامج التعليمي</string>
     <string name="tutorial_step_merge_instruction">اسحب قطعة فوق قطعة مطابقة لدمجهما.</string>
     <string name="tutorial_step_frame_instruction">ادمج هذه القطع لفتح خلايا إطار جديدة.</string>
-    <string name="tutorial_step_hazard_instruction">تحجب مخاطر النار والجليد والسم القطع وتُلحق بها الضرر بمرور الوقت. حقق قيم دمج عالية أو استخدم الدروع لإزالتها.</string>
-    <string name="tutorial_step_shield_instruction">اسحب بطاقة الدرع فوق قطعة خطر لإبطال مفعولها.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">هذه القطع المقفلة خطيرة. اضغط لتتعلم كيفية إزالتها.</string>
+    <string name="tutorial_step_hazards_and_shield_action">استخدم درعك لإزالة خطر.</string>
     <string name="tutorial_step_shield_subhint">اضغط على بطاقة الدرع لمشاهدة فيديو والحصول على 3 دروع إضافية.</string>
     <string name="tutorial_step_leaderboard_instruction">تُرسل أعلى نتائجك تلقائيًا إلى لوحة المتصدرين العالمية. افتحها من القائمة لمعرفة ترتيبك.</string>
     <string name="tutorial_hint_drag_to_merge">جرّب سحب القطع معًا…</string>

@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">Pular tutorial</string>
     <string name="tutorial_step_merge_instruction">Arraste uma peça sobre a peça correspondente para combiná-las.</string>
     <string name="tutorial_step_frame_instruction">Combine estas peças para desbloquear novas células do quadro.</string>
-    <string name="tutorial_step_hazard_instruction">Os perigos de Fogo, Gelo e Veneno bloqueiam peças e as danificam com o tempo. Alcance valores de combinação altos ou use escudos para eliminá-los.</string>
-    <string name="tutorial_step_shield_instruction">Arraste a carta de escudo sobre uma peça de perigo para neutralizá-la.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Estas peças bloqueadas são perigosas. Toque para aprender a removê-las.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Use seu escudo para remover um perigo.</string>
     <string name="tutorial_step_shield_subhint">Toque na carta de escudo para assistir a um vídeo e ganhar mais 3 escudos.</string>
     <string name="tutorial_step_leaderboard_instruction">Suas pontuações mais altas são enviadas automaticamente para a classificação global. Abra pelo menu para ver sua posição.</string>
     <string name="tutorial_hint_drag_to_merge">Tente arrastar as peças juntas…</string>

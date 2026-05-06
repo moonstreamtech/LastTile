@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">Passer le tutoriel</string>
     <string name="tutorial_step_merge_instruction">Glisse une tuile sur la tuile correspondante pour les fusionner.</string>
     <string name="tutorial_step_frame_instruction">Fusionne ces tuiles pour débloquer de nouvelles cellules du cadre.</string>
-    <string name="tutorial_step_hazard_instruction">Les dangers Feu, Glace et Poison bloquent les tuiles et les endommagent avec le temps. Atteins des valeurs de fusion élevées ou utilise des boucliers pour les éliminer.</string>
-    <string name="tutorial_step_shield_instruction">Glisse la carte bouclier sur une tuile danger pour la neutraliser.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ces tuiles verrouillées sont dangereuses. Touche pour apprendre à les éliminer.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Utilise ton bouclier pour éliminer un danger.</string>
     <string name="tutorial_step_shield_subhint">Appuie sur la carte bouclier pour regarder une vidéo et gagner 3 boucliers supplémentaires.</string>
     <string name="tutorial_step_leaderboard_instruction">Tes meilleurs scores sont envoyés automatiquement au classement mondial. Ouvre-le depuis le menu pour voir ton rang.</string>
     <string name="tutorial_hint_drag_to_merge">Essaie de glisser les tuiles ensemble…</string>

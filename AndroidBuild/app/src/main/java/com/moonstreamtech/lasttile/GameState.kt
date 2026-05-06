@@ -27,11 +27,11 @@ class GameState(
     private val isTutorialActive: () -> Boolean = { false },
     // Returns the live tutorial step, or null when the tutorial is
     // inactive. Distinct from [isTutorialActive] because the shield
-    // gate in [applyShieldOn] only blocks during non-Shield tutorial
-    // steps — Step 4 is the one place during the tutorial where a
-    // shield drag should still fire (against the scripted Fire(4)).
-    // Default { null } keeps tests / preview-only constructions
-    // unchanged.
+    // gate in [applyShieldOn] only blocks during non-Hazard tutorial
+    // steps — the Hazard step (v0.1.11 combined intro+shield-use) is
+    // the one place during the tutorial where a shield drag should
+    // still fire. Default { null } keeps tests / preview-only
+    // constructions unchanged.
     private val currentTutorialStep: () -> TutorialStep? = { null }
 ) {
     companion object {
@@ -124,13 +124,14 @@ class GameState(
         private set
 
     // Pre-tutorial shieldCount, captured the first time setupForTutorial
-    // is called for the Shield step. Step 4 then forces shieldCount to 1
-    // (in memory only — see saveShieldCount gate below) so the demo is
-    // consistent regardless of the player's actual shield economy. When
-    // the tutorial finishes (Done OR skip) [restoreSavedShieldForTutorial]
-    // writes this value back so the player never loses a shield to the
-    // tutorial. Null when nothing is captured (e.g. user skipped before
-    // ever reaching the Shield step) — restore is a no-op in that case.
+    // is called for the Hazard step. The Hazard step then forces
+    // shieldCount to 1 (in memory only — see saveShieldCount gate
+    // below) so the demo is consistent regardless of the player's
+    // actual shield economy. When the tutorial finishes (Done OR skip)
+    // [restoreSavedShieldForTutorial] writes this value back so the
+    // player never loses a shield to the tutorial. Null when nothing
+    // is captured (e.g. user skipped before ever reaching the Hazard
+    // step) — restore is a no-op in that case.
     private var savedShieldCountForTutorial: Int? = null
 
     // Highest score already pushed to the online leaderboard during this
@@ -234,14 +235,14 @@ class GameState(
      * save() so backgrounding mid-step preserves the scripted layout.
      */
     fun setupForTutorial(step: TutorialStep) {
-        // Step 4 → Step 5 transition restores the player's real shield
-        // count immediately rather than waiting for the whole tutorial
-        // to end. Otherwise Step 5's instruction card sits on top of a
-        // KALKAN value that was artificially set to 1 during step 4,
-        // and a player who glances at the HUD on step 5 thinks the
-        // tutorial just consumed their shield. Idempotent — the
-        // restore is a no-op when nothing was captured (e.g. the user
-        // skipped before step 4).
+        // Hazard → Leaderboard transition restores the player's real
+        // shield count immediately rather than waiting for the whole
+        // tutorial to end. Otherwise the Leaderboard step's instruction
+        // card sits on top of a KALKAN value that was artificially set
+        // to 1 during the Hazard step, and a player who glances at the
+        // HUD thinks the tutorial just consumed their shield.
+        // Idempotent — the restore is a no-op when nothing was
+        // captured (e.g. the user skipped before reaching Hazard).
         if (step == TutorialStep.Leaderboard) {
             restoreSavedShieldForTutorial()
         }
@@ -261,21 +262,27 @@ class GameState(
                 b[3][3] = Tile.Normal(32)
             }
             TutorialStep.Hazard -> {
+                // v0.1.11: combined hazard-intro + shield-use step.
+                // Sub-phase 0 spotlights all three hazards so the
+                // player sees the variety; sub-phase 1 prompts them to
+                // drag the KALKAN card onto any of them. One shield is
+                // enough — clearing any single hazard advances the
+                // step, and consuming the demo shield forces
+                // shieldCount = 0 which the auto-advance trigger in
+                // GameScreen observes.
                 b[2][2] = Tile.Fire(2, 0)
                 b[3][3] = Tile.Ice(2, 0)
                 b[4][4] = Tile.Poison(2, 0)
-            }
-            TutorialStep.Shield -> {
-                b[3][3] = Tile.Fire(4, 0)
                 // Demo shield: capture the player's real shield count
-                // (only on the first entry of this Shield step, so a
+                // (only on the first entry of this Hazard step, so a
                 // re-script doesn't overwrite the saved value with our
                 // own demo 1) and force a single shield for the drag.
                 // restoreSavedShieldForTutorial puts the saved value
-                // back when the tutorial ends. We deliberately do NOT
-                // call saveShieldCount() here — the in-memory override
-                // must not hit disk, otherwise a process kill mid-
-                // tutorial would persist shieldCount = 1.
+                // back when the tutorial transitions to Leaderboard.
+                // We deliberately do NOT call saveShieldCount() here
+                // — the in-memory override must not hit disk,
+                // otherwise a process kill mid-tutorial would persist
+                // shieldCount = 1.
                 if (savedShieldCountForTutorial == null) {
                     savedShieldCountForTutorial = shieldCount
                 }
@@ -318,20 +325,21 @@ class GameState(
         unlockDebt = 0
         lastFocus = null
 
-        // shieldCount is set above for the Shield step only. Other
+        // shieldCount is set above for the Hazard step only. Other
         // steps leave the player's real shield count alone — the demo
-        // override is exclusive to step 4 and is restored on tutorial
-        // exit by restoreSavedShieldForTutorial.
+        // override is exclusive to the combined Hazard step and is
+        // restored on tutorial exit by restoreSavedShieldForTutorial.
 
         save()
     }
 
     /**
      * Restores the pre-tutorial shieldCount captured by
-     * [setupForTutorial] for [TutorialStep.Shield]. Call from the UI
+     * [setupForTutorial] for [TutorialStep.Hazard]. Call from the UI
      * layer when the tutorial transitions to inactive (Done OR skip),
      * before any restart() that follows. Idempotent and a no-op when
-     * nothing was captured (e.g. user skipped before reaching step 4).
+     * nothing was captured (e.g. user skipped before reaching the
+     * Hazard step).
      */
     fun restoreSavedShieldForTutorial() {
         val saved = savedShieldCountForTutorial ?: return
@@ -567,17 +575,18 @@ class GameState(
     // was actually consumed; if not, the caller should treat the
     // action as a no-op (no toast, no counter change).
     fun applyShieldOn(row: Int, col: Int): Boolean {
-        // Tutorial gate: shields can only be applied during Step 4
-        // (Shield). Earlier steps still show the player's real
-        // shieldCount on the HUD, so without this gate a curious user
-        // could drag onto a hazard during Step 3 and burn a real
-        // shield — and the PR #22 saveShieldCount gate alone would
-        // not undo that until tutorial end. Returning false silently
-        // here makes the drag a no-op (the floating shield overlay
-        // still snaps away because handleShieldDragEnd cleared the
-        // drag pos before calling us).
+        // Tutorial gate: shields can only be applied during the Hazard
+        // step (v0.1.11 combined intro + shield-use). Earlier steps
+        // still show the player's real shieldCount on the HUD, so
+        // without this gate a curious user could drag onto a hazard
+        // during the Frame step and burn a real shield — and the
+        // PR #22 saveShieldCount gate alone would not undo that until
+        // tutorial end. Returning false silently here makes the drag
+        // a no-op (the floating shield overlay still snaps away
+        // because handleShieldDragEnd cleared the drag pos before
+        // calling us).
         val tutorialStep = currentTutorialStep()
-        if (tutorialStep != null && tutorialStep != TutorialStep.Shield) return false
+        if (tutorialStep != null && tutorialStep != TutorialStep.Hazard) return false
         if (shieldCount <= 0) return false
         if (!isInBounds(row, col) || !unlocked[row][col]) return false
         val tile = board[row][col]

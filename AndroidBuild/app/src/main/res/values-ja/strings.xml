@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">チュートリアルをスキップ</string>
     <string name="tutorial_step_merge_instruction">タイルを同じ値のタイルにドラッグして合体させましょう。</string>
     <string name="tutorial_step_frame_instruction">これらのタイルを合体させて新しいフレームセルを解放しましょう。</string>
-    <string name="tutorial_step_hazard_instruction">ファイア、アイス、ポイズンの危険はタイルをブロックし、時間とともにダメージを与えます。高い合体値を達成するか、シールドを使って除去しましょう。</string>
-    <string name="tutorial_step_shield_instruction">シールドカードを危険タイルにドラッグして無効化しましょう。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">これらのロックされたタイルは危険です。タップして除去方法を学びましょう。</string>
+    <string name="tutorial_step_hazards_and_shield_action">シールドを使って危険を除去しましょう。</string>
     <string name="tutorial_step_shield_subhint">シールドカードをタップして動画を見ると、シールドが3つ追加されます。</string>
     <string name="tutorial_step_leaderboard_instruction">ハイスコアは自動的にグローバルランキングに送信されます。メニューから開いて順位を確認しましょう。</string>
     <string name="tutorial_hint_drag_to_merge">タイルをドラッグして合体させてみましょう…</string>

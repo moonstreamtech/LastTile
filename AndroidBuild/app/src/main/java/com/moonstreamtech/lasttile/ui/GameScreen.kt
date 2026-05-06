@@ -57,6 +57,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -121,8 +124,9 @@ private val AccentBlue = Color(0xFF64B5F6)
 private val AccentGreen = Color(0xFF81C784)
 
 // Warm yellow used for the tutorial spotlight pulse on highlighted
-// board cells and the KALKAN card during step 4. Picked to match the
-// existing Restart button accent in the screenshots.
+// board cells and the KALKAN card during the Hazard step's
+// shield-use sub-phase. Picked to match the existing Restart button
+// accent in the screenshots.
 private val TutorialSpotlight = Color(0xFFF4C062)
 
 @Composable
@@ -165,7 +169,7 @@ fun GameScreen() {
     // — without the delay the dim layer paints into a half-laid-out
     // tree and the cut-out region misses on the first frame.
     //
-    // First-launch tutorials run in mandatory mode so step 6 forces the
+    // First-launch tutorials run in mandatory mode so the Username step forces the
     // user to pick a name before the overlay can be dismissed.
     LaunchedEffect(Unit) {
         if (!tutorial.hasSeenTutorial) {
@@ -200,23 +204,49 @@ fun GameScreen() {
     //
     //   1) Trigger detection — when the scripted action fires (combo
     //      went up for Merge, a frame cell unlocked for Frame, the
-    //      shield count dropped for Shield) we mark the step completed
-    //      but do NOT call next() yet. The overlay reads stepCompleted
-    //      and swaps to a checkmark + localized "Nice merge / Frame
-    //      opened / Hazard cleared" message.
+    //      shield count dropped for the combined Hazard step) we mark
+    //      the step completed but do NOT call next() yet. The overlay
+    //      reads stepCompleted and swaps to a checkmark + localized
+    //      "Nice merge / Frame opened / Hazard cleared" message.
     //   2) Delayed advance — once stepCompleted flips to true we wait
-    //      ~2s and then advance. Hazard and Leaderboard are not in this
-    //      pipeline; they advance on the explicit Got it tap.
+    //      ~2s and then advance. Leaderboard is not in this pipeline;
+    //      it advances on the explicit Leaderboard-button tap.
     LaunchedEffect(state.combo, state.unlockedTargets, state.shieldCount, tutorial.state.currentStep) {
         if (!tutorial.state.active) return@LaunchedEffect
         if (tutorial.state.stepCompleted) return@LaunchedEffect
         val triggered = when (tutorial.state.currentStep) {
             TutorialStep.Merge -> state.combo > 0
             TutorialStep.Frame -> state.unlockedTargets.isNotEmpty()
-            TutorialStep.Shield -> state.shieldCount == 0
+            // v0.1.11: Hazard is the combined intro + shield-use step.
+            // The completion trigger is the same as the old Shield step
+            // (player drags the demo shield onto a hazard, dropping
+            // shieldCount from 1 to 0).
+            TutorialStep.Hazard -> state.shieldCount == 0
             else -> false
         }
         if (triggered) tutorial.markStepCompleted()
+    }
+    // v0.1.11: sub-phase advance for the combined Hazard step.
+    // Sub-phase 0 spotlights the hazard tiles with the "these are
+    // dangerous" copy; after ~3s OR as soon as the player taps a tile
+    // (state.selected becomes non-null), the spotlight shifts to the
+    // KALKAN card and the copy switches to "use your shield to clear
+    // one". Internal to the step — no step counter change.
+    LaunchedEffect(tutorial.state.currentStep, tutorial.state.subPhase) {
+        if (!tutorial.state.active) return@LaunchedEffect
+        if (tutorial.state.currentStep != TutorialStep.Hazard) return@LaunchedEffect
+        if (tutorial.state.subPhase != 0) return@LaunchedEffect
+        withTimeoutOrNull(3000L) {
+            snapshotFlow { state.selected != null }.first { it }
+        }
+        // Re-check after the suspend in case the user already cleared a
+        // hazard (which advances the whole step) before either signal
+        // fired.
+        if (tutorial.state.currentStep == TutorialStep.Hazard &&
+            tutorial.state.subPhase == 0
+        ) {
+            tutorial.advanceHazardSubPhase()
+        }
     }
     LaunchedEffect(tutorial.state.stepCompleted, tutorial.state.currentStep) {
         if (!tutorial.state.active) return@LaunchedEffect
@@ -311,9 +341,14 @@ fun GameScreen() {
     val tutorialSpotlightActive = tutorial.state.active &&
         !tutorial.state.stepCompleted &&
         tutorial.state.highlightedCells.isNotEmpty()
+    // v0.1.11: KALKAN card highlights during sub-phase 1 of the
+    // combined Hazard step (after the "use your shield" prompt
+    // appears). Sub-phase 0 keeps the highlight off so it doesn't
+    // compete with the hazard-tile spotlight on the board.
     val tutorialShieldCardHighlighted = tutorial.state.active &&
         !tutorial.state.stepCompleted &&
-        tutorial.state.currentStep == TutorialStep.Shield
+        tutorial.state.currentStep == TutorialStep.Hazard &&
+        tutorial.state.subPhase == 1
 
     fun handleShieldDragEnd() {
         val pos = shieldDragWindowPos
@@ -355,7 +390,7 @@ fun GameScreen() {
     // normally (Android closes the activity).
     BackHandler(enabled = tutorial.state.active && tutorial.state.mandatory) {
         // Intentional no-op. The tutorial finishes via username save
-        // on step 6, not via back press.
+        // on the Username step, not via back press.
     }
 
     Box(
@@ -500,16 +535,17 @@ fun GameScreen() {
                 Spacer(Modifier.size(12.dp))
                 Button(
                     onClick = {
-                        // v0.2.0: tutorial step 5 spotlights this button
-                        // and requires a tap to advance to step 6 (which
-                        // spotlights the player's row inside the now-open
+                        // v0.2.0: the Leaderboard tutorial step
+                        // spotlights this button and requires a tap to
+                        // advance to the Username step (which spotlights
+                        // the player's row inside the now-open
                         // leaderboard). For non-Leaderboard tutorial
                         // steps in non-mandatory mode, the legacy
                         // graceful-skip behaviour is preserved.
                         if (tutorial.state.active) {
                             when (tutorial.state.currentStep) {
                                 TutorialStep.Leaderboard -> tutorial.next()
-                                TutorialStep.Username -> { /* leave at step 6 */ }
+                                TutorialStep.Username -> { /* leave at the Username step */ }
                                 else -> if (!tutorial.state.mandatory) tutorial.skip()
                             }
                         }
@@ -546,10 +582,11 @@ fun GameScreen() {
             LeaderboardDialog(
                 entries = leaderboard.topScores(),
                 onDismiss = {
-                    // Mandatory tutorial step 6 spotlights the player's
-                    // row inside this dialog. Closing the dialog mid-
-                    // tutorial would orphan the spotlight target, so we
-                    // refuse the dismiss until the user completes step 6.
+                    // The mandatory Username step spotlights the
+                    // player's row inside this dialog. Closing the
+                    // dialog mid-tutorial would orphan the spotlight
+                    // target, so we refuse the dismiss until the user
+                    // completes the Username step.
                     if (tutorial.state.active &&
                         tutorial.state.mandatory &&
                         tutorial.state.currentStep == TutorialStep.Username
@@ -569,7 +606,7 @@ fun GameScreen() {
                         tutorial.state.mandatory &&
                         tutorial.state.currentStep == TutorialStep.Username
                     if (mandatory) {
-                        // Tutorial step 6 only fires on a brand-new
+                        // The Username tutorial step only fires on a brand-new
                         // user, so a cooldown can never be active —
                         // open the dialog without the pre-check.
                         usernameDialogCurrent = entry.displayName
@@ -634,7 +671,7 @@ fun GameScreen() {
                                 leaderboardRefreshTick += 1
                                 showToast(usernameSavedMsg)
                                 if (wasMandatory && tutorial.state.active) {
-                                    // Mandatory step 6: give the user
+                                    // Mandatory Username step: give the user
                                     // ~600ms to see their newly-saved
                                     // entry land in the leaderboard,
                                     // then auto-close the panel and
@@ -723,7 +760,7 @@ fun GameScreen() {
         // button. A dialog open during the tutorial calls skip() at
         // its open site so the overlay doesn't collide with the dialog.
         //
-        // v0.2.x fix: during step 6 the leaderboard dialog is open and
+        // v0.2.x fix: during the Username step the leaderboard dialog is open and
         // already shows the inline orange instruction at its top, so
         // the bottom step card would duplicate that copy. Hide the
         // card in that exact case; the spotlight on the player's row
@@ -772,7 +809,8 @@ private fun ShieldStatCard(
     onDragStart: (Offset) -> Unit,
     onDragChange: (Offset) -> Unit,
     onDragFinish: () -> Unit,
-    // Tutorial spotlight on the KALKAN card during step 4. When
+    // Tutorial spotlight on the KALKAN card during the Hazard step's
+    // shield-use sub-phase. When
     // [highlighted] is true a 3.dp pulsing border is drawn around
     // the card with [pulseAlpha] driving the alpha. The card otherwise
     // renders identically — the existing tap and long-press-drag
@@ -979,7 +1017,7 @@ private fun LeaderboardDialog(
     entries: List<LeaderboardEntry>,
     onDismiss: () -> Unit,
     onClear: () -> Unit,
-    // v0.2.0: tutorial step 6 spotlights the player's own row inside
+    // v0.2.0: the Username tutorial step spotlights the player's own row inside
     // this dialog and prompts them to tap it to pick a name. The
     // spotlight + tap-to-name affordance also stays available for any
     // post-tutorial change-name action — the difference is whether the
@@ -1255,7 +1293,7 @@ private fun LeaderboardListWithPinning(
     }
 
     // v0.2.0: the bottom pinned player row is ALWAYS shown when
-    // playerEntry is non-null. That ensures tutorial step 6 has a
+    // playerEntry is non-null. That ensures the Username tutorial step has a
     // tap target on a fresh install (when the player is not in the
     // top 100 because their score is still 0). The top pin still
     // appears only when the player has scrolled past their own row
@@ -2006,7 +2044,7 @@ private fun TutorialOverlay(
     onGotIt: () -> Unit,
     onSkip: () -> Unit,
     // v0.2.x: when true, the bottom instruction card is omitted but
-    // the spotlight + dimming logic still runs — used during step 6
+    // the spotlight + dimming logic still runs — used during the Username step
     // where the leaderboard dialog renders its own inline instruction.
     suppressCard: Boolean = false
 ) {
@@ -2070,6 +2108,7 @@ private fun TutorialOverlay(
                     } else {
                         TutorialStepContent(
                             step = step,
+                            subPhase = state.subPhase,
                             instructionTextRes = state.instructionTextRes,
                             ctaTextRes = state.ctaTextRes,
                             mandatory = state.mandatory,
@@ -2086,6 +2125,7 @@ private fun TutorialOverlay(
 @Composable
 private fun TutorialStepContent(
     step: TutorialStep,
+    subPhase: Int,
     instructionTextRes: Int,
     ctaTextRes: Int,
     mandatory: Boolean,
@@ -2121,7 +2161,13 @@ private fun TutorialStepContent(
                 textAlign = TextAlign.Center
             )
         }
-        if (step == TutorialStep.Shield) {
+        // v0.1.11: the "tap shield card to earn 3 more" sub-hint is
+        // gated to sub-phase 1 of the combined Hazard step — same
+        // moment as the legacy Shield step, when the user has just
+        // been prompted to drag a shield onto a hazard. During
+        // sub-phase 0 we're still introducing the hazards themselves
+        // and the shield mechanic hasn't been mentioned yet.
+        if (step == TutorialStep.Hazard && subPhase == 1) {
             Spacer(Modifier.height(8.dp))
             Text(
                 text = stringResource(R.string.tutorial_step_shield_subhint),
@@ -2133,7 +2179,7 @@ private fun TutorialStepContent(
         Spacer(Modifier.height(14.dp))
         Row(verticalAlignment = Alignment.CenterVertically) {
             // Skip is hidden during the mandatory first-launch flow —
-            // the user has to complete step 6 to dismiss the overlay.
+            // the user has to complete the Username step to dismiss the overlay.
             if (!mandatory) {
                 TextButton(onClick = onSkip) {
                     Text(
@@ -2177,7 +2223,11 @@ private fun TutorialSuccessContent(step: TutorialStep) {
     val successRes = when (step) {
         TutorialStep.Merge -> R.string.tutorial_success_merge
         TutorialStep.Frame -> R.string.tutorial_success_frame
-        TutorialStep.Shield -> R.string.tutorial_success_shield
+        // v0.1.11: the combined Hazard step's success beat fires when
+        // the player consumes the demo shield to clear a hazard — the
+        // existing "Hazard cleared!" copy reads correctly for the
+        // merged step.
+        TutorialStep.Hazard -> R.string.tutorial_success_shield
         TutorialStep.Username -> R.string.username_change_saved
         else -> 0
     }

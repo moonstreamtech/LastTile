@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">Salta tutorial</string>
     <string name="tutorial_step_merge_instruction">Trascina una tessera su quella corrispondente per unirle.</string>
     <string name="tutorial_step_frame_instruction">Unisci queste tessere per sbloccare nuove celle del bordo.</string>
-    <string name="tutorial_step_hazard_instruction">I pericoli Fuoco, Ghiaccio e Veleno bloccano le tessere e le danneggiano nel tempo. Raggiungi valori di fusione alti o usa gli scudi per rimuoverli.</string>
-    <string name="tutorial_step_shield_instruction">Trascina la carta scudo su una tessera di pericolo per neutralizzarla.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Queste tessere bloccate sono pericolose. Tocca per imparare a rimuoverle.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Usa il tuo scudo per rimuovere un pericolo.</string>
     <string name="tutorial_step_shield_subhint">Tocca la carta scudo per guardare un video e ottenere 3 scudi in più.</string>
     <string name="tutorial_step_leaderboard_instruction">I tuoi punteggi migliori vengono inviati automaticamente alla classifica globale. Aprila dal menu per vedere la tua posizione.</string>
     <string name="tutorial_hint_drag_to_merge">Prova a trascinare insieme le tessere…</string>

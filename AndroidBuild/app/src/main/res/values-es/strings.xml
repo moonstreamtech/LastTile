@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">Omitir tutorial</string>
     <string name="tutorial_step_merge_instruction">Arrastra una pieza sobre la pieza coincidente para fusionarlas.</string>
     <string name="tutorial_step_frame_instruction">Fusiona estas piezas para desbloquear nuevas celdas del marco.</string>
-    <string name="tutorial_step_hazard_instruction">Los peligros de Fuego, Hielo y Veneno bloquean piezas y las dañan con el tiempo. Alcanza valores de fusión altos o usa escudos para eliminarlos.</string>
-    <string name="tutorial_step_shield_instruction">Arrastra la carta de escudo sobre una pieza de peligro para neutralizarla.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Estas piezas bloqueadas son peligrosas. Toca para aprender a eliminarlas.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Usa tu escudo para eliminar un peligro.</string>
     <string name="tutorial_step_shield_subhint">Toca la carta de escudo para ver un video y ganar 3 escudos más.</string>
     <string name="tutorial_step_leaderboard_instruction">Tus puntuaciones más altas se envían automáticamente a la clasificación global. Ábrela desde el menú para ver tu posición.</string>
     <string name="tutorial_hint_drag_to_merge">Intenta arrastrar las piezas juntas…</string>

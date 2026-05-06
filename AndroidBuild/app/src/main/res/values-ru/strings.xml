@@ -80,8 +80,8 @@
     <string name="tutorial_cta_skip">Пропустить обучение</string>
     <string name="tutorial_step_merge_instruction">Перетащи плитку на совпадающую плитку, чтобы объединить их.</string>
     <string name="tutorial_step_frame_instruction">Объедини эти плитки, чтобы открыть новые ячейки рамки.</string>
-    <string name="tutorial_step_hazard_instruction">Опасности Огня, Льда и Яда блокируют плитки и наносят им урон со временем. Достигни высоких значений объединения или используй щиты, чтобы убрать их.</string>
-    <string name="tutorial_step_shield_instruction">Перетащи карту щита на опасную плитку, чтобы нейтрализовать её.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Эти заблокированные плитки опасны. Нажми, чтобы узнать, как их убрать.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Используй щит, чтобы убрать опасность.</string>
     <string name="tutorial_step_shield_subhint">Нажми на карту щита, чтобы посмотреть видео и получить ещё 3 щита.</string>
     <string name="tutorial_step_leaderboard_instruction">Твои рекорды автоматически отправляются в глобальную таблицу лидеров. Открой её из меню, чтобы увидеть своё место.</string>
     <string name="tutorial_hint_drag_to_merge">Попробуй перетащить плитки вместе…</string>

@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">Anleitung überspringen</string>
     <string name="tutorial_step_merge_instruction">Ziehe eine Kachel auf eine passende Kachel, um sie zu verschmelzen.</string>
     <string name="tutorial_step_frame_instruction">Verschmelze diese Kacheln, um neue Rahmenfelder freizuschalten.</string>
-    <string name="tutorial_step_hazard_instruction">Feuer, Eis und Gift blockieren Kacheln und beschädigen sie mit der Zeit. Erreiche hohe Verschmelzungswerte oder nutze Schilde, um sie zu entfernen.</string>
-    <string name="tutorial_step_shield_instruction">Ziehe die Schildkarte auf eine Gefahrenkachel, um sie zu neutralisieren.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Diese gesperrten Kacheln sind gefährlich. Tippe, um zu lernen, wie du sie entfernst.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Nutze deinen Schild, um eine Gefahr zu entfernen.</string>
     <string name="tutorial_step_shield_subhint">Tippe auf die Schildkarte, um ein Video anzusehen und 3 weitere Schilde zu erhalten.</string>
     <string name="tutorial_step_leaderboard_instruction">Deine Highscores werden automatisch an die globale Bestenliste gesendet. Öffne sie im Menü, um deine Platzierung zu sehen.</string>
     <string name="tutorial_hint_drag_to_merge">Versuche, die Kacheln zusammenzuziehen…</string>

@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">跳过教程</string>
     <string name="tutorial_step_merge_instruction">将方块拖到匹配的方块上以合并它们。</string>
     <string name="tutorial_step_frame_instruction">合并这些方块以解锁新的边框单元格。</string>
-    <string name="tutorial_step_hazard_instruction">火焰、冰霜和毒素危险会阻挡方块并随时间造成伤害。达到高合并值或使用护盾来清除它们。</string>
-    <string name="tutorial_step_shield_instruction">将护盾卡拖到危险方块上将其中和。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">这些被锁定的方块很危险。点击了解如何清除它们。</string>
+    <string name="tutorial_step_hazards_and_shield_action">使用你的护盾来清除危险。</string>
     <string name="tutorial_step_shield_subhint">点击护盾卡观看视频，再获得3个护盾。</string>
     <string name="tutorial_step_leaderboard_instruction">你的高分会自动提交到全球排行榜。从菜单打开它查看你的排名。</string>
     <string name="tutorial_hint_drag_to_merge">尝试将方块拖到一起…</string>

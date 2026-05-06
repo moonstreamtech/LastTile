@@ -19,7 +19,7 @@ class LastTileApplication : Application() {
         // v0.2.0: One-time promotion of the legacy tutorial_v1_seen flag
         // to tutorial_completed_once so existing players who finished
         // the v0.1.x tutorial aren't forced through the new mandatory
-        // step 6 username flow. Cheap and idempotent.
+        // Username step. Cheap and idempotent.
         runCatching {
             val prefs = getSharedPreferences("lasttile_state", Context.MODE_PRIVATE)
             TutorialController.migrateLegacyTutorialFlag(prefs)

@@ -78,8 +78,8 @@
     <string name="tutorial_cta_skip">Tutorial overslaan</string>
     <string name="tutorial_step_merge_instruction">Sleep een tegel op de bijpassende tegel om ze samen te voegen.</string>
     <string name="tutorial_step_frame_instruction">Voeg deze tegels samen om nieuwe randvakken te ontgrendelen.</string>
-    <string name="tutorial_step_hazard_instruction">Vuur-, IJs- en Gifgevaren blokkeren tegels en beschadigen ze na verloop van tijd. Bereik hoge samenvoegwaarden of gebruik schilden om ze te verwijderen.</string>
-    <string name="tutorial_step_shield_instruction">Sleep de schildkaart op een gevarentegel om deze te neutraliseren.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Deze vergrendelde tegels zijn gevaarlijk. Tik om te leren hoe je ze verwijdert.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Gebruik je schild om een gevaar te verwijderen.</string>
     <string name="tutorial_step_shield_subhint">Tik op de schildkaart om een video te bekijken en 3 extra schilden te verdienen.</string>
     <string name="tutorial_step_leaderboard_instruction">Je hoogste scores worden automatisch verstuurd naar het wereldwijde scorebord. Open het via het menu om je ranking te zien.</string>
     <string name="tutorial_hint_drag_to_merge">Probeer de tegels samen te slepen…</string>

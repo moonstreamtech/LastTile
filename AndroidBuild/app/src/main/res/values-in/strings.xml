@@ -77,8 +77,8 @@
     <string name="tutorial_cta_skip">Lewati Tutorial</string>
     <string name="tutorial_step_merge_instruction">Seret satu ubin ke ubin yang cocok untuk menggabungkannya.</string>
     <string name="tutorial_step_frame_instruction">Gabungkan ubin-ubin ini untuk membuka sel frame baru.</string>
-    <string name="tutorial_step_hazard_instruction">Bahaya Api, Es, dan Racun memblokir ubin dan merusaknya seiring waktu. Capai nilai gabungan tinggi atau gunakan perisai untuk menghilangkannya.</string>
-    <string name="tutorial_step_shield_instruction">Seret kartu perisai ke ubin bahaya untuk menetralkannya.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ubin terkunci ini berbahaya. Ketuk untuk belajar cara menghilangkannya.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Gunakan perisai untuk menghilangkan bahaya.</string>
     <string name="tutorial_step_shield_subhint">Ketuk kartu perisai untuk menonton video dan mendapatkan 3 perisai lagi.</string>
     <string name="tutorial_step_leaderboard_instruction">Skor tertinggi kamu otomatis dikirim ke papan peringkat global. Buka dari menu untuk melihat peringkatmu.</string>
     <string name="tutorial_hint_drag_to_merge">Coba seret ubin-ubin bersama…</string>
