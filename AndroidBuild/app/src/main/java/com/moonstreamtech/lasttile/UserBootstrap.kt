@@ -131,17 +131,18 @@ object UserBootstrap {
             return
         }
         val numericId = allocateNumericId(uid)
+        val numericIdStr = "#${"%06d".format(numericId)}"
         ref.set(
             mapOf(
                 "userId" to uid,
-                "displayName" to "#$numericId",
-                "numericId" to numericId,
+                "displayName" to numericIdStr,
+                "numericId" to numericIdStr,
                 "lastUsernameChangeAt" to null,
                 "bestScore" to 0L,
                 "createdAt" to FieldValue.serverTimestamp()
             )
         ).await()
-        Log.i(TAG, "Created user doc uid=$uid displayName=#$numericId")
+        Log.i(TAG, "Created user doc uid=$uid displayName=$numericIdStr")
     }
 
     /**
@@ -160,7 +161,7 @@ object UserBootstrap {
 
         repeat(5) { attempt ->
             val candidate = Random.nextInt(100_000, 1_000_000)
-            val reservationRef = db.collection("usernames").document("#$candidate")
+            val reservationRef = db.collection("usernames").document("%06d".format(candidate))
             try {
                 db.runTransaction { tx ->
                     if (tx.get(reservationRef).exists()) throw Collision()
