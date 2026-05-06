@@ -36,6 +36,10 @@
     <string name="leaderboard_retry">Retry</string>
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_loading">Loading…</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
+    <!-- TODO i18n: needs translation -->
+    <string name="leaderboard_refresh">Refresh</string>
 
     <string name="status_game_over">ГРУ  ЗАВЕРШЕНО</string>
     <string name="status_split">Розділено навпіл.</string>
