@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Placar</string>
     <string name="btn_close">Fechar</string>
     <string name="btn_clear">Limpar</string>
-    <string name="btn_view_online_leaderboard">Ver placar on-line</string>
 
     <string name="leaderboard_title">PLACAR</string>
     <string name="leaderboard_tab_global">Global</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · este aparelho</string>
     <string name="leaderboard_empty">Nenhuma partida ainda. Conclua uma partida para entrar no placar.</string>
     <string name="leaderboard_powered_by">Fornecido por Google Play Games</string>
-    <string name="leaderboard_not_configured_long">O placar on-line ainda não está configurado. A próxima versão ativará as classificações do Google Play Games.</string>
-    <string name="leaderboard_compete">Compita com jogadores do mundo todo. Faça login no Google Play Games quando solicitado.</string>
-    <string name="leaderboard_activity_unavailable">Atividade indisponível. Tente novamente pela tela do jogo.</string>
-    <string name="leaderboard_opening">Abrindo Google Play Games…</string>
-    <string name="leaderboard_open_failed">Não foi possível abrir o Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">O placar on-line ainda não está configurado.</string>
-    <string name="leaderboard_sign_in_hint">Faça login no Google Play Games para ver as classificações globais.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

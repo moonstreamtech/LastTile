@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">المتصدرون</string>
     <string name="btn_close">إغلاق</string>
     <string name="btn_clear">مسح</string>
-    <string name="btn_view_online_leaderboard">عرض المتصدرين عبر الإنترنت</string>
 
     <string name="leaderboard_title">المتصدرون</string>
     <string name="leaderboard_tab_global">عالمي</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">أفضل 10 · هذا الجهاز</string>
     <string name="leaderboard_empty">لا توجد جولات بعد. أكمل جولة لتدخل قائمة المتصدرين.</string>
     <string name="leaderboard_powered_by">مدعوم من Google Play Games</string>
-    <string name="leaderboard_not_configured_long">قائمة المتصدرين عبر الإنترنت لم تُعدّ بعد. ستُفعِّل النسخة التالية تصنيفات Google Play Games.</string>
-    <string name="leaderboard_compete">نافس لاعبين من حول العالم. سجّل الدخول إلى Google Play Games عند الطلب.</string>
-    <string name="leaderboard_activity_unavailable">النشاط غير متاح. حاول مجددًا من شاشة اللعبة.</string>
-    <string name="leaderboard_opening">جارٍ فتح Google Play Games…</string>
-    <string name="leaderboard_open_failed">تعذّر فتح Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">قائمة المتصدرين عبر الإنترنت لم تُعدّ بعد.</string>
-    <string name="leaderboard_sign_in_hint">سجّل الدخول إلى Google Play Games لرؤية التصنيفات العالمية.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

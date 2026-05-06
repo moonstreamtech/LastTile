@@ -91,7 +91,6 @@ import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.LoadAdError
 import com.moonstreamtech.lasttile.AdConfig
 import com.moonstreamtech.lasttile.GameState
-import com.moonstreamtech.lasttile.GpgsLeaderboard
 import com.moonstreamtech.lasttile.LeaderboardEntry
 import com.moonstreamtech.lasttile.LocalLeaderboard
 import com.moonstreamtech.lasttile.R
@@ -122,7 +121,7 @@ private val AccentBlue = Color(0xFF64B5F6)
 private val AccentGreen = Color(0xFF81C784)
 
 // Warm yellow used for the tutorial spotlight pulse on highlighted
-// board cells and the KORUMA card during step 4. Picked to match the
+// board cells and the KALKAN card during step 4. Picked to match the
 // existing Restart button accent in the screenshots.
 private val TutorialSpotlight = Color(0xFFF4C062)
 
@@ -143,9 +142,6 @@ fun GameScreen() {
             prefs = prefs,
             leaderboard = leaderboard,
             onRunSubmitted = { finalScore ->
-                // Both backends run in parallel during the PR B → PR D transition.
-                // GpgsLeaderboard removed in PR D; FirebaseLeaderboard persists.
-                GpgsLeaderboard.submitScore(context, finalScore.toLong())
                 FirebaseLeaderboard.submitBestScore(finalScore.toLong())
             },
             isTutorialActive = { tutorial.state.active },
@@ -287,7 +283,7 @@ fun GameScreen() {
     }
 
     // Shared pulse alpha for the tutorial spotlight. One transition
-    // drives every glowing cell + the KORUMA card so they breathe in
+    // drives every glowing cell + the KALKAN card so they breathe in
     // sync, and the transition runs unconditionally — cheap, and means
     // the float is always defined for callers that gate on
     // tutorial.state.active themselves. 1200 ms with LinearEasing +
@@ -721,7 +717,7 @@ private fun ShieldStatCard(
     onDragStart: (Offset) -> Unit,
     onDragChange: (Offset) -> Unit,
     onDragFinish: () -> Unit,
-    // Tutorial spotlight on the KORUMA card during step 4. When
+    // Tutorial spotlight on the KALKAN card during step 4. When
     // [highlighted] is true a 3.dp pulsing border is drawn around
     // the card with [pulseAlpha] driving the alpha. The card otherwise
     // renders identically — the existing tap and long-press-drag
@@ -1078,7 +1074,6 @@ private fun GlobalLeaderboardContent(
     onOwnRowTap: (FirebaseLeaderboard.LeaderboardEntry) -> Unit = {},
     refreshTick: Int = 0
 ) {
-    val context = LocalContext.current
     var loadResult by remember { mutableStateOf<FirebaseLeaderboard.LoadResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var refreshKey by remember { mutableStateOf(0) }
@@ -1089,7 +1084,7 @@ private fun GlobalLeaderboardContent(
     val effectiveKey = refreshKey + refreshTick
     LaunchedEffect(effectiveKey) {
         isLoading = true
-        loadResult = FirebaseLeaderboard.loadLeaderboard(context, forceRefresh = effectiveKey > 0)
+        loadResult = FirebaseLeaderboard.loadLeaderboard(forceRefresh = effectiveKey > 0)
         isLoading = false
     }
 
@@ -1140,6 +1135,10 @@ private fun GlobalLeaderboardContent(
 
         loadResult is FirebaseLeaderboard.LoadResult.Success -> {
             val success = loadResult as FirebaseLeaderboard.LoadResult.Success
+            // playerEntry is null only when auth is missing or the user
+            // doc is missing; both are exceptional. The empty-state path
+            // is therefore only taken when there are no top entries and
+            // also no player doc to pin.
             if (success.topEntries.isEmpty() && success.playerEntry == null) {
                 Text(
                     text = stringResource(R.string.leaderboard_empty_global),
@@ -1195,18 +1194,15 @@ private fun LeaderboardListWithPinning(
                 listState.firstVisibleItemIndex > playerIndexInTop
         }
     }
-    val playerBelowViewport by remember {
-        androidx.compose.runtime.derivedStateOf {
-            if (playerIndexInTop < 0) return@derivedStateOf false
-            val lastVisible = listState.layoutInfo.visibleItemsInfo
-                .lastOrNull()?.index ?: -1
-            lastVisible in 0 until playerIndexInTop
-        }
-    }
 
-    val showTopPin    = success.playerInTop && playerAboveViewport
-    val showBottomPin = (!success.playerInTop && success.playerEntry != null) ||
-                        (success.playerInTop && playerBelowViewport)
+    // v0.2.0: the bottom pinned player row is ALWAYS shown when
+    // playerEntry is non-null. That ensures tutorial step 6 has a
+    // tap target on a fresh install (when the player is not in the
+    // top 100 because their score is still 0). The top pin still
+    // appears only when the player has scrolled past their own row
+    // and that row is in the top 100, so the pinned row at the top
+    // doubles as a "jump back to me" affordance.
+    val showTopPin = success.playerInTop && playerAboveViewport
 
     Column(modifier = Modifier.fillMaxWidth()) {
         // Pinned to top edge when player has scrolled their row above viewport.
@@ -1245,10 +1241,20 @@ private fun LeaderboardListWithPinning(
             }
         }
 
-        // Pinned to bottom edge: always when player is outside top 100,
-        // or when player is in top 100 but scrolled their row below viewport.
-        if (showBottomPin && success.playerEntry != null) {
-            Spacer(Modifier.height(4.dp))
+        // Always show the player's own row pinned at the bottom. When
+        // the player is in the top 100 they will appear twice — once
+        // in the scrollable list and once pinned — and a thin
+        // separator above the pin makes the duplication read as
+        // intentional.
+        if (success.playerEntry != null) {
+            Spacer(Modifier.height(8.dp))
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(TextSecondary.copy(alpha = 0.25f))
+            )
+            Spacer(Modifier.height(8.dp))
             FirestoreLeaderboardRow(
                 entry = success.playerEntry,
                 isPinned = true,
@@ -1338,12 +1344,22 @@ private fun FirestoreLeaderboardRow(
             } else Modifier
         )
         .padding(horizontal = 12.dp, vertical = 8.dp)
+    // Em-dash placeholder for ranks the user hasn't yet earned (fresh
+    // install, score == 0). Shown in the rank column AND the score
+    // column so a player without a submitted run reads as "—  Name  —"
+    // rather than "#null  Name  0".
+    val rankText = if (entry.rank != null) {
+        stringResource(R.string.leaderboard_rank_format, entry.rank)
+    } else {
+        "—"
+    }
+    val scoreText = if (entry.bestScore > 0L) entry.bestScore.toString() else "—"
     Row(
         modifier = rowModifier,
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.leaderboard_rank_format, entry.rank),
+            text = rankText,
             color = accent,
             fontSize = 12.sp,
             fontWeight = FontWeight.Black,
@@ -1372,7 +1388,7 @@ private fun FirestoreLeaderboardRow(
             )
         }
         Text(
-            text = entry.bestScore.toString(),
+            text = scoreText,
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Black

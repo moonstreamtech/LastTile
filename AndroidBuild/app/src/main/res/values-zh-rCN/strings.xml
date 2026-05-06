@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">排行榜</string>
     <string name="btn_close">关闭</string>
     <string name="btn_clear">清除</string>
-    <string name="btn_view_online_leaderboard">查看在线排行榜</string>
 
     <string name="leaderboard_title">排行榜</string>
     <string name="leaderboard_tab_global">全球</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">前 10 · 本机</string>
     <string name="leaderboard_empty">暂无记录。完成一局即可上榜。</string>
     <string name="leaderboard_powered_by">由 Google Play Games 提供支持</string>
-    <string name="leaderboard_not_configured_long">在线排行榜尚未配置。下个版本将启用 Google Play Games 排行榜。</string>
-    <string name="leaderboard_compete">与全球玩家一较高下。出现提示时请登录 Google Play Games。</string>
-    <string name="leaderboard_activity_unavailable">活动不可用。请从游戏界面重试。</string>
-    <string name="leaderboard_opening">正在打开 Google Play Games…</string>
-    <string name="leaderboard_open_failed">无法打开 Play Games：%1$s</string>
-    <string name="leaderboard_not_configured_short">在线排行榜尚未配置。</string>
-    <string name="leaderboard_sign_in_hint">登录 Google Play Games 即可查看全球排行。</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Bảng xếp hạng</string>
     <string name="btn_close">Đóng</string>
     <string name="btn_clear">Xoá</string>
-    <string name="btn_view_online_leaderboard">Xem bảng xếp hạng trực tuyến</string>
 
     <string name="leaderboard_title">BẢNG XẾP HẠNG</string>
     <string name="leaderboard_tab_global">Toàn cầu</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · thiết bị này</string>
     <string name="leaderboard_empty">Chưa có ván nào. Hoàn thành một ván để có tên trong bảng.</string>
     <string name="leaderboard_powered_by">Được hỗ trợ bởi Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Bảng xếp hạng trực tuyến chưa được cấu hình. Phiên bản tiếp theo sẽ bật xếp hạng Google Play Games.</string>
-    <string name="leaderboard_compete">Tranh tài với người chơi khắp thế giới. Đăng nhập Google Play Games khi được nhắc.</string>
-    <string name="leaderboard_activity_unavailable">Hoạt động không khả dụng. Thử lại từ màn hình trò chơi.</string>
-    <string name="leaderboard_opening">Đang mở Google Play Games…</string>
-    <string name="leaderboard_open_failed">Không mở được Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">Bảng xếp hạng trực tuyến chưa được cấu hình.</string>
-    <string name="leaderboard_sign_in_hint">Đăng nhập Google Play Games để xem xếp hạng toàn cầu.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

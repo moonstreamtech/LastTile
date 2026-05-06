@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Рейтинг</string>
     <string name="btn_close">Закрыть</string>
     <string name="btn_clear">Очистить</string>
-    <string name="btn_view_online_leaderboard">Открыть онлайн-рейтинг</string>
 
     <string name="leaderboard_title">РЕЙТИНГ</string>
     <string name="leaderboard_tab_global">Глобальный</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Топ-10 · это устройство</string>
     <string name="leaderboard_empty">Игр ещё нет. Заверши одну партию, чтобы попасть в рейтинг.</string>
     <string name="leaderboard_powered_by">При поддержке Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Онлайн-рейтинг ещё не настроен. В следующей версии появятся рейтинги Google Play Games.</string>
-    <string name="leaderboard_compete">Соревнуйся с игроками со всего мира. Войди в Google Play Games, когда появится запрос.</string>
-    <string name="leaderboard_activity_unavailable">Активность недоступна. Попробуй снова с экрана игры.</string>
-    <string name="leaderboard_opening">Открываем Google Play Games…</string>
-    <string name="leaderboard_open_failed">Не удалось открыть Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">Онлайн-рейтинг ещё не настроен.</string>
-    <string name="leaderboard_sign_in_hint">Войди в Google Play Games, чтобы увидеть глобальный рейтинг.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

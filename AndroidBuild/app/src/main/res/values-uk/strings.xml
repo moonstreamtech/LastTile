@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Таблиця лідерів</string>
     <string name="btn_close">Закрити</string>
     <string name="btn_clear">Очистити</string>
-    <string name="btn_view_online_leaderboard">Відкрити онлайн-таблицю</string>
 
     <string name="leaderboard_title">ТАБЛИЦЯ ЛІДЕРІВ</string>
     <string name="leaderboard_tab_global">Глобально</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Топ 10 · цей пристрій</string>
     <string name="leaderboard_empty">Ще немає ігор. Заверши партію, щоб потрапити до таблиці.</string>
     <string name="leaderboard_powered_by">За підтримки Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Онлайн-таблицю лідерів ще не налаштовано. Наступна версія активує рейтинги Google Play Games.</string>
-    <string name="leaderboard_compete">Змагайся з гравцями з усього світу. Увійди в Google Play Games, коли з\'явиться запит.</string>
-    <string name="leaderboard_activity_unavailable">Активність недоступна. Спробуй знову з екрана гри.</string>
-    <string name="leaderboard_opening">Відкриваємо Google Play Games…</string>
-    <string name="leaderboard_open_failed">Не вдалося відкрити Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">Онлайн-таблицю лідерів ще не налаштовано.</string>
-    <string name="leaderboard_sign_in_hint">Увійди в Google Play Games, щоб побачити глобальні рейтинги.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

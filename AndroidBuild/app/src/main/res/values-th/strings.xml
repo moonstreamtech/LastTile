@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">กระดานผู้นำ</string>
     <string name="btn_close">ปิด</string>
     <string name="btn_clear">ล้าง</string>
-    <string name="btn_view_online_leaderboard">ดูกระดานผู้นำออนไลน์</string>
 
     <string name="leaderboard_title">กระดานผู้นำ</string>
     <string name="leaderboard_tab_global">ทั่วโลก</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">10 อันดับแรก · เครื่องนี้</string>
     <string name="leaderboard_empty">ยังไม่มีการเล่น เล่นจบหนึ่งรอบเพื่อขึ้นกระดาน</string>
     <string name="leaderboard_powered_by">ขับเคลื่อนโดย Google Play Games</string>
-    <string name="leaderboard_not_configured_long">ยังไม่ได้ตั้งค่ากระดานผู้นำออนไลน์ เวอร์ชันถัดไปจะเปิดใช้งานอันดับ Google Play Games</string>
-    <string name="leaderboard_compete">แข่งขันกับผู้เล่นทั่วโลก ลงชื่อเข้าใช้ Google Play Games เมื่อมีคำขอ</string>
-    <string name="leaderboard_activity_unavailable">กิจกรรมใช้งานไม่ได้ ลองอีกครั้งจากหน้าจอเกม</string>
-    <string name="leaderboard_opening">กำลังเปิด Google Play Games…</string>
-    <string name="leaderboard_open_failed">เปิด Play Games ไม่สำเร็จ: %1$s</string>
-    <string name="leaderboard_not_configured_short">ยังไม่ได้ตั้งค่ากระดานผู้นำออนไลน์</string>
-    <string name="leaderboard_sign_in_hint">ลงชื่อเข้าใช้ Google Play Games เพื่อดูอันดับทั่วโลก</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

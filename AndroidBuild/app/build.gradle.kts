@@ -74,8 +74,8 @@ android {
         applicationId = "com.moonstreamtech.lasttile"
         minSdk = 24
         targetSdk = 35
-        versionCode = 10
-        versionName = "0.1.9"
+        versionCode = 11
+        versionName = "0.2.0"
 
         // Lock the APK to the locales we ship translations for. Android still
         // auto-picks the closest match for the device language at runtime, so
@@ -211,19 +211,18 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.material3:material3")
-    implementation("com.google.android.gms:play-services-games-v2:20.1.2")
-    implementation("com.google.android.gms:play-services-tasks:18.0.2")
     implementation("com.google.android.gms:play-services-ads:23.6.0")
     // Bridges play-services Tasks into kotlinx coroutines (.await()) so
-    // GpgsLeaderboard.loadTopScores can be a suspend function. Also used
-    // by UserBootstrap to await Firebase Auth + Firestore Task results.
+    // FirebaseLeaderboard.loadLeaderboard and UserBootstrap can suspend
+    // on Firebase Auth + Firestore Task results. The artifact pulls in
+    // play-services-tasks transitively, so no explicit dep is needed.
     // Version matches the coroutines core that Compose BOM 2024.02.02
     // transitively pulls in; bumping the BOM later may require bumping this.
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.3")
 
-    // Firebase — PR A: Anonymous Auth + Firestore best-score write.
+    // Firebase — Anonymous Auth + Firestore best-score write + leaderboard.
     // BOM pins all Firebase library versions; only auth-ktx and
-    // firestore-ktx are needed in this PR (GPGS removed in PR D).
+    // firestore-ktx are needed since GPGS was removed in v0.2.0.
     implementation(platform("com.google.firebase:firebase-bom:33.7.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")

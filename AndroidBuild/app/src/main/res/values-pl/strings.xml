@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Ranking</string>
     <string name="btn_close">Zamknij</string>
     <string name="btn_clear">Wyczyść</string>
-    <string name="btn_view_online_leaderboard">Zobacz ranking online</string>
 
     <string name="leaderboard_title">RANKING</string>
     <string name="leaderboard_tab_global">Globalny</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · to urządzenie</string>
     <string name="leaderboard_empty">Brak rozgrywek. Ukończ jedną, by trafić do rankingu.</string>
     <string name="leaderboard_powered_by">Wspierane przez Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Ranking online nie jest jeszcze skonfigurowany. Następna wersja włączy rankingi Google Play Games.</string>
-    <string name="leaderboard_compete">Rywalizuj z graczami z całego świata. Zaloguj się w Google Play Games, gdy pojawi się prośba.</string>
-    <string name="leaderboard_activity_unavailable">Aktywność niedostępna. Spróbuj ponownie z ekranu gry.</string>
-    <string name="leaderboard_opening">Otwieranie Google Play Games…</string>
-    <string name="leaderboard_open_failed">Nie można otworzyć Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">Ranking online nie jest jeszcze skonfigurowany.</string>
-    <string name="leaderboard_sign_in_hint">Zaloguj się w Google Play Games, aby zobaczyć rankingi globalne.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

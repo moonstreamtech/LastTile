@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Bestenliste</string>
     <string name="btn_close">Schließen</string>
     <string name="btn_clear">Löschen</string>
-    <string name="btn_view_online_leaderboard">Online-Bestenliste ansehen</string>
 
     <string name="leaderboard_title">BESTENLISTE</string>
     <string name="leaderboard_tab_global">Global</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · dieses Gerät</string>
     <string name="leaderboard_empty">Noch keine Runden. Beende eine Runde, um in der Liste zu erscheinen.</string>
     <string name="leaderboard_powered_by">Bereitgestellt von Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Die Online-Bestenliste ist noch nicht konfiguriert. Die nächste Version aktiviert die Google Play Games-Ranglisten.</string>
-    <string name="leaderboard_compete">Tritt gegen Spieler weltweit an. Melde dich bei Google Play Games an, wenn du dazu aufgefordert wirst.</string>
-    <string name="leaderboard_activity_unavailable">Aktivität nicht verfügbar. Versuche es vom Spielbildschirm aus erneut.</string>
-    <string name="leaderboard_opening">Google Play Games wird geöffnet…</string>
-    <string name="leaderboard_open_failed">Play Games konnte nicht geöffnet werden: %1$s</string>
-    <string name="leaderboard_not_configured_short">Die Online-Bestenliste ist noch nicht konfiguriert.</string>
-    <string name="leaderboard_sign_in_hint">Melde dich bei Google Play Games an, um globale Ranglisten zu sehen.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

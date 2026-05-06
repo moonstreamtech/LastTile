@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">ランキング</string>
     <string name="btn_close">閉じる</string>
     <string name="btn_clear">クリア</string>
-    <string name="btn_view_online_leaderboard">オンラインランキングを見る</string>
 
     <string name="leaderboard_title">ランキング</string>
     <string name="leaderboard_tab_global">グローバル</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">トップ10 · この端末</string>
     <string name="leaderboard_empty">まだ記録がありません。1ゲーム完走するとランキング入りします。</string>
     <string name="leaderboard_powered_by">Powered by Google Play Games</string>
-    <string name="leaderboard_not_configured_long">オンラインランキングはまだ設定されていません。次のリリースでGoogle Play Gamesのランキングが有効になります。</string>
-    <string name="leaderboard_compete">世界中のプレイヤーと競い合おう。表示されたらGoogle Play Gamesにサインインしてください。</string>
-    <string name="leaderboard_activity_unavailable">アクティビティが利用できません。ゲーム画面からもう一度お試しください。</string>
-    <string name="leaderboard_opening">Google Play Gamesを開いています…</string>
-    <string name="leaderboard_open_failed">Play Gamesを開けませんでした: %1$s</string>
-    <string name="leaderboard_not_configured_short">オンラインランキングはまだ設定されていません。</string>
-    <string name="leaderboard_sign_in_hint">グローバルランキングを見るにはGoogle Play Gamesにサインインしてください。</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

@@ -5,7 +5,7 @@
     <string name="stat_score">PUAN</string>
     <string name="stat_turn">TUR</string>
     <string name="stat_combo">KOMBO</string>
-    <string name="stat_shield">KORUMA</string>
+    <string name="stat_shield">KALKAN</string>
 
     <string name="shield_dialog_title">Kalkan kazan</string>
     <string name="shield_dialog_body">Kısa bir video izleyerek 3 kalkan kazan. Ateş, Buz ve Zehir kutucuklarını temizlemek için kullan.</string>
@@ -21,7 +21,6 @@
     <string name="btn_leaderboard">Skor Tablosu</string>
     <string name="btn_close">Kapat</string>
     <string name="btn_clear">Temizle</string>
-    <string name="btn_view_online_leaderboard">Çevrimiçi Skorları Gör</string>
 
     <string name="leaderboard_title">SKOR TABLOSU</string>
     <string name="leaderboard_tab_global">Küresel</string>
@@ -29,13 +28,6 @@
     <string name="leaderboard_local_subtitle">İlk 10 · bu cihaz</string>
     <string name="leaderboard_empty">Henüz oyun yok. Tablodaki yerini almak için bir tur tamamla.</string>
     <string name="leaderboard_powered_by">Küresel sıralama</string>
-    <string name="leaderboard_not_configured_long">Çevrimiçi skor tablosu henüz yapılandırılmadı. Bir sonraki sürüm Google Play Games sıralamalarını etkinleştirecek.</string>
-    <string name="leaderboard_compete">Dünyanın her yerinden oyuncularla yarış. İstendiğinde Google Play Games\'e giriş yap.</string>
-    <string name="leaderboard_activity_unavailable">Etkinlik kullanılamıyor. Oyun ekranından tekrar dene.</string>
-    <string name="leaderboard_opening">Google Play Games açılıyor…</string>
-    <string name="leaderboard_open_failed">Play Games açılamadı: %1$s</string>
-    <string name="leaderboard_not_configured_short">Çevrimiçi skor tablosu henüz yapılandırılmadı.</string>
-    <string name="leaderboard_sign_in_hint">Küresel sıralamaları görmek için Google Play Games\'e giriş yap.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

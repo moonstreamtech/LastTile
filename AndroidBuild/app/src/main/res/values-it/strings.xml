@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Classifica</string>
     <string name="btn_close">Chiudi</string>
     <string name="btn_clear">Cancella</string>
-    <string name="btn_view_online_leaderboard">Vedi classifica online</string>
 
     <string name="leaderboard_title">CLASSIFICA</string>
     <string name="leaderboard_tab_global">Globale</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · questo dispositivo</string>
     <string name="leaderboard_empty">Ancora nessuna partita. Completane una per entrare in classifica.</string>
     <string name="leaderboard_powered_by">Powered by Google Play Games</string>
-    <string name="leaderboard_not_configured_long">La classifica online non è ancora configurata. La prossima versione attiverà le classifiche Google Play Games.</string>
-    <string name="leaderboard_compete">Sfida giocatori da tutto il mondo. Accedi a Google Play Games quando richiesto.</string>
-    <string name="leaderboard_activity_unavailable">Attività non disponibile. Riprova dalla schermata di gioco.</string>
-    <string name="leaderboard_opening">Apertura di Google Play Games…</string>
-    <string name="leaderboard_open_failed">Impossibile aprire Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">La classifica online non è ancora configurata.</string>
-    <string name="leaderboard_sign_in_hint">Accedi a Google Play Games per vedere le classifiche globali.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

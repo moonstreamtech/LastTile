@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Ranglijst</string>
     <string name="btn_close">Sluiten</string>
     <string name="btn_clear">Wissen</string>
-    <string name="btn_view_online_leaderboard">Online ranglijst bekijken</string>
 
     <string name="leaderboard_title">RANGLIJST</string>
     <string name="leaderboard_tab_global">Wereldwijd</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · dit apparaat</string>
     <string name="leaderboard_empty">Nog geen potjes. Speel er één om in de lijst te komen.</string>
     <string name="leaderboard_powered_by">Mogelijk gemaakt door Google Play Games</string>
-    <string name="leaderboard_not_configured_long">De online ranglijst is nog niet ingesteld. De volgende versie schakelt Google Play Games-rankings in.</string>
-    <string name="leaderboard_compete">Neem het op tegen spelers wereldwijd. Meld je aan bij Google Play Games wanneer hierom wordt gevraagd.</string>
-    <string name="leaderboard_activity_unavailable">Activiteit niet beschikbaar. Probeer het opnieuw vanuit het spelscherm.</string>
-    <string name="leaderboard_opening">Google Play Games openen…</string>
-    <string name="leaderboard_open_failed">Kan Play Games niet openen: %1$s</string>
-    <string name="leaderboard_not_configured_short">De online ranglijst is nog niet ingesteld.</string>
-    <string name="leaderboard_sign_in_hint">Meld je aan bij Google Play Games om wereldwijde rankings te zien.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

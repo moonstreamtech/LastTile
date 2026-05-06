@@ -12,7 +12,6 @@
     <string name="btn_leaderboard">Classement</string>
     <string name="btn_close">Fermer</string>
     <string name="btn_clear">Effacer</string>
-    <string name="btn_view_online_leaderboard">Voir le classement en ligne</string>
 
     <string name="leaderboard_title">CLASSEMENT</string>
     <string name="leaderboard_tab_global">Mondial</string>
@@ -20,13 +19,6 @@
     <string name="leaderboard_local_subtitle">Top 10 · cet appareil</string>
     <string name="leaderboard_empty">Aucune partie. Termine une partie complète pour apparaître au classement.</string>
     <string name="leaderboard_powered_by">Propulsé par Google Play Games</string>
-    <string name="leaderboard_not_configured_long">Le classement en ligne n\'est pas encore configuré. La prochaine version activera les classements Google Play Games.</string>
-    <string name="leaderboard_compete">Affronte des joueurs du monde entier. Connecte-toi à Google Play Games lorsque demandé.</string>
-    <string name="leaderboard_activity_unavailable">Activité indisponible. Réessaie depuis l\'écran de jeu.</string>
-    <string name="leaderboard_opening">Ouverture de Google Play Games…</string>
-    <string name="leaderboard_open_failed">Impossible d\'ouvrir Play Games : %1$s</string>
-    <string name="leaderboard_not_configured_short">Le classement en ligne n\'est pas encore configuré.</string>
-    <string name="leaderboard_sign_in_hint">Connecte-toi à Google Play Games pour voir les classements mondiaux.</string>
 
     <!-- TODO i18n: needs translation -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>

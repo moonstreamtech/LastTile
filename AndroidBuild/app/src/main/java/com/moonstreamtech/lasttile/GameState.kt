@@ -237,7 +237,7 @@ class GameState(
         // Step 4 → Step 5 transition restores the player's real shield
         // count immediately rather than waiting for the whole tutorial
         // to end. Otherwise Step 5's instruction card sits on top of a
-        // KORUMA value that was artificially set to 1 during step 4,
+        // KALKAN value that was artificially set to 1 during step 4,
         // and a player who glances at the HUD on step 5 thinks the
         // tutorial just consumed their shield. Idempotent — the
         // restore is a no-op when nothing was captured (e.g. the user

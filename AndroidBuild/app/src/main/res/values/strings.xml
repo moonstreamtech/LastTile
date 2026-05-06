@@ -1,13 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- App identity. The on-device launcher label and the Play Games meta-data
-         pointer stay in English in every locale because they are brand /
-         platform identifiers. -->
+    <!-- App identity. The on-device launcher label stays in English in
+         every locale because it is a brand identifier. -->
     <string name="app_name" translatable="false">Last Tile</string>
-    <!-- Replace with the numeric Project ID from Play Console > Play Games Services
-         once the app is registered. Until then GPGS sign-in fails gracefully and
-         only the local leaderboard works. -->
-    <string name="game_services_app_id" translatable="false">245356515245</string>
 
     <!-- Header / branding. The wordmark is intentionally untranslated. -->
     <string name="title_wordmark" translatable="false">LAST  TILE</string>
@@ -35,7 +30,6 @@
     <string name="btn_leaderboard">Leaderboard</string>
     <string name="btn_close">Close</string>
     <string name="btn_clear">Clear</string>
-    <string name="btn_view_online_leaderboard">View Online Leaderboard</string>
 
     <!-- Leaderboard dialog. -->
     <string name="leaderboard_title">LEADERBOARD</string>
@@ -44,22 +38,8 @@
     <string name="leaderboard_local_subtitle">Top 10 · local device</string>
     <string name="leaderboard_empty">No runs yet. Survive one full run to chart.</string>
     <string name="leaderboard_powered_by">Global rankings</string>
-    <string name="leaderboard_not_configured_long">Online leaderboard isn\'t configured yet. The next release will enable Google Play Games rankings.</string>
-    <string name="leaderboard_compete">Compete with players worldwide. Sign in to Google Play Games when prompted.</string>
-    <string name="leaderboard_activity_unavailable">Activity unavailable. Try again from the game screen.</string>
-    <string name="leaderboard_opening">Opening Google Play Games…</string>
-    <string name="leaderboard_open_failed">Couldn\'t open Play Games: %1$s</string>
-    <string name="leaderboard_not_configured_short">Online leaderboard isn\'t configured yet.</string>
-    <string name="leaderboard_sign_in_hint">Sign in to Google Play Games to see global rankings.</string>
 
-    <!-- v0.1.4: in-app fetched Global tab. The static descriptive copy
-         above (leaderboard_compete, leaderboard_opening, leaderboard_open_failed,
-         leaderboard_activity_unavailable, leaderboard_not_configured_short,
-         btn_view_online_leaderboard) is intentionally retained even
-         though no Kotlin call site references it any more — translators
-         shipped versions in 19 locales and we keep the resources around
-         to avoid resurrecting broken non-English builds if a future
-         feature needs similar copy. -->
+    <!-- Global tab states (in-app fetched leaderboard). -->
     <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
     <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
     <string name="leaderboard_retry">Retry</string>
