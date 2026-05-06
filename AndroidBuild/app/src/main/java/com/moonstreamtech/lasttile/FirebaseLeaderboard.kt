@@ -1,6 +1,8 @@
 package com.moonstreamtech.lasttile
 
+import android.content.Context
 import android.util.Log
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.AggregateSource
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.firestore
@@ -54,6 +56,20 @@ object FirebaseLeaderboard {
 
     @Volatile private var cachedResult: LoadResult.Success? = null
 
+    private fun debugLog(context: Context, message: String) {
+        try {
+            val timestamp = java.text.SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss.SSS",
+                java.util.Locale.US
+            ).format(java.util.Date())
+            val logFile = java.io.File(
+                context.getExternalFilesDir(null),
+                "firebase-debug.log"
+            )
+            logFile.appendText("[$timestamp] $message\n")
+        } catch (_: Exception) { /* swallow */ }
+    }
+
     /**
      * Write [score] to Firestore via a monotone-increasing transaction.
      * Invalidates the in-memory cache on a successful write so the next
@@ -102,27 +118,39 @@ object FirebaseLeaderboard {
      * top 100 + player rank from Firestore. Pass [forceRefresh] = true to
      * bypass the cache (e.g. when the user taps the Refresh button).
      */
-    suspend fun loadLeaderboard(forceRefresh: Boolean = false): LoadResult {
+    suspend fun loadLeaderboard(context: Context, forceRefresh: Boolean = false): LoadResult {
+        debugLog(context, "=== loadLeaderboard ENTRY, forceRefresh=$forceRefresh ===")
+
         if (!forceRefresh) {
             val cached = cachedResult
-            if (cached != null &&
-                (System.currentTimeMillis() - cached.fetchedAtMs) < CACHE_TTL_MS) {
+            val ageMs = if (cached != null) System.currentTimeMillis() - cached.fetchedAtMs else -1L
+            debugLog(context, "cache check: hasCache=${cached != null}, ageMs=$ageMs")
+            if (cached != null && ageMs < CACHE_TTL_MS) {
                 Log.i(TAG, "loadLeaderboard: returning cached result (${cached.topEntries.size} entries)")
+                debugLog(context, "returning cached result (${cached.topEntries.size} entries)")
                 return cached
             }
         }
+
         return try {
             val firestore = Firebase.firestore
-            val uid = UserBootstrap.uid
+            val uid = Firebase.auth.currentUser?.uid
+            debugLog(context, "currentUser uid=$uid")
+            if (uid == null) {
+                debugLog(context, "ERROR: currentUser is null, returning Failure")
+                return LoadResult.Failure("not authenticated")
+            }
 
             // Top 100 query. Excludes bestScore == 0 so users who installed
             // but never finished a run don't fill the board with zero rows.
+            debugLog(context, "fetching top 100 users orderBy bestScore DESC limit 100")
             val topSnapshot = firestore.collection("users")
                 .whereGreaterThan("bestScore", 0L)
                 .orderBy("bestScore", Query.Direction.DESCENDING)
                 .limit(TOP_LIMIT.toLong())
                 .get()
                 .await()
+            debugLog(context, "topSnapshot: size=${topSnapshot.size()}, isEmpty=${topSnapshot.isEmpty}")
 
             val topEntries = topSnapshot.documents.mapIndexed { idx, doc ->
                 LeaderboardEntry(
@@ -136,25 +164,33 @@ object FirebaseLeaderboard {
             }
 
             val playerInTop = topEntries.any { it.uid == uid }
+            debugLog(context, "computing player rank, foundInTop=$playerInTop")
+
             val playerEntry: LeaderboardEntry? = when {
-                uid == null -> null
                 playerInTop -> topEntries.first { it.uid == uid }
                 else -> {
                     // Player is below top 100 (or has no score yet).
                     // Fetch their doc and compute rank via count() aggregation
                     // (1 read regardless of collection size).
                     val playerDoc = firestore.collection("users").document(uid).get().await()
-                    if (!playerDoc.exists()) null
-                    else {
+                    if (!playerDoc.exists()) {
+                        debugLog(context, "player doc does not exist for uid=$uid")
+                        null
+                    } else {
                         val playerScore = playerDoc.getLong("bestScore") ?: 0L
-                        if (playerScore <= 0L) null
-                        else {
+                        debugLog(context, "computing player rank, playerScore=$playerScore, foundInTop=$playerInTop")
+                        if (playerScore <= 0L) {
+                            debugLog(context, "playerScore=$playerScore <= 0, omitting player entry")
+                            null
+                        } else {
+                            debugLog(context, "calling count() aggregation for rank")
                             val countSnap = firestore.collection("users")
                                 .whereGreaterThan("bestScore", playerScore)
                                 .count()
                                 .get(AggregateSource.SERVER)
                                 .await()
                             val playersAhead = countSnap.count.toInt()
+                            debugLog(context, "count result=$playersAhead, player rank=${playersAhead + 1}")
                             LeaderboardEntry(
                                 uid = uid,
                                 displayName = playerDoc.getString("displayName") ?: "?",
@@ -177,9 +213,13 @@ object FirebaseLeaderboard {
             cachedResult = result
             Log.i(TAG, "loadLeaderboard: ${topEntries.size} top entries, " +
                 "playerInTop=$playerInTop, playerRank=${playerEntry?.rank}")
+            debugLog(context, "SUCCESS: returning ${topEntries.size} entries, playerEntry=${playerEntry?.numericId}")
             result
         } catch (e: Exception) {
+            val stack = android.util.Log.getStackTraceString(e)
             Log.w(TAG, "loadLeaderboard failed", e)
+            debugLog(context, "EXCEPTION: ${e.javaClass.name}: ${e.message}")
+            debugLog(context, "STACK:\n$stack")
             LoadResult.Failure(e.message ?: "unknown")
         }
     }

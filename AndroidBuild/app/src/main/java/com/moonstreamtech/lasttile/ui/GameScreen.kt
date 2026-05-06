@@ -902,13 +902,14 @@ private fun LocalLeaderboardContent(entries: List<LeaderboardEntry>) {
 
 @Composable
 private fun GlobalLeaderboardContent() {
+    val context = LocalContext.current
     var loadResult by remember { mutableStateOf<FirebaseLeaderboard.LoadResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var refreshKey by remember { mutableStateOf(0) }
 
     LaunchedEffect(refreshKey) {
         isLoading = true
-        loadResult = FirebaseLeaderboard.loadLeaderboard(forceRefresh = refreshKey > 0)
+        loadResult = FirebaseLeaderboard.loadLeaderboard(context, forceRefresh = refreshKey > 0)
         isLoading = false
     }
 
