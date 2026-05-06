@@ -123,4 +123,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">업데이트 가능 — 설치하려면 탭하세요</string>
+    <string name="update_ready_to_install">업데이트 다운로드 완료 — 지금 설치하려면 탭하세요</string>
 </resources>

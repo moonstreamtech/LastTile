@@ -148,4 +148,11 @@
     <string name="username_cooldown">You can change your name in %d days</string>
     <string name="username_change_failed">Save failed</string>
     <string name="username_change_saved">Name saved</string>
+
+    <!-- v0.1.11: in-app update indicator strings. Used as
+         contentDescription on the small badge next to the LAST TILE
+         wordmark when Google Play surfaces a newer version through
+         the FLEXIBLE in-app update API. -->
+    <string name="update_available">Update available — tap to install</string>
+    <string name="update_ready_to_install">Update downloaded — tap to install now</string>
 </resources>

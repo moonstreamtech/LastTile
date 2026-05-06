@@ -123,4 +123,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">有可用更新 — 点击安装</string>
+    <string name="update_ready_to_install">更新已下载 — 点击立即安装</string>
 </resources>

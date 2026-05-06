@@ -49,9 +49,12 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.activity.ComponentActivity
+import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -423,13 +426,42 @@ fun GameScreen() {
                     .padding(horizontal = 16.dp, vertical = 16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Text(
-                    text = stringResource(R.string.title_wordmark),
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Black,
-                    color = TextPrimary,
-                    letterSpacing = 6.sp
-                )
+                // v0.1.11: optional update-available indicator next
+                // to the wordmark. The badge is hidden when the Play
+                // Core probe says we're current (or fails outright on
+                // devices without Play Services), so the title row
+                // keeps its centered single-element shape in the
+                // common case.
+                val updateState by UpdateChecker.uiState.collectAsState()
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(R.string.title_wordmark),
+                        fontSize = 30.sp,
+                        fontWeight = FontWeight.Black,
+                        color = TextPrimary,
+                        letterSpacing = 6.sp
+                    )
+                    if (updateState !is UpdateChecker.UpdateState.Idle) {
+                        Spacer(Modifier.width(8.dp))
+                        UpdateBadge(
+                            state = updateState,
+                            onClick = click@{
+                                val ca = activity as? ComponentActivity
+                                    ?: return@click
+                                when (updateState) {
+                                    is UpdateChecker.UpdateState.Available ->
+                                        UpdateChecker.startUpdate(ca)
+                                    is UpdateChecker.UpdateState.Downloaded ->
+                                        UpdateChecker.completeInstall()
+                                    UpdateChecker.UpdateState.Idle -> Unit
+                                }
+                            }
+                        )
+                    }
+                }
                 Spacer(Modifier.height(4.dp))
                 Text(
                     text = stringResource(R.string.tagline),
@@ -1542,6 +1574,74 @@ private fun LeaderboardRow(rank: Int, entry: LeaderboardEntry) {
             text = if (entry.timestamp > 0) DATE_FMT.format(Date(entry.timestamp)) else "",
             color = TextSecondary,
             fontSize = 10.sp
+        )
+    }
+}
+
+/**
+ * v0.1.11: Compact tap target rendered next to the LAST TILE wordmark
+ * when [UpdateChecker] surfaces a Play Store update. Two visual
+ * states:
+ *   - Available: amber down-arrow, slow pulse to draw the eye without
+ *     being noisy. Tap → kicks off the FLEXIBLE update flow (download
+ *     in background while the player keeps playing).
+ *   - Downloaded: green check, steady (no pulse — the user shouldn't
+ *     wait for anything else). Tap → completeUpdate(), which restarts
+ *     the app onto the new version.
+ *
+ * Uses Unicode glyphs rather than a Material icon dependency so we
+ * stay consistent with the rest of the UI ("?", "+", "🔒") and avoid
+ * pulling in `material-icons-extended` for two characters.
+ */
+@Composable
+private fun UpdateBadge(
+    state: UpdateChecker.UpdateState,
+    onClick: () -> Unit
+) {
+    val glyph: String
+    val tint: Color
+    val description: String
+    when (state) {
+        is UpdateChecker.UpdateState.Available -> {
+            glyph = "↓"
+            tint = AccentAmber
+            description = stringResource(R.string.update_available)
+        }
+        is UpdateChecker.UpdateState.Downloaded -> {
+            glyph = "✓"
+            tint = Color(0xFF66BB6A)
+            description = stringResource(R.string.update_ready_to_install)
+        }
+        UpdateChecker.UpdateState.Idle -> return
+    }
+    // Pulse only while Available, so the badge feels like it's
+    // asking for attention. Once Downloaded the action is one
+    // simple tap-to-install — a steady glyph reads as "ready".
+    val pulseAlpha: Float = if (state is UpdateChecker.UpdateState.Available) {
+        val transition = rememberInfiniteTransition(label = "updateBadgePulse")
+        transition.animateFloat(
+            initialValue = 0.65f,
+            targetValue = 1f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(1500, easing = LinearEasing),
+                repeatMode = RepeatMode.Reverse
+            ),
+            label = "updateBadgeAlpha"
+        ).value
+    } else {
+        1f
+    }
+    IconButton(
+        onClick = onClick,
+        modifier = Modifier
+            .size(32.dp)
+            .semantics { contentDescription = description }
+    ) {
+        Text(
+            text = glyph,
+            color = tint.copy(alpha = pulseAlpha),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Black
         )
     }
 }

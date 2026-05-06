@@ -37,5 +37,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+
+        // v0.1.11: Probe Play Store for an in-app update and register
+        // the activity-result launcher that drives the FLEXIBLE
+        // update flow. Must run during onCreate (before the activity
+        // reaches STARTED) so registerForActivityResult is allowed.
+        // Devices without Play Services fail the probe silently and
+        // never surface the update badge.
+        UpdateChecker.init(this)
     }
 }

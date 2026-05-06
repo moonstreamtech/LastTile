@@ -123,4 +123,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">Có bản cập nhật — chạm để cài đặt</string>
+    <string name="update_ready_to_install">Đã tải bản cập nhật — chạm để cài đặt ngay</string>
 </resources>

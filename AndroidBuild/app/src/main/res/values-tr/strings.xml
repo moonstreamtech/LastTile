@@ -96,4 +96,6 @@
     <string name="username_change_failed">Kaydedilemedi</string>
     <string name="username_change_saved">İsim kaydedildi</string>
 
+    <string name="update_available">Güncelleme mevcut — yüklemek için dokun</string>
+    <string name="update_ready_to_install">Güncelleme indirildi — şimdi yüklemek için dokun</string>
 </resources>

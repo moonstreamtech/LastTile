@@ -126,4 +126,6 @@
     <string name="username_change_failed">Save failed</string>
     <!-- TODO i18n: needs translation -->
     <string name="username_change_saved">Name saved</string>
+    <string name="update_available">Доступно обновление — нажми, чтобы установить</string>
+    <string name="update_ready_to_install">Обновление загружено — нажми, чтобы установить сейчас</string>
 </resources>
