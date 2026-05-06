@@ -56,6 +56,18 @@ object FirebaseLeaderboard {
 
     @Volatile private var cachedResult: LoadResult.Success? = null
 
+    // Defensive read for numericId: old docs stored it as Long/Int; new docs
+    // store it as a "#NNNNNN" String. Both are accepted so the leaderboard
+    // never crashes on already-written documents.
+    private fun readNumericId(doc: com.google.firebase.firestore.DocumentSnapshot): String {
+        return when (val raw = doc.get("numericId")) {
+            is String -> raw
+            is Long -> "#${"%06d".format(raw)}"
+            is Number -> "#${"%06d".format(raw.toLong())}"
+            else -> "#000000"
+        }
+    }
+
     private fun debugLog(context: Context, message: String) {
         try {
             val timestamp = java.text.SimpleDateFormat(
@@ -156,7 +168,7 @@ object FirebaseLeaderboard {
                 LeaderboardEntry(
                     uid = doc.id,
                     displayName = doc.getString("displayName") ?: "?",
-                    numericId = doc.getString("numericId") ?: "",
+                    numericId = readNumericId(doc),
                     bestScore = doc.getLong("bestScore") ?: 0L,
                     rank = idx + 1,
                     isCurrentPlayer = (doc.id == uid)
@@ -194,7 +206,7 @@ object FirebaseLeaderboard {
                             LeaderboardEntry(
                                 uid = uid,
                                 displayName = playerDoc.getString("displayName") ?: "?",
-                                numericId = playerDoc.getString("numericId") ?: "",
+                                numericId = readNumericId(playerDoc),
                                 bestScore = playerScore,
                                 rank = playersAhead + 1,
                                 isCurrentPlayer = true
