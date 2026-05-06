@@ -142,7 +142,17 @@ fun GameScreen() {
             prefs = prefs,
             leaderboard = leaderboard,
             onRunSubmitted = { finalScore ->
-                FirebaseLeaderboard.submitBestScore(finalScore.toLong())
+                // Local PB guard: only spend a Firestore transaction when
+                // the new score actually beats this device's lifetime best.
+                // The "lifetime_best_score" mirror is updated optimistically
+                // — Firestore's monotone-increasing transaction remains
+                // the authoritative source of truth.
+                val score = finalScore.toLong()
+                val localBest = prefs.getLong("lifetime_best_score", 0L)
+                if (score > localBest) {
+                    prefs.edit().putLong("lifetime_best_score", score).apply()
+                    FirebaseLeaderboard.submitBestScore(context, score)
+                }
             },
             isTutorialActive = { tutorial.state.active },
             currentTutorialStep = {
@@ -616,6 +626,11 @@ fun GameScreen() {
                                 usernameDialogCurrent = newName
                                 // Force a refetch of the global tab so
                                 // the new name is visible immediately.
+                                // invalidateCache also wipes the persisted
+                                // disk snapshot so a process kill between
+                                // here and the next panel open doesn't
+                                // resurface the old name from disk.
+                                FirebaseLeaderboard.invalidateCache(context)
                                 leaderboardRefreshTick += 1
                                 showToast(usernameSavedMsg)
                                 if (wasMandatory && tutorial.state.active) {
@@ -1114,6 +1129,7 @@ private fun GlobalLeaderboardContent(
     onOwnRowTap: (FirebaseLeaderboard.LeaderboardEntry) -> Unit = {},
     refreshTick: Int = 0
 ) {
+    val context = LocalContext.current
     var loadResult by remember { mutableStateOf<FirebaseLeaderboard.LoadResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
     var refreshKey by remember { mutableStateOf(0) }
@@ -1124,7 +1140,10 @@ private fun GlobalLeaderboardContent(
     val effectiveKey = refreshKey + refreshTick
     LaunchedEffect(effectiveKey) {
         isLoading = true
-        loadResult = FirebaseLeaderboard.loadLeaderboard(forceRefresh = effectiveKey > 0)
+        loadResult = FirebaseLeaderboard.loadLeaderboard(
+            context = context,
+            forceRefresh = effectiveKey > 0
+        )
         isLoading = false
     }
 
