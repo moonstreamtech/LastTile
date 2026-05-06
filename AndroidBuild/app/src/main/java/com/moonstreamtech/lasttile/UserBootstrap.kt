@@ -172,7 +172,12 @@ object UserBootstrap {
             try {
                 db.runTransaction { tx ->
                     if (tx.get(reservationRef).exists()) throw Collision()
-                    tx.set(reservationRef, mapOf("uid" to uid))
+                    // Field name "userId" matches the Firestore rules
+                    // schema (firestore.rules at repo root) — strict
+                    // rules expect every reservation doc to carry the
+                    // claimant's uid in this exact key. Same convention
+                    // as usernames/{name}.userId in [UsernameRepository].
+                    tx.set(reservationRef, mapOf("userId" to uid))
                 }.await()
                 Log.i(TAG, "Allocated numericId=$candidate (attempt ${attempt + 1})")
                 return candidate

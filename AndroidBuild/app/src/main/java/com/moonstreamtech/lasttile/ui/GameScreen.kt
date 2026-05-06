@@ -555,12 +555,36 @@ fun GameScreen() {
                     tutorial.state.currentStep == TutorialStep.Username,
                 pulseAlpha = tutorialPulseAlpha,
                 onOwnRowTap = { entry ->
-                    usernameDialogCurrent = entry.displayName
-                    usernameInlineError = null
-                    usernameDialogMandatory = tutorial.state.active &&
+                    val mandatory = tutorial.state.active &&
                         tutorial.state.mandatory &&
                         tutorial.state.currentStep == TutorialStep.Username
-                    showUsernameDialog = true
+                    if (mandatory) {
+                        // Tutorial step 6 only fires on a brand-new
+                        // user, so a cooldown can never be active —
+                        // open the dialog without the pre-check.
+                        usernameDialogCurrent = entry.displayName
+                        usernameInlineError = null
+                        usernameDialogMandatory = true
+                        showUsernameDialog = true
+                    } else {
+                        // Manual rename path: pre-check the 30-day
+                        // cooldown so the user gets a toast instead of
+                        // typing into a dialog whose Save will be
+                        // rejected by the transaction.
+                        coroutineScope.launch {
+                            val days = UsernameRepository.cooldownDaysRemaining()
+                            if (days > 0) {
+                                showToast(
+                                    String.format(usernameCooldownTemplate, days)
+                                )
+                            } else {
+                                usernameDialogCurrent = entry.displayName
+                                usernameInlineError = null
+                                usernameDialogMandatory = false
+                                showUsernameDialog = true
+                            }
+                        }
+                    }
                 },
                 refreshTick = leaderboardRefreshTick
             )
@@ -587,18 +611,24 @@ fun GameScreen() {
                         usernameSaving = false
                         when (result) {
                             is UsernameRepository.ChangeResult.Success -> {
+                                val wasMandatory = usernameDialogMandatory
                                 showUsernameDialog = false
                                 usernameDialogCurrent = newName
                                 // Force a refetch of the global tab so
                                 // the new name is visible immediately.
                                 leaderboardRefreshTick += 1
                                 showToast(usernameSavedMsg)
-                                // Mandatory step 6 finishes ONLY after a
-                                // successful save. Mark the step done
-                                // and let the existing 2s success-beat
-                                // delay run before next() commits the
-                                // tutorial_completed_once flag.
-                                if (usernameDialogMandatory && tutorial.state.active) {
+                                if (wasMandatory && tutorial.state.active) {
+                                    // Mandatory step 6: give the user
+                                    // ~600ms to see their newly-saved
+                                    // entry land in the leaderboard,
+                                    // then auto-close the panel and
+                                    // mark the step completed. The
+                                    // existing 2s success-beat
+                                    // LaunchedEffect drives next() →
+                                    // finish() → tutorial_completed_once.
+                                    kotlinx.coroutines.delay(600L)
+                                    showLeaderboard = false
                                     tutorial.markStepCompleted()
                                 }
                                 usernameDialogMandatory = false
@@ -677,11 +707,21 @@ fun GameScreen() {
         // shield sub-hint when relevant, a Got it CTA, and a Skip text
         // button. A dialog open during the tutorial calls skip() at
         // its open site so the overlay doesn't collide with the dialog.
+        //
+        // v0.2.x fix: during step 6 the leaderboard dialog is open and
+        // already shows the inline orange instruction at its top, so
+        // the bottom step card would duplicate that copy. Hide the
+        // card in that exact case; the spotlight on the player's row
+        // is what guides the user, and the inline text in the dialog
+        // is enough.
         if (tutorial.state.active) {
+            val suppressCard = showLeaderboard &&
+                tutorial.state.currentStep == TutorialStep.Username
             TutorialOverlay(
                 state = tutorial.state,
                 onGotIt = { tutorial.next() },
-                onSkip = { tutorial.skip() }
+                onSkip = { tutorial.skip() },
+                suppressCard = suppressCard
             )
         }
     }
@@ -1945,8 +1985,13 @@ private fun tileBrush(value: Int): Brush {
 private fun TutorialOverlay(
     state: TutorialState,
     onGotIt: () -> Unit,
-    onSkip: () -> Unit
+    onSkip: () -> Unit,
+    // v0.2.x: when true, the bottom instruction card is omitted but
+    // the spotlight + dimming logic still runs — used during step 6
+    // where the leaderboard dialog renders its own inline instruction.
+    suppressCard: Boolean = false
 ) {
+    if (suppressCard) return
     // v0.1.8: dim layer removed — full-opacity board + scoreboard read
     // better against the dark theme than the muddy 0.55-alpha black scrim
     // we shipped in v0.1.7. The instruction card carries the tutorial UI
