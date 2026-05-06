@@ -105,6 +105,7 @@ import com.moonstreamtech.lasttile.Tile
 import com.moonstreamtech.lasttile.TutorialController
 import com.moonstreamtech.lasttile.TutorialState
 import com.moonstreamtech.lasttile.TutorialStep
+import com.moonstreamtech.lasttile.UpdateChecker
 import com.moonstreamtech.lasttile.UserBootstrap
 import com.moonstreamtech.lasttile.UsernameRepository
 import com.moonstreamtech.lasttile.FirebaseLeaderboard
