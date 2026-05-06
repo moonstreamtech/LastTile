@@ -146,11 +146,18 @@ object UserBootstrap {
     }
 
     /**
-     * Reserves a unique 6-digit numeric ID in `usernames/#NNNNNN` via a
-     * Firestore transaction.  Up to 5 attempts handle the (rare) case where
-     * the randomly chosen number is already taken.  On exhaustion a final
-     * random value is returned unreserved — at current user scale (< 10 K)
-     * the birthday probability of a 6-digit collision run of 5 is negligible.
+     * Reserves a unique 6-digit numeric ID in `numericIds/NNNNNN` via a
+     * Firestore transaction. Up to 5 attempts handle the (rare) case
+     * where the randomly chosen number is already taken. On exhaustion
+     * a final random value is returned unreserved — at current user
+     * scale (< 10 K) the birthday probability of a 6-digit collision
+     * run of 5 is negligible.
+     *
+     * v0.2.0: moved out of `usernames/{NNNNNN}` so that auto-assigned
+     * "#NNNNNN" identifiers no longer occupy slots in the username
+     * reservation collection. This lets a player pick a real name later
+     * without their own auto-name reservation getting in the way and
+     * keeps the username collection free of internal placeholders.
      */
     private suspend fun allocateNumericId(uid: String): Int {
         val db = Firebase.firestore
@@ -161,7 +168,7 @@ object UserBootstrap {
 
         repeat(5) { attempt ->
             val candidate = Random.nextInt(100_000, 1_000_000)
-            val reservationRef = db.collection("usernames").document("%06d".format(candidate))
+            val reservationRef = db.collection("numericIds").document("%06d".format(candidate))
             try {
                 db.runTransaction { tx ->
                     if (tx.get(reservationRef).exists()) throw Collision()

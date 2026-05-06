@@ -86,4 +86,22 @@
     <string name="tutorial_success_frame">Hücre açıldı!</string>
     <string name="tutorial_success_shield">Tehlike temizlendi!</string>
 
+    <!-- v0.2.0: Username system. -->
+    <string name="tutorial_step_leaderboard_instruction_v2">Küresel sıralamayı görmek için Skor Tablosu düğmesine dokun.</string>
+    <string name="tutorial_step_username_instruction">Kendine bir isim seçmek için kendi satırına dokun.</string>
+    <string name="username_dialog_title_first">Kendine bir isim seç</string>
+    <string name="username_dialog_title_change">İsmini değiştir</string>
+    <string name="username_input_hint">İsim</string>
+    <string name="username_too_short">En az 2 karakter</string>
+    <string name="username_too_long">En fazla 20 karakter</string>
+    <string name="username_checking">Kontrol ediliyor…</string>
+    <string name="username_available">Kullanılabilir</string>
+    <string name="username_taken">Bu isim alınmış</string>
+    <string name="username_network_error">Bağlantı hatası</string>
+    <string name="username_save">Kaydet</string>
+    <string name="username_cancel">İptal</string>
+    <string name="username_cooldown">İsmini %d gün sonra değiştirebilirsin</string>
+    <string name="username_change_failed">Kaydedilemedi</string>
+    <string name="username_change_saved">İsim kaydedildi</string>
+
 </resources>

@@ -1,6 +1,7 @@
 package com.moonstreamtech.lasttile
 
 import android.app.Application
+import android.content.Context
 import android.util.Log
 import com.google.android.gms.ads.MobileAds
 import com.google.android.gms.games.PlayGamesSdk
@@ -15,6 +16,17 @@ class LastTileApplication : Application() {
         // (gradle), 3 (CI pre-build) and 4 (post-build AAB scan) catch
         // the same condition earlier; this one is the last safety net.
         AdConfig.verifyReleaseIntegrity()
+
+        // v0.2.0: One-time promotion of the legacy tutorial_v1_seen flag
+        // to tutorial_completed_once so existing players who finished
+        // the v0.1.x tutorial aren't forced through the new mandatory
+        // step 6 username flow. Cheap and idempotent.
+        runCatching {
+            val prefs = getSharedPreferences("lasttile_state", Context.MODE_PRIVATE)
+            TutorialController.migrateLegacyTutorialFlag(prefs)
+        }.onFailure { e ->
+            Log.w("LastTileApp", "tutorial flag migration failed", e)
+        }
 
         // Eager-preload a rewarded ad so the Shield "earn" dialog has
         // something to play instantly when the player taps. Survives

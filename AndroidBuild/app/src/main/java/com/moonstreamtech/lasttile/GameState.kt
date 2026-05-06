@@ -284,6 +284,15 @@ class GameState(
             TutorialStep.Leaderboard -> {
                 b[3][3] = Tile.Normal(2)
             }
+            TutorialStep.Username -> {
+                // The Username step's interaction lives in the global
+                // leaderboard dialog (player taps their own row to
+                // pick a name). The board itself is just a calm
+                // backdrop; mirror the Leaderboard step's single-tile
+                // layout so the screen behind the dialog reads the
+                // same as the previous step.
+                b[3][3] = Tile.Normal(2)
+            }
             TutorialStep.Done -> Unit
         }
 
