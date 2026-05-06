@@ -37,6 +37,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -98,6 +99,7 @@ import com.moonstreamtech.lasttile.TutorialController
 import com.moonstreamtech.lasttile.TutorialState
 import com.moonstreamtech.lasttile.TutorialStep
 import com.moonstreamtech.lasttile.UserBootstrap
+import com.moonstreamtech.lasttile.FirebaseLeaderboard
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -137,10 +139,10 @@ fun GameScreen() {
             prefs = prefs,
             leaderboard = leaderboard,
             onRunSubmitted = { finalScore ->
-                // Both backends run in parallel during the PR A → PR D transition.
-                // GpgsLeaderboard is removed in PR D; UserBootstrap persists.
+                // Both backends run in parallel during the PR B → PR D transition.
+                // GpgsLeaderboard removed in PR D; FirebaseLeaderboard persists.
                 GpgsLeaderboard.submitScore(context, finalScore.toLong())
-                UserBootstrap.submitBestScore(finalScore.toLong())
+                FirebaseLeaderboard.submitBestScore(finalScore.toLong())
             },
             isTutorialActive = { tutorial.state.active },
             currentTutorialStep = {
@@ -900,25 +902,13 @@ private fun LocalLeaderboardContent(entries: List<LeaderboardEntry>) {
 
 @Composable
 private fun GlobalLeaderboardContent() {
-    val context = LocalContext.current
-    var entries by remember { mutableStateOf<List<GpgsLeaderboard.GlobalEntry>>(emptyList()) }
+    var loadResult by remember { mutableStateOf<FirebaseLeaderboard.LoadResult?>(null) }
     var isLoading by remember { mutableStateOf(true) }
-    var errorReason by remember { mutableStateOf<String?>(null) }
-    var retryKey by remember { mutableStateOf(0) }
+    var refreshKey by remember { mutableStateOf(0) }
 
-    LaunchedEffect(retryKey) {
+    LaunchedEffect(refreshKey) {
         isLoading = true
-        errorReason = null
-        when (val result = GpgsLeaderboard.loadTopScores(context)) {
-            is GpgsLeaderboard.LoadResult.Success -> {
-                entries = result.entries
-                errorReason = null
-            }
-            is GpgsLeaderboard.LoadResult.Failure -> {
-                entries = emptyList()
-                errorReason = result.reason
-            }
-        }
+        loadResult = FirebaseLeaderboard.loadLeaderboard(forceRefresh = refreshKey > 0)
         isLoading = false
     }
 
@@ -938,10 +928,7 @@ private fun GlobalLeaderboardContent() {
                     .padding(vertical = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                CircularProgressIndicator(
-                    color = AccentAmber,
-                    strokeWidth = 3.dp
-                )
+                CircularProgressIndicator(color = AccentAmber, strokeWidth = 3.dp)
             }
             Spacer(Modifier.height(6.dp))
             Text(
@@ -951,24 +938,16 @@ private fun GlobalLeaderboardContent() {
                 textAlign = TextAlign.Center
             )
         }
-        errorReason != null -> {
-            // sign_in_failed and not_configured map to dedicated copy that
-            // already exists in every locale; everything else (network
-            // hiccup, exception, no_scores_response) falls back to the
-            // generic leaderboard_load_failed string added in v0.1.4.
-            val msgRes = when (errorReason) {
-                "sign_in_failed" -> R.string.leaderboard_sign_in_hint
-                "not_configured" -> R.string.leaderboard_not_configured_long
-                else -> R.string.leaderboard_load_failed
-            }
+
+        loadResult is FirebaseLeaderboard.LoadResult.Failure -> {
             Text(
-                text = stringResource(msgRes),
+                text = stringResource(R.string.leaderboard_load_failed),
                 color = TextSecondary,
                 fontSize = 12.sp,
                 textAlign = TextAlign.Center
             )
             Spacer(Modifier.height(10.dp))
-            TextButton(onClick = { retryKey += 1 }) {
+            TextButton(onClick = { refreshKey += 1 }) {
                 Text(
                     text = stringResource(R.string.leaderboard_retry),
                     color = AccentAmber,
@@ -977,29 +956,144 @@ private fun GlobalLeaderboardContent() {
                 )
             }
         }
-        entries.isEmpty() -> {
-            Text(
-                text = stringResource(R.string.leaderboard_empty_global),
-                color = TextSecondary,
-                fontSize = 12.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-        else -> {
-            entries.forEach { e ->
-                GlobalLeaderboardRow(entry = e)
-                Spacer(Modifier.height(6.dp))
+
+        loadResult is FirebaseLeaderboard.LoadResult.Success -> {
+            val success = loadResult as FirebaseLeaderboard.LoadResult.Success
+            if (success.topEntries.isEmpty() && success.playerEntry == null) {
+                Text(
+                    text = stringResource(R.string.leaderboard_empty_global),
+                    color = TextSecondary,
+                    fontSize = 12.sp,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(Modifier.height(10.dp))
+                RefreshRow(success.fetchedAtMs) { refreshKey += 1 }
+            } else {
+                LeaderboardListWithPinning(
+                    success = success,
+                    onRefresh = { refreshKey += 1 }
+                )
             }
+        }
+
+        else -> {
+            // Initial null state before first load resolves — should be
+            // transient, but render a safe empty state just in case.
+            Text(
+                text = stringResource(R.string.leaderboard_load_failed),
+                color = TextSecondary,
+                fontSize = 12.sp
+            )
         }
     }
 }
 
 @Composable
-private fun GlobalLeaderboardRow(entry: GpgsLeaderboard.GlobalEntry) {
+private fun LeaderboardListWithPinning(
+    success: FirebaseLeaderboard.LoadResult.Success,
+    onRefresh: () -> Unit
+) {
+    val listState = androidx.compose.foundation.lazy.rememberLazyListState()
+
+    val playerIndexInTop = remember(success) {
+        success.topEntries.indexOfFirst { it.isCurrentPlayer }
+    }
+
+    // Derive pin state from scroll position without triggering
+    // recomposition on every scroll pixel — only when the boundary
+    // condition changes.
+    val playerAboveViewport by remember {
+        androidx.compose.runtime.derivedStateOf {
+            playerIndexInTop >= 0 &&
+                listState.firstVisibleItemIndex > playerIndexInTop
+        }
+    }
+    val playerBelowViewport by remember {
+        androidx.compose.runtime.derivedStateOf {
+            if (playerIndexInTop < 0) return@derivedStateOf false
+            val lastVisible = listState.layoutInfo.visibleItemsInfo
+                .lastOrNull()?.index ?: -1
+            lastVisible in 0 until playerIndexInTop
+        }
+    }
+
+    val showTopPin    = success.playerInTop && playerAboveViewport
+    val showBottomPin = (!success.playerInTop && success.playerEntry != null) ||
+                        (success.playerInTop && playerBelowViewport)
+
+    Column(modifier = Modifier.fillMaxWidth()) {
+        // Pinned to top edge when player has scrolled their row above viewport.
+        if (showTopPin && success.playerEntry != null) {
+            FirestoreLeaderboardRow(success.playerEntry, isPinned = true)
+            Spacer(Modifier.height(4.dp))
+        }
+
+        // Scrollable main list. Capped at 320 dp so the dialog doesn't
+        // overflow on small phones — LazyColumn scrolls internally.
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(320.dp)
+        ) {
+            androidx.compose.foundation.lazy.LazyColumn(
+                state = listState,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                items(success.topEntries.size) { idx ->
+                    FirestoreLeaderboardRow(success.topEntries[idx], isPinned = false)
+                    Spacer(Modifier.height(6.dp))
+                }
+            }
+        }
+
+        // Pinned to bottom edge: always when player is outside top 100,
+        // or when player is in top 100 but scrolled their row below viewport.
+        if (showBottomPin && success.playerEntry != null) {
+            Spacer(Modifier.height(4.dp))
+            FirestoreLeaderboardRow(success.playerEntry, isPinned = true)
+        }
+
+        Spacer(Modifier.height(8.dp))
+        RefreshRow(success.fetchedAtMs, onRefresh)
+    }
+}
+
+@Composable
+private fun RefreshRow(fetchedAtMs: Long, onRefresh: () -> Unit) {
+    val ageMin = ((System.currentTimeMillis() - fetchedAtMs) / 60_000L)
+        .coerceAtLeast(0L).toInt()
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = stringResource(R.string.leaderboard_updated_ago, ageMin),
+            color = TextSecondary,
+            fontSize = 10.sp,
+            letterSpacing = 1.sp
+        )
+        TextButton(onClick = onRefresh) {
+            Text(
+                text = stringResource(R.string.leaderboard_refresh),
+                color = AccentAmber,
+                fontWeight = FontWeight.Bold,
+                fontSize = 11.sp,
+                letterSpacing = 1.sp
+            )
+        }
+    }
+}
+
+@Composable
+private fun FirestoreLeaderboardRow(
+    entry: FirebaseLeaderboard.LeaderboardEntry,
+    isPinned: Boolean
+) {
     val accent = when (entry.rank) {
-        1L -> AccentGold
-        2L -> Color(0xFFCFD8DC)
-        3L -> Color(0xFFD7A26B)
+        1 -> AccentGold
+        2 -> Color(0xFFCFD8DC)
+        3 -> Color(0xFFD7A26B)
         else -> TextSecondary
     }
     val container = if (entry.isCurrentPlayer) {
@@ -1007,8 +1101,8 @@ private fun GlobalLeaderboardRow(entry: GpgsLeaderboard.GlobalEntry) {
     } else {
         Brush.verticalGradient(listOf(Color(0xFF1F2A38), Color(0xFF141C26)))
     }
-    val borderWidth = if (entry.isCurrentPlayer) 1.dp else 0.dp
-    val borderColor = if (entry.isCurrentPlayer) AccentAmber else Color.Transparent
+    val borderWidth = if (entry.isCurrentPlayer || isPinned) 1.5.dp else 0.dp
+    val borderColor = if (entry.isCurrentPlayer || isPinned) AccentAmber else Color.Transparent
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -1019,7 +1113,7 @@ private fun GlobalLeaderboardRow(entry: GpgsLeaderboard.GlobalEntry) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
-            text = stringResource(R.string.leaderboard_rank_format, entry.rank.toInt()),
+            text = stringResource(R.string.leaderboard_rank_format, entry.rank),
             color = accent,
             fontSize = 12.sp,
             fontWeight = FontWeight.Black,
@@ -1037,7 +1131,7 @@ private fun GlobalLeaderboardRow(entry: GpgsLeaderboard.GlobalEntry) {
                 .padding(end = 10.dp)
         )
         Text(
-            text = entry.score.toString(),
+            text = entry.bestScore.toString(),
             color = TextPrimary,
             fontSize = 16.sp,
             fontWeight = FontWeight.Black

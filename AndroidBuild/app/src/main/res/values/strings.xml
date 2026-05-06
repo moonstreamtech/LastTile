@@ -43,7 +43,7 @@
     <string name="leaderboard_tab_local">Local</string>
     <string name="leaderboard_local_subtitle">Top 10 · local device</string>
     <string name="leaderboard_empty">No runs yet. Survive one full run to chart.</string>
-    <string name="leaderboard_powered_by">Powered by Google Play Games</string>
+    <string name="leaderboard_powered_by">Global rankings</string>
     <string name="leaderboard_not_configured_long">Online leaderboard isn\'t configured yet. The next release will enable Google Play Games rankings.</string>
     <string name="leaderboard_compete">Compete with players worldwide. Sign in to Google Play Games when prompted.</string>
     <string name="leaderboard_activity_unavailable">Activity unavailable. Try again from the game screen.</string>
@@ -64,6 +64,10 @@
     <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
     <string name="leaderboard_retry">Retry</string>
     <string name="leaderboard_loading">Loading…</string>
+
+    <!-- v0.2.0: Firebase leaderboard pinning + cache refresh UI -->
+    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
+    <string name="leaderboard_refresh">Refresh</string>
 
     <!-- Status line. -->
     <string name="status_game_over">GAME  OVER</string>
