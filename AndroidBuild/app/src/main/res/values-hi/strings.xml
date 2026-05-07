@@ -1,129 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tagline">मिलाओ · बाँटो · बढ़ाओ</string>
-
+    <string name="tagline">मिलाएँ · विभाजित करें · विस्तार करें</string>
     <string name="stat_score">स्कोर</string>
-    <string name="stat_turn">चाल</string>
+    <string name="stat_turn">टर्न</string>
     <string name="stat_combo">कॉम्बो</string>
-    <string name="stat_shield">कवच</string>
-
-    <string name="btn_play_again">फिर से खेलें</string>
-    <string name="btn_restart">पुनः प्रारंभ</string>
+    <string name="stat_shield">शील्ड</string>
+    <string name="shield_dialog_title">शील्ड पाएं</string>
+    <string name="shield_dialog_body">एक छोटा वीडियो देखकर 3 शील्ड पाएं। आग, बर्फ या ज़हर वाली टाइलें हटाने के लिए इन्हें इस्तेमाल करें।</string>
+    <string name="shield_dialog_watch">देखें</string>
+    <string name="shield_dialog_cancel">अभी नहीं</string>
+    <string name="shield_ad_unavailable">विज्ञापन अभी उपलब्ध नहीं है। बाद में कोशिश करें।</string>
+    <string name="shield_ad_loading">विज्ञापन लोड हो रहा है…</string>
+    <string name="shield_ad_skipped">शील्ड पाने के लिए पूरा वीडियो देखें।</string>
+    <string name="shield_ad_rewarded">3 शील्ड जोड़े गए।</string>
+    <string name="btn_play_again">फिर खेलें</string>
+    <string name="btn_restart">रीस्टार्ट</string>
     <string name="btn_leaderboard">लीडरबोर्ड</string>
     <string name="btn_close">बंद करें</string>
     <string name="btn_clear">साफ़ करें</string>
-
     <string name="leaderboard_title">लीडरबोर्ड</string>
-    <string name="leaderboard_tab_global">वैश्विक</string>
-    <string name="leaderboard_tab_local">स्थानीय</string>
-    <string name="leaderboard_local_subtitle">शीर्ष 10 · यह डिवाइस</string>
-    <string name="leaderboard_empty">अभी कोई गेम नहीं। चार्ट में आने के लिए एक पूरा गेम पूरा करें।</string>
-    <string name="leaderboard_powered_by">Google Play Games द्वारा संचालित</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
-    <string name="status_game_over">गेम  समाप्त</string>
-    <string name="status_split">दो हिस्सों में बँट गया।</string>
+    <string name="leaderboard_tab_global">ग्लोबल</string>
+    <string name="leaderboard_tab_local">लोकल</string>
+    <string name="leaderboard_local_subtitle">टॉप 10 · इस डिवाइस पर</string>
+    <string name="leaderboard_empty">अभी कोई गेम नहीं। एक राउंड पूरा करें और सूची में आएं।</string>
+    <string name="leaderboard_powered_by">ग्लोबल रैंकिंग</string>
+    <string name="leaderboard_load_failed">ग्लोबल स्कोर लोड नहीं हो सके।</string>
+    <string name="leaderboard_empty_global">अभी कोई स्कोर नहीं। एक राउंड खेलें और पहले बनें।</string>
+    <string name="leaderboard_retry">फिर से</string>
+    <string name="leaderboard_loading">लोड हो रहा है…</string>
+    <string name="leaderboard_updated_ago">%1$d मिनट पहले अपडेट किया गया</string>
+    <string name="leaderboard_refresh">रीफ्रेश</string>
+    <string name="status_game_over">गेम  ओवर</string>
+    <string name="status_split">दो भागों में बंट गया।</string>
     <string name="status_frame_opened">फ़्रेम खुल गया!</string>
-    <string name="status_hint_match_or_split">मैच पर टैप · बाँटने के लिए दो बार टैप</string>
-    <string name="status_hint_match">पास वाले मैच पर टैप करें</string>
-
+    <string name="status_hint_match_or_split">मैच पर टैप · विभाजित करने के लिए डबल टैप</string>
+    <string name="status_hint_match">एक नज़दीकी मैच पर टैप करें</string>
     <string name="hazard_fire_subtitle">आग %1$dt</string>
-    <string name="hazard_ice_subtitle">बर्फ़ %1$dt</string>
+    <string name="hazard_ice_subtitle">बर्फ %1$dt</string>
     <string name="hazard_poison_subtitle">ज़हर %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="one">%d ख़तरा साफ़ हुआ!</item>
-        <item quantity="other">%d ख़तरे साफ़ हुए!</item>
+        <item quantity="one">%d ख़तरा हटाया!</item>
+        <item quantity="other">%d ख़तरे हटाए!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">कैसे खेलें</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">समझ गया</string>
     <string name="tutorial_cta_skip">ट्यूटोरियल छोड़ें</string>
     <string name="tutorial_step_merge_instruction">एक टाइल को मिलती-जुलती टाइल पर खींचकर उन्हें मिलाएं।</string>
-    <string name="tutorial_step_frame_instruction">नई फ्रेम सेल अनलॉक करने के लिए इन टाइलों को मिलाएं।</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ये बंद टाइलें खतरनाक हैं। उन्हें हटाना सीखने के लिए टैप करें।</string>
-    <string name="tutorial_step_hazards_and_shield_action">खतरे को हटाने के लिए अपने कवच का उपयोग करें।</string>
-    <string name="tutorial_step_shield_subhint">वीडियो देखकर 3 और कवच पाने के लिए कवच कार्ड पर टैप करें।</string>
+    <string name="tutorial_step_frame_instruction">नई फ़्रेम सेल खोलने के लिए इन टाइलों को मिलाएं।</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ये बंद टाइलें ख़तरनाक हैं। हटाने का तरीक़ा सीखने के लिए टैप करें।</string>
+    <string name="tutorial_step_hazards_and_shield_action">ख़तरा हटाने के लिए शील्ड का इस्तेमाल करें।</string>
+    <string name="tutorial_step_shield_subhint">शील्ड कार्ड पर टैप करके वीडियो देखें और 3 और शील्ड पाएं।</string>
     <string name="tutorial_step_leaderboard_instruction">आपके उच्चतम स्कोर स्वचालित रूप से वैश्विक लीडरबोर्ड पर भेजे जाते हैं। अपनी रैंक देखने के लिए मेनू से इसे खोलें।</string>
     <string name="tutorial_hint_drag_to_merge">टाइलों को एक साथ खींचने का प्रयास करें…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">अपडेट उपलब्ध है — इंस्टॉल करने के लिए टैप करें</string>
-    <string name="update_ready_to_install">अपडेट डाउनलोड हो गया — अभी इंस्टॉल करने के लिए टैप करें</string>
+    <string name="tutorial_success_merge">बढ़िया विलय!</string>
+    <string name="tutorial_success_frame">फ़्रेम खुल गया!</string>
+    <string name="tutorial_success_shield">ख़तरा हटाया!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">ग्लोबल रैंकिंग देखने के लिए लीडरबोर्ड बटन पर टैप करें।</string>
+    <string name="tutorial_step_username_instruction">नाम चुनने के लिए अपनी पंक्ति पर टैप करें।</string>
+    <string name="username_dialog_title_first">अपना नाम चुनें</string>
+    <string name="username_dialog_title_change">नाम बदलें</string>
+    <string name="username_input_hint">नाम</string>
+    <string name="username_too_short">कम से कम 2 अक्षर</string>
+    <string name="username_too_long">अधिकतम 20 अक्षर</string>
+    <string name="username_checking">जांच हो रही है…</string>
+    <string name="username_available">उपलब्ध</string>
+    <string name="username_taken">पहले से लिया गया</string>
+    <string name="username_network_error">कनेक्शन त्रुटि</string>
+    <string name="username_save">सहेजें</string>
+    <string name="username_cancel">रद्द करें</string>
+    <string name="username_cooldown">%d दिन में नाम बदल सकते हैं</string>
+    <string name="username_change_failed">सहेजना विफल</string>
+    <string name="username_change_saved">नाम सहेजा गया</string>
+    <string name="update_available">अपडेट उपलब्ध — इंस्टॉल के लिए टैप करें</string>
+    <string name="update_ready_to_install">अपडेट डाउनलोड — अभी इंस्टॉल के लिए टैप करें</string>
 </resources>

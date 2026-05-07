@@ -1,129 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">samenvoegen · splitsen · uitbreiden</string>
-
     <string name="stat_score">SCORE</string>
     <string name="stat_turn">BEURT</string>
     <string name="stat_combo">COMBO</string>
     <string name="stat_shield">SCHILD</string>
-
+    <string name="shield_dialog_title">Verdien schilden</string>
+    <string name="shield_dialog_body">Bekijk een korte video om 3 schilden te verdienen. Gebruik ze om Vuur-, IJs- of Giftegels op te ruimen.</string>
+    <string name="shield_dialog_watch">Bekijken</string>
+    <string name="shield_dialog_cancel">Niet nu</string>
+    <string name="shield_ad_unavailable">Advertentie is nu niet beschikbaar. Probeer het later opnieuw.</string>
+    <string name="shield_ad_loading">Advertentie laden…</string>
+    <string name="shield_ad_skipped">Bekijk de hele video om schilden te verdienen.</string>
+    <string name="shield_ad_rewarded">3 schilden toegevoegd.</string>
     <string name="btn_play_again">Opnieuw spelen</string>
-    <string name="btn_restart">Opnieuw starten</string>
-    <string name="btn_leaderboard">Ranglijst</string>
+    <string name="btn_restart">Opnieuw</string>
+    <string name="btn_leaderboard">Scorebord</string>
     <string name="btn_close">Sluiten</string>
     <string name="btn_clear">Wissen</string>
-
-    <string name="leaderboard_title">RANGLIJST</string>
-    <string name="leaderboard_tab_global">Wereldwijd</string>
+    <string name="leaderboard_title">SCOREBORD</string>
+    <string name="leaderboard_tab_global">Globaal</string>
     <string name="leaderboard_tab_local">Lokaal</string>
-    <string name="leaderboard_local_subtitle">Top 10 · dit apparaat</string>
-    <string name="leaderboard_empty">Nog geen potjes. Speel er één om in de lijst te komen.</string>
-    <string name="leaderboard_powered_by">Mogelijk gemaakt door Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_local_subtitle">Top 10 · dit toestel</string>
+    <string name="leaderboard_empty">Nog geen rondes. Speel een ronde uit om in de lijst te komen.</string>
+    <string name="leaderboard_powered_by">Wereldranglijst</string>
+    <string name="leaderboard_load_failed">Globale scores konden niet worden geladen.</string>
+    <string name="leaderboard_empty_global">Nog geen scores. Speel een ronde om de eerste te zijn.</string>
+    <string name="leaderboard_retry">Opnieuw</string>
+    <string name="leaderboard_loading">Laden…</string>
+    <string name="leaderboard_updated_ago">%1$d min geleden bijgewerkt</string>
+    <string name="leaderboard_refresh">Vernieuwen</string>
     <string name="status_game_over">GAME  OVER</string>
     <string name="status_split">In tweeën gesplitst.</string>
     <string name="status_frame_opened">Frame geopend!</string>
-    <string name="status_hint_match_or_split">Tik op een paar · dubbel tikken om te splitsen</string>
-    <string name="status_hint_match">Tik op een aangrenzend paar</string>
-
+    <string name="status_hint_match_or_split">Tik op match · dubbeltik om te splitsen</string>
+    <string name="status_hint_match">Tik op een aangrenzende match</string>
     <string name="hazard_fire_subtitle">VUUR %1$dt</string>
     <string name="hazard_ice_subtitle">IJS %1$dt</string>
     <string name="hazard_poison_subtitle">GIF %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="one">%d gevaar gezuiverd!</item>
-        <item quantity="other">%d gevaren gezuiverd!</item>
+        <item quantity="one">%d gevaar opgeruimd!</item>
+        <item quantity="other">%d gevaren opgeruimd!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">Hoe te spelen</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">Begrepen</string>
     <string name="tutorial_cta_skip">Tutorial overslaan</string>
-    <string name="tutorial_step_merge_instruction">Sleep een tegel op de bijpassende tegel om ze samen te voegen.</string>
-    <string name="tutorial_step_frame_instruction">Voeg deze tegels samen om nieuwe randvakken te ontgrendelen.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Deze vergrendelde tegels zijn gevaarlijk. Tik om te leren hoe je ze verwijdert.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Gebruik je schild om een gevaar te verwijderen.</string>
+    <string name="tutorial_step_merge_instruction">Sleep een tegel op een passende tegel om ze samen te voegen.</string>
+    <string name="tutorial_step_frame_instruction">Voeg deze tegels samen om nieuwe framecellen vrij te spelen.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Deze vergrendelde tegels zijn gevaarlijk. Tik om te leren hoe je ze opruimt.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Gebruik je schild om een gevaar op te ruimen.</string>
     <string name="tutorial_step_shield_subhint">Tik op de schildkaart om een video te bekijken en 3 extra schilden te verdienen.</string>
     <string name="tutorial_step_leaderboard_instruction">Je hoogste scores worden automatisch verstuurd naar het wereldwijde scorebord. Open het via het menu om je ranking te zien.</string>
     <string name="tutorial_hint_drag_to_merge">Probeer de tegels samen te slepen…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
+    <string name="tutorial_success_merge">Goed samengevoegd!</string>
+    <string name="tutorial_success_frame">Frame geopend!</string>
+    <string name="tutorial_success_shield">Gevaar opgeruimd!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tik op Scorebord om de wereldranglijst te zien.</string>
+    <string name="tutorial_step_username_instruction">Tik op je rij om een naam te kiezen.</string>
+    <string name="username_dialog_title_first">Kies je naam</string>
+    <string name="username_dialog_title_change">Naam wijzigen</string>
+    <string name="username_input_hint">Naam</string>
+    <string name="username_too_short">Min. 2 tekens</string>
+    <string name="username_too_long">Max. 20 tekens</string>
+    <string name="username_checking">Controleren…</string>
+    <string name="username_available">Beschikbaar</string>
+    <string name="username_taken">Al in gebruik</string>
+    <string name="username_network_error">Verbindingsfout</string>
+    <string name="username_save">Opslaan</string>
+    <string name="username_cancel">Annuleren</string>
+    <string name="username_cooldown">Je kunt je naam over %d dagen wijzigen</string>
+    <string name="username_change_failed">Opslaan mislukt</string>
+    <string name="username_change_saved">Naam opgeslagen</string>
     <string name="update_available">Update beschikbaar — tik om te installeren</string>
     <string name="update_ready_to_install">Update gedownload — tik om nu te installeren</string>
 </resources>

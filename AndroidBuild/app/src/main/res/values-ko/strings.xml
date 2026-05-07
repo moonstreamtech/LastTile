@@ -1,128 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">합치기 · 나누기 · 확장</string>
-
     <string name="stat_score">점수</string>
     <string name="stat_turn">턴</string>
     <string name="stat_combo">콤보</string>
-    <string name="stat_shield">방패</string>
-
-    <string name="btn_play_again">다시 시작</string>
+    <string name="stat_shield">방어막</string>
+    <string name="shield_dialog_title">방어막 획득</string>
+    <string name="shield_dialog_body">짧은 동영상을 보면 방어막 3개를 받습니다. 불・얼음・독 타일을 제거할 때 사용하세요.</string>
+    <string name="shield_dialog_watch">시청</string>
+    <string name="shield_dialog_cancel">나중에</string>
+    <string name="shield_ad_unavailable">광고를 지금 표시할 수 없습니다. 잠시 후 다시 시도하세요.</string>
+    <string name="shield_ad_loading">광고 로딩 중…</string>
+    <string name="shield_ad_skipped">방어막을 받으려면 영상을 끝까지 시청하세요.</string>
+    <string name="shield_ad_rewarded">방어막 3개 추가됨.</string>
+    <string name="btn_play_again">다시 하기</string>
     <string name="btn_restart">재시작</string>
-    <string name="btn_leaderboard">순위표</string>
+    <string name="btn_leaderboard">리더보드</string>
     <string name="btn_close">닫기</string>
     <string name="btn_clear">지우기</string>
-
-    <string name="leaderboard_title">순위표</string>
+    <string name="leaderboard_title">리더보드</string>
     <string name="leaderboard_tab_global">글로벌</string>
     <string name="leaderboard_tab_local">로컬</string>
     <string name="leaderboard_local_subtitle">상위 10 · 이 기기</string>
-    <string name="leaderboard_empty">아직 기록이 없습니다. 한 판을 끝내면 순위에 오릅니다.</string>
-    <string name="leaderboard_powered_by">Powered by Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
-    <string name="status_game_over">게임  종료</string>
-    <string name="status_split">반으로 나눴습니다.</string>
+    <string name="leaderboard_empty">기록이 없습니다. 한 라운드를 완료해 순위에 들어보세요.</string>
+    <string name="leaderboard_powered_by">글로벌 순위</string>
+    <string name="leaderboard_load_failed">글로벌 점수를 불러오지 못했습니다.</string>
+    <string name="leaderboard_empty_global">아직 점수가 없습니다. 한 판 플레이해 첫 번째가 되세요.</string>
+    <string name="leaderboard_retry">다시 시도</string>
+    <string name="leaderboard_loading">로딩 중…</string>
+    <string name="leaderboard_updated_ago">%1$d분 전 업데이트됨</string>
+    <string name="leaderboard_refresh">새로 고침</string>
+    <string name="status_game_over">게임  오버</string>
+    <string name="status_split">둘로 나뉘었습니다.</string>
     <string name="status_frame_opened">프레임 열림!</string>
-    <string name="status_hint_match_or_split">같은 숫자 탭 · 더블 탭으로 분할</string>
-    <string name="status_hint_match">인접한 같은 숫자를 탭</string>
-
+    <string name="status_hint_match_or_split">일치 항목 탭 · 더블탭으로 분할</string>
+    <string name="status_hint_match">인접한 일치 항목을 탭하세요</string>
     <string name="hazard_fire_subtitle">불 %1$dt</string>
     <string name="hazard_ice_subtitle">얼음 %1$dt</string>
     <string name="hazard_poison_subtitle">독 %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="other">위험 %d개 정화!</item>
+        <item quantity="one">위험 %d개 제거!</item>
+        <item quantity="other">위험 %d개 제거!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">플레이 방법</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <string name="tutorial_cta_got_it">알겠어요</string>
+    <string name="tutorial_cta_got_it">확인</string>
     <string name="tutorial_cta_skip">튜토리얼 건너뛰기</string>
-    <string name="tutorial_step_merge_instruction">같은 값의 타일 위로 드래그하여 합치세요.</string>
-    <string name="tutorial_step_frame_instruction">이 타일들을 합쳐 새로운 프레임 칸을 열어보세요.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">이 잠긴 타일은 위험합니다. 제거 방법을 배우려면 탭하세요.</string>
-    <string name="tutorial_step_hazards_and_shield_action">방패를 사용해 위험을 제거하세요.</string>
-    <string name="tutorial_step_shield_subhint">방패 카드를 탭해 동영상을 시청하면 방패 3개를 더 얻을 수 있습니다.</string>
+    <string name="tutorial_step_merge_instruction">같은 타일 위로 드래그해 합치세요.</string>
+    <string name="tutorial_step_frame_instruction">이 타일들을 합쳐 새로운 칸을 여세요.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">잠긴 타일은 위험합니다. 제거 방법을 배우려면 탭하세요.</string>
+    <string name="tutorial_step_hazards_and_shield_action">방어막으로 위험을 제거하세요.</string>
+    <string name="tutorial_step_shield_subhint">방어막 카드를 탭해 동영상을 보고 방어막 3개를 더 받으세요.</string>
     <string name="tutorial_step_leaderboard_instruction">최고 점수는 자동으로 글로벌 리더보드에 제출됩니다. 메뉴에서 열어 순위를 확인하세요.</string>
     <string name="tutorial_hint_drag_to_merge">타일들을 함께 드래그해 보세요…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">업데이트 가능 — 설치하려면 탭하세요</string>
-    <string name="update_ready_to_install">업데이트 다운로드 완료 — 지금 설치하려면 탭하세요</string>
+    <string name="tutorial_success_merge">멋지게 합쳤어요!</string>
+    <string name="tutorial_success_frame">프레임 열림!</string>
+    <string name="tutorial_success_shield">위험 제거됨!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">리더보드 버튼을 눌러 글로벌 순위를 확인하세요.</string>
+    <string name="tutorial_step_username_instruction">내 행을 탭해 이름을 정하세요.</string>
+    <string name="username_dialog_title_first">이름 선택</string>
+    <string name="username_dialog_title_change">이름 변경</string>
+    <string name="username_input_hint">이름</string>
+    <string name="username_too_short">최소 2자</string>
+    <string name="username_too_long">최대 20자</string>
+    <string name="username_checking">확인 중…</string>
+    <string name="username_available">사용 가능</string>
+    <string name="username_taken">이미 사용 중</string>
+    <string name="username_network_error">연결 오류</string>
+    <string name="username_save">저장</string>
+    <string name="username_cancel">취소</string>
+    <string name="username_cooldown">%d일 후 이름을 변경할 수 있습니다</string>
+    <string name="username_change_failed">저장 실패</string>
+    <string name="username_change_saved">이름 저장됨</string>
+    <string name="update_available">업데이트 있음 — 탭해서 설치</string>
+    <string name="update_ready_to_install">업데이트 다운로드 완료 — 탭해서 설치</string>
 </resources>

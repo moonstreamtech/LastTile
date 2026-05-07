@@ -1,131 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">łącz · dziel · rozszerzaj</string>
-
     <string name="stat_score">WYNIK</string>
-    <string name="stat_turn">TURA</string>
+    <string name="stat_turn">RUCH</string>
     <string name="stat_combo">COMBO</string>
     <string name="stat_shield">TARCZA</string>
-
+    <string name="shield_dialog_title">Zdobądź tarcze</string>
+    <string name="shield_dialog_body">Obejrzyj krótki film, aby zdobyć 3 tarcze. Użyj ich, aby usuwać kafelki Ognia, Lodu lub Trucizny.</string>
+    <string name="shield_dialog_watch">Oglądaj</string>
+    <string name="shield_dialog_cancel">Nie teraz</string>
+    <string name="shield_ad_unavailable">Reklama jest teraz niedostępna. Spróbuj później.</string>
+    <string name="shield_ad_loading">Ładowanie reklamy…</string>
+    <string name="shield_ad_skipped">Obejrzyj cały film, aby zdobyć tarcze.</string>
+    <string name="shield_ad_rewarded">Dodano 3 tarcze.</string>
     <string name="btn_play_again">Zagraj ponownie</string>
     <string name="btn_restart">Restart</string>
     <string name="btn_leaderboard">Ranking</string>
     <string name="btn_close">Zamknij</string>
     <string name="btn_clear">Wyczyść</string>
-
     <string name="leaderboard_title">RANKING</string>
     <string name="leaderboard_tab_global">Globalny</string>
     <string name="leaderboard_tab_local">Lokalny</string>
     <string name="leaderboard_local_subtitle">Top 10 · to urządzenie</string>
-    <string name="leaderboard_empty">Brak rozgrywek. Ukończ jedną, by trafić do rankingu.</string>
-    <string name="leaderboard_powered_by">Wspierane przez Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_empty">Brak rozegranych partii. Zakończ rundę, aby trafić do rankingu.</string>
+    <string name="leaderboard_powered_by">Ranking globalny</string>
+    <string name="leaderboard_load_failed">Nie udało się wczytać wyników globalnych.</string>
+    <string name="leaderboard_empty_global">Brak wyników. Zagraj rundę, aby być pierwszym.</string>
+    <string name="leaderboard_retry">Ponów</string>
+    <string name="leaderboard_loading">Ładowanie…</string>
+    <string name="leaderboard_updated_ago">Zaktualizowano %1$d min temu</string>
+    <string name="leaderboard_refresh">Odśwież</string>
     <string name="status_game_over">KONIEC  GRY</string>
-    <string name="status_split">Podzielone na pół.</string>
+    <string name="status_split">Podzielono na pół.</string>
     <string name="status_frame_opened">Ramka otwarta!</string>
-    <string name="status_hint_match_or_split">Stuknij parę · dwukrotnie, aby podzielić</string>
+    <string name="status_hint_match_or_split">Stuknij parę · dwukrotnie, by podzielić</string>
     <string name="status_hint_match">Stuknij sąsiednią parę</string>
-
     <string name="hazard_fire_subtitle">OGIEŃ %1$dt</string>
     <string name="hazard_ice_subtitle">LÓD %1$dt</string>
     <string name="hazard_poison_subtitle">TRU %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="one">Oczyszczono %d zagrożenie!</item>
-        <item quantity="few">Oczyszczono %d zagrożenia!</item>
-        <item quantity="many">Oczyszczono %d zagrożeń!</item>
-        <item quantity="other">Oczyszczono %d zagrożenia!</item>
+        <item quantity="one">Usunięto %d zagrożenie!</item>
+        <item quantity="few">Usunięto %d zagrożenia!</item>
+        <item quantity="many">Usunięto %d zagrożeń!</item>
+        <item quantity="other">Usunięto %d zagrożeń!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">Jak grać</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">Rozumiem</string>
     <string name="tutorial_cta_skip">Pomiń samouczek</string>
     <string name="tutorial_step_merge_instruction">Przeciągnij kafelek na pasujący kafelek, aby je połączyć.</string>
-    <string name="tutorial_step_frame_instruction">Połącz te kafelki, aby odblokować nowe pola ramy.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Te zablokowane kafelki są niebezpieczne. Dotknij, aby nauczyć się je usuwać.</string>
+    <string name="tutorial_step_frame_instruction">Połącz te kafelki, aby odblokować nowe pola ramki.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Te zablokowane kafelki są groźne. Stuknij, aby nauczyć się je usuwać.</string>
     <string name="tutorial_step_hazards_and_shield_action">Użyj tarczy, aby usunąć zagrożenie.</string>
-    <string name="tutorial_step_shield_subhint">Dotknij karty tarczy, aby obejrzeć film i zdobyć 3 dodatkowe tarcze.</string>
+    <string name="tutorial_step_shield_subhint">Stuknij kartę tarczy, aby obejrzeć film i zdobyć 3 dodatkowe tarcze.</string>
     <string name="tutorial_step_leaderboard_instruction">Twoje najlepsze wyniki są automatycznie wysyłane do globalnego rankingu. Otwórz go z menu, aby zobaczyć swoją pozycję.</string>
     <string name="tutorial_hint_drag_to_merge">Spróbuj przeciągnąć kafelki razem…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">Dostępna aktualizacja — dotknij, aby zainstalować</string>
-    <string name="update_ready_to_install">Aktualizacja pobrana — dotknij, aby zainstalować teraz</string>
+    <string name="tutorial_success_merge">Świetne łączenie!</string>
+    <string name="tutorial_success_frame">Ramka otwarta!</string>
+    <string name="tutorial_success_shield">Zagrożenie usunięte!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Stuknij Ranking, aby zobaczyć ranking globalny.</string>
+    <string name="tutorial_step_username_instruction">Stuknij swój wiersz, aby wybrać nazwę.</string>
+    <string name="username_dialog_title_first">Wybierz nazwę</string>
+    <string name="username_dialog_title_change">Zmień nazwę</string>
+    <string name="username_input_hint">Nazwa</string>
+    <string name="username_too_short">Min. 2 znaki</string>
+    <string name="username_too_long">Maks. 20 znaków</string>
+    <string name="username_checking">Sprawdzanie…</string>
+    <string name="username_available">Dostępna</string>
+    <string name="username_taken">Już zajęta</string>
+    <string name="username_network_error">Błąd połączenia</string>
+    <string name="username_save">Zapisz</string>
+    <string name="username_cancel">Anuluj</string>
+    <string name="username_cooldown">Możesz zmienić nazwę za %d dni</string>
+    <string name="username_change_failed">Zapis nie powiódł się</string>
+    <string name="username_change_saved">Nazwa zapisana</string>
+    <string name="update_available">Dostępna aktualizacja — stuknij, aby zainstalować</string>
+    <string name="update_ready_to_install">Aktualizacja pobrana — stuknij, aby teraz zainstalować</string>
 </resources>

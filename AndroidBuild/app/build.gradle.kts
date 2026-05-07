@@ -74,22 +74,26 @@ android {
         applicationId = "com.moonstreamtech.lasttile"
         minSdk = 24
         targetSdk = 35
-        versionCode = 12
-        versionName = "0.1.11"
+        versionCode = 13
+        versionName = "0.1.12"
 
         // Lock the APK to the locales we ship translations for. Android still
         // auto-picks the closest match for the device language at runtime, so
         // a Spanish phone gets values-es, a Brazilian phone gets values-pt-rBR,
         // and anything outside the list falls back to the default English
-        // resources in `values/`.
+        // resources in `values/`. v0.1.12 expands from 20 to 50 locales — see
+        // tools/i18n/ for the source-of-truth translation tables.
         resourceConfigurations += listOf(
             "en",
             "tr",
             "es",
+            "b+es+419",
             "fr",
+            "fr-rCA",
             "de",
             "it",
             "pt-rBR",
+            "pt-rPT",
             "ru",
             "ja",
             "ko",
@@ -102,7 +106,34 @@ android {
             "th",
             "pl",
             "nl",
-            "uk"
+            "uk",
+            "da",
+            "sv",
+            "nb",
+            "fi",
+            "el",
+            "hu",
+            "cs",
+            "sk",
+            "ro",
+            "bg",
+            "hr",
+            "sr",
+            "sl",
+            "iw",
+            "fa",
+            "ur",
+            "bn",
+            "ta",
+            "te",
+            "mr",
+            "ml",
+            "gu",
+            "kn",
+            "pa",
+            "fil",
+            "ms",
+            "sw"
         )
     }
 
@@ -227,7 +258,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
-    // v0.1.11: Google Play Core In-App Updates. Drives the small
+    // Google Play Core In-App Updates. Drives the small
     // "update available" indicator next to the title bar — when the
     // Play Store has a newer version, [UpdateChecker] flips to
     // Available and the user can tap to launch the FLEXIBLE update

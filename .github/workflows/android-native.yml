@@ -1,19 +1,23 @@
 name: Android APK & AAB
 
 on:
+  # Only push events on protected branches (post-merge into main/master).
+  # All feature/bot/PR work runs through the pull_request trigger below
+  # so each commit gets exactly one CI run via PR `synchronize`. Listing
+  # source branches here too would create a second workflow run on the
+  # same SHA — concurrency would cancel one of them and the PR would
+  # carry a stale "cancelled" check, blocking mergeable_state.
   push:
-    branches: [main, master, 'claude/**', 'codex/**']
+    branches: [main, master]
   pull_request:
     branches: [main, master]
   workflow_dispatch:
 
 concurrency:
-  # Dedupe push + pull_request triggers on the same source branch.
-  # github.head_ref is the PR's source branch on pull_request events
-  # and empty on push events; github.ref_name is the branch on push.
-  # Result: a push to claude/foo and a pull_request synchronize from
-  # claude/foo share one group, so cancel-in-progress collapses them
-  # into a single queued run.
+  # Cancel a still-running build when a newer commit lands on the same
+  # source branch. With duplicate triggers eliminated above, this block
+  # only fires for back-to-back commits (push #2 cancels push #1's CI),
+  # so the PR ends up showing only the latest SHA's check.
   group: android-native-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
@@ -21,6 +25,14 @@ jobs:
   build:
     name: Build debug APK + release AAB
     runs-on: ubuntu-latest
+    # GitHub-hosted ubuntu-latest is a 2-core, 7GB RAM box. The 50-locale
+    # AAPT2 compile step kills the runner with the default Gradle heap, so
+    # cap the JVM at 5GB and force single-worker execution at the JOB level
+    # (gradle.properties also pins these — env wins for daemons spawned by
+    # the action setup, properties win for tasks run via gradlew).
+    env:
+      GRADLE_OPTS: "-Xmx5g -XX:MaxMetaspaceSize=768m -Dorg.gradle.daemon=false -Dfile.encoding=UTF-8"
+      JAVA_TOOL_OPTIONS: "-Xmx5g"
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -96,7 +108,7 @@ jobs:
           ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
           ADMOB_BANNER_UNIT_ID: ${{ secrets.ADMOB_BANNER_UNIT_ID }}
           ADMOB_REWARDED_UNIT_ID: ${{ secrets.ADMOB_REWARDED_UNIT_ID }}
-        run: gradle :app:assembleDebug --no-daemon --stacktrace
+        run: gradle :app:assembleDebug --no-daemon --stacktrace --max-workers=1
 
       - name: Build release AAB (signed)
         working-directory: AndroidBuild
@@ -108,7 +120,7 @@ jobs:
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-        run: gradle :app:bundleRelease --no-daemon --stacktrace
+        run: gradle :app:bundleRelease --no-daemon --stacktrace --max-workers=1
 
       - name: Verify release AAB is signed
         working-directory: AndroidBuild

@@ -1,128 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">合併 · 分裂 · 擴展</string>
-
-    <string name="stat_score">得分</string>
+    <string name="stat_score">分數</string>
     <string name="stat_turn">回合</string>
     <string name="stat_combo">連擊</string>
     <string name="stat_shield">護盾</string>
-
+    <string name="shield_dialog_title">獲取護盾</string>
+    <string name="shield_dialog_body">觀看一段短片獲得3個護盾。用來清除火、冰或毒方塊。</string>
+    <string name="shield_dialog_watch">觀看</string>
+    <string name="shield_dialog_cancel">暫不</string>
+    <string name="shield_ad_unavailable">廣告暫時無法使用,請稍後再試。</string>
+    <string name="shield_ad_loading">廣告載入中…</string>
+    <string name="shield_ad_skipped">完整觀看影片以獲得護盾。</string>
+    <string name="shield_ad_rewarded">已新增3個護盾。</string>
     <string name="btn_play_again">再玩一次</string>
     <string name="btn_restart">重新開始</string>
     <string name="btn_leaderboard">排行榜</string>
     <string name="btn_close">關閉</string>
     <string name="btn_clear">清除</string>
-
     <string name="leaderboard_title">排行榜</string>
     <string name="leaderboard_tab_global">全球</string>
     <string name="leaderboard_tab_local">本機</string>
-    <string name="leaderboard_local_subtitle">前 10 · 本機</string>
-    <string name="leaderboard_empty">尚無紀錄。完成一局即可上榜。</string>
-    <string name="leaderboard_powered_by">由 Google Play Games 提供</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_local_subtitle">前10 · 本裝置</string>
+    <string name="leaderboard_empty">尚無紀錄。完成一局以登榜。</string>
+    <string name="leaderboard_powered_by">全球排名</string>
+    <string name="leaderboard_load_failed">無法載入全球分數。</string>
+    <string name="leaderboard_empty_global">尚無分數。玩一局成為第一吧。</string>
+    <string name="leaderboard_retry">重試</string>
+    <string name="leaderboard_loading">載入中…</string>
+    <string name="leaderboard_updated_ago">%1$d分鐘前更新</string>
+    <string name="leaderboard_refresh">重新整理</string>
     <string name="status_game_over">遊戲  結束</string>
-    <string name="status_split">已對半分裂。</string>
-    <string name="status_frame_opened">邊框已開啟！</string>
-    <string name="status_hint_match_or_split">點選匹配 · 點兩下分裂</string>
-    <string name="status_hint_match">點選相鄰匹配</string>
-
+    <string name="status_split">已分裂為兩半。</string>
+    <string name="status_frame_opened">框架已開啟!</string>
+    <string name="status_hint_match_or_split">點擊匹配 · 雙擊分裂</string>
+    <string name="status_hint_match">點擊相鄰的匹配方塊</string>
     <string name="hazard_fire_subtitle">火 %1$dt</string>
     <string name="hazard_ice_subtitle">冰 %1$dt</string>
     <string name="hazard_poison_subtitle">毒 %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="other">已淨化 %d 個危險！</item>
+        <item quantity="one">已清除%d個危險!</item>
+        <item quantity="other">已清除%d個危險!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">如何玩</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <string name="tutorial_cta_got_it">明白了</string>
+    <string name="tutorial_cta_got_it">知道了</string>
     <string name="tutorial_cta_skip">跳過教學</string>
-    <string name="tutorial_step_merge_instruction">將方塊拖到匹配的方塊上以合併它們。</string>
-    <string name="tutorial_step_frame_instruction">合併這些方塊以解鎖新的邊框單元格。</string>
-    <string name="tutorial_step_hazards_and_shield_initial">這些被鎖定的方塊很危險。點擊了解如何清除它們。</string>
-    <string name="tutorial_step_hazards_and_shield_action">使用你的護盾來清除危險。</string>
-    <string name="tutorial_step_shield_subhint">點擊護盾卡觀看影片，再獲得3個護盾。</string>
+    <string name="tutorial_step_merge_instruction">把一個方塊拖到對應的方塊上以合併。</string>
+    <string name="tutorial_step_frame_instruction">合併這些方塊以解鎖新的框架格。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">這些鎖定的方塊很危險。點擊了解如何清除。</string>
+    <string name="tutorial_step_hazards_and_shield_action">用護盾清除一個危險。</string>
+    <string name="tutorial_step_shield_subhint">點擊護盾卡觀看影片以獲得另外3個護盾。</string>
     <string name="tutorial_step_leaderboard_instruction">你的高分會自動提交到全球排行榜。從選單開啟以查看你的排名。</string>
     <string name="tutorial_hint_drag_to_merge">嘗試將方塊拖到一起…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">有可用更新 — 點擊安裝</string>
+    <string name="tutorial_success_merge">合併成功!</string>
+    <string name="tutorial_success_frame">框架已開啟!</string>
+    <string name="tutorial_success_shield">危險已清除!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">點擊排行榜按鈕查看全球排名。</string>
+    <string name="tutorial_step_username_instruction">點擊你的一列以選擇名稱。</string>
+    <string name="username_dialog_title_first">選擇名稱</string>
+    <string name="username_dialog_title_change">變更名稱</string>
+    <string name="username_input_hint">名稱</string>
+    <string name="username_too_short">至少2個字元</string>
+    <string name="username_too_long">最多20個字元</string>
+    <string name="username_checking">檢查中…</string>
+    <string name="username_available">可用</string>
+    <string name="username_taken">已被使用</string>
+    <string name="username_network_error">連線錯誤</string>
+    <string name="username_save">儲存</string>
+    <string name="username_cancel">取消</string>
+    <string name="username_cooldown">你可在%d天後變更名稱</string>
+    <string name="username_change_failed">儲存失敗</string>
+    <string name="username_change_saved">名稱已儲存</string>
+    <string name="update_available">有更新 — 點擊安裝</string>
     <string name="update_ready_to_install">更新已下載 — 點擊立即安裝</string>
 </resources>

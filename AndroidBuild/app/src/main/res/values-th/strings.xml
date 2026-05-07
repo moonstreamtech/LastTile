@@ -1,128 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tagline">ผสาน · แยก · ขยาย</string>
-
+    <string name="tagline">รวม · แยก · ขยาย</string>
     <string name="stat_score">คะแนน</string>
     <string name="stat_turn">ตา</string>
     <string name="stat_combo">คอมโบ</string>
-    <string name="stat_shield">เกราะ</string>
-
+    <string name="stat_shield">โล่</string>
+    <string name="shield_dialog_title">รับโล่</string>
+    <string name="shield_dialog_body">ดูวิดีโอสั้น ๆ เพื่อรับโล่ 3 อัน ใช้ล้างไทล์ไฟ น้ำแข็ง และพิษ</string>
+    <string name="shield_dialog_watch">ดู</string>
+    <string name="shield_dialog_cancel">ภายหลัง</string>
+    <string name="shield_ad_unavailable">โฆษณาไม่พร้อมใช้งานในขณะนี้ โปรดลองใหม่ภายหลัง</string>
+    <string name="shield_ad_loading">กำลังโหลดโฆษณา…</string>
+    <string name="shield_ad_skipped">ดูวิดีโอจบเพื่อรับโล่</string>
+    <string name="shield_ad_rewarded">เพิ่มโล่ 3 อันแล้ว</string>
     <string name="btn_play_again">เล่นอีกครั้ง</string>
     <string name="btn_restart">เริ่มใหม่</string>
     <string name="btn_leaderboard">กระดานผู้นำ</string>
     <string name="btn_close">ปิด</string>
     <string name="btn_clear">ล้าง</string>
-
     <string name="leaderboard_title">กระดานผู้นำ</string>
     <string name="leaderboard_tab_global">ทั่วโลก</string>
     <string name="leaderboard_tab_local">ในเครื่อง</string>
     <string name="leaderboard_local_subtitle">10 อันดับแรก · เครื่องนี้</string>
-    <string name="leaderboard_empty">ยังไม่มีการเล่น เล่นจบหนึ่งรอบเพื่อขึ้นกระดาน</string>
-    <string name="leaderboard_powered_by">ขับเคลื่อนโดย Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_empty">ยังไม่มีรอบเล่น เล่นจบ 1 รอบเพื่อขึ้นกระดาน</string>
+    <string name="leaderboard_powered_by">อันดับโลก</string>
+    <string name="leaderboard_load_failed">โหลดคะแนนทั่วโลกไม่ได้</string>
+    <string name="leaderboard_empty_global">ยังไม่มีคะแนน มาเล่นรอบแรกกัน</string>
+    <string name="leaderboard_retry">ลองใหม่</string>
+    <string name="leaderboard_loading">กำลังโหลด…</string>
+    <string name="leaderboard_updated_ago">อัปเดตเมื่อ %1$d นาทีที่แล้ว</string>
+    <string name="leaderboard_refresh">รีเฟรช</string>
     <string name="status_game_over">เกม  จบ</string>
-    <string name="status_split">แยกเป็นสองส่วนแล้ว</string>
-    <string name="status_frame_opened">เปิดกรอบแล้ว!</string>
-    <string name="status_hint_match_or_split">แตะคู่ที่ตรงกัน · แตะสองครั้งเพื่อแยก</string>
+    <string name="status_split">แบ่งเป็นสอง</string>
+    <string name="status_frame_opened">เปิดเฟรมแล้ว!</string>
+    <string name="status_hint_match_or_split">แตะเพื่อจับคู่ · แตะสองครั้งเพื่อแยก</string>
     <string name="status_hint_match">แตะคู่ที่อยู่ติดกัน</string>
-
     <string name="hazard_fire_subtitle">ไฟ %1$dt</string>
     <string name="hazard_ice_subtitle">น้ำแข็ง %1$dt</string>
     <string name="hazard_poison_subtitle">พิษ %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="other">ชำระล้างอันตราย %d รายการ!</item>
+        <item quantity="one">ล้าง %d ภัยอันตราย!</item>
+        <item quantity="other">ล้าง %d ภัยอันตราย!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">วิธีเล่น</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">เข้าใจแล้ว</string>
     <string name="tutorial_cta_skip">ข้ามบทช่วยสอน</string>
-    <string name="tutorial_step_merge_instruction">ลากไทล์หนึ่งไปวางบนไทล์ที่ตรงกันเพื่อผสานรวม</string>
-    <string name="tutorial_step_frame_instruction">ผสานไทล์เหล่านี้เพื่อปลดล็อกเซลล์เฟรมใหม่</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ไทล์ที่ล็อกเหล่านี้อันตราย แตะเพื่อเรียนรู้วิธีกำจัด</string>
-    <string name="tutorial_step_hazards_and_shield_action">ใช้โล่ของคุณเพื่อกำจัดอันตราย</string>
-    <string name="tutorial_step_shield_subhint">แตะการ์ดโล่เพื่อดูวิดีโอและรับโล่เพิ่มอีก 3 ชิ้น</string>
+    <string name="tutorial_step_merge_instruction">ลากไทล์หนึ่งมาทับไทล์ที่ตรงกันเพื่อรวมกัน</string>
+    <string name="tutorial_step_frame_instruction">รวมไทล์เหล่านี้เพื่อปลดล็อกเซลล์เฟรมใหม่</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ไทล์ที่ล็อกเหล่านี้อันตราย แตะเพื่อเรียนรู้วิธีล้าง</string>
+    <string name="tutorial_step_hazards_and_shield_action">ใช้โล่เพื่อล้างภัยอันตราย</string>
+    <string name="tutorial_step_shield_subhint">แตะการ์ดโล่เพื่อดูวิดีโอและรับโล่อีก 3 อัน</string>
     <string name="tutorial_step_leaderboard_instruction">คะแนนสูงของคุณจะถูกส่งไปยังกระดานผู้นำทั่วโลกโดยอัตโนมัติ เปิดจากเมนูเพื่อดูอันดับของคุณ</string>
     <string name="tutorial_hint_drag_to_merge">ลองลากไทล์มาวางใกล้กัน…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
+    <string name="tutorial_success_merge">รวมเยี่ยม!</string>
+    <string name="tutorial_success_frame">เปิดเฟรมแล้ว!</string>
+    <string name="tutorial_success_shield">ล้างภัยอันตรายแล้ว!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">แตะปุ่มกระดานผู้นำเพื่อดูอันดับโลก</string>
+    <string name="tutorial_step_username_instruction">แตะแถวของคุณเพื่อเลือกชื่อ</string>
+    <string name="username_dialog_title_first">เลือกชื่อของคุณ</string>
+    <string name="username_dialog_title_change">เปลี่ยนชื่อ</string>
+    <string name="username_input_hint">ชื่อ</string>
+    <string name="username_too_short">อย่างน้อย 2 ตัว</string>
+    <string name="username_too_long">ไม่เกิน 20 ตัว</string>
+    <string name="username_checking">กำลังตรวจสอบ…</string>
+    <string name="username_available">ว่าง</string>
+    <string name="username_taken">ถูกใช้แล้ว</string>
+    <string name="username_network_error">ข้อผิดพลาดการเชื่อมต่อ</string>
+    <string name="username_save">บันทึก</string>
+    <string name="username_cancel">ยกเลิก</string>
+    <string name="username_cooldown">เปลี่ยนชื่อได้อีกใน %d วัน</string>
+    <string name="username_change_failed">บันทึกไม่สำเร็จ</string>
+    <string name="username_change_saved">บันทึกชื่อแล้ว</string>
     <string name="update_available">มีอัปเดต — แตะเพื่อติดตั้ง</string>
-    <string name="update_ready_to_install">ดาวน์โหลดอัปเดตแล้ว — แตะเพื่อติดตั้งทันที</string>
+    <string name="update_ready_to_install">ดาวน์โหลดอัปเดตแล้ว — แตะเพื่อติดตั้งเลย</string>
 </resources>

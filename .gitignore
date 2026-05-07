@@ -32,3 +32,4 @@ release.keystore
 # AndroidBuild/app/google-services.json, and use
 #   git update-index --assume-unchanged AndroidBuild/app/google-services.json
 # to prevent accidentally committing the real credentials.
+__pycache__/

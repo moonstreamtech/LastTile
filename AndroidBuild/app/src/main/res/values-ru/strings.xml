@@ -1,131 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">объединяй · дели · расширяй</string>
-
     <string name="stat_score">ОЧКИ</string>
     <string name="stat_turn">ХОД</string>
     <string name="stat_combo">КОМБО</string>
     <string name="stat_shield">ЩИТ</string>
-
-    <string name="btn_play_again">Играть снова</string>
-    <string name="btn_restart">Перезапуск</string>
-    <string name="btn_leaderboard">Рейтинг</string>
+    <string name="shield_dialog_title">Получи щиты</string>
+    <string name="shield_dialog_body">Посмотри короткое видео и получи 3 щита. Используй их, чтобы очищать плитки Огня, Льда и Яда.</string>
+    <string name="shield_dialog_watch">Смотреть</string>
+    <string name="shield_dialog_cancel">Не сейчас</string>
+    <string name="shield_ad_unavailable">Реклама сейчас недоступна. Попробуй позже.</string>
+    <string name="shield_ad_loading">Загрузка рекламы…</string>
+    <string name="shield_ad_skipped">Посмотри видео до конца, чтобы получить щиты.</string>
+    <string name="shield_ad_rewarded">Добавлено 3 щита.</string>
+    <string name="btn_play_again">Сыграть ещё</string>
+    <string name="btn_restart">Заново</string>
+    <string name="btn_leaderboard">Таблица лидеров</string>
     <string name="btn_close">Закрыть</string>
     <string name="btn_clear">Очистить</string>
-
-    <string name="leaderboard_title">РЕЙТИНГ</string>
-    <string name="leaderboard_tab_global">Глобальный</string>
-    <string name="leaderboard_tab_local">Локальный</string>
+    <string name="leaderboard_title">ТАБЛИЦА ЛИДЕРОВ</string>
+    <string name="leaderboard_tab_global">Глобально</string>
+    <string name="leaderboard_tab_local">Локально</string>
     <string name="leaderboard_local_subtitle">Топ-10 · это устройство</string>
-    <string name="leaderboard_empty">Игр ещё нет. Заверши одну партию, чтобы попасть в рейтинг.</string>
-    <string name="leaderboard_powered_by">При поддержке Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_empty">Партий пока нет. Доиграй раунд, чтобы попасть в таблицу.</string>
+    <string name="leaderboard_powered_by">Мировой рейтинг</string>
+    <string name="leaderboard_load_failed">Не удалось загрузить мировые результаты.</string>
+    <string name="leaderboard_empty_global">Очков пока нет. Сыграй раунд, чтобы стать первым.</string>
+    <string name="leaderboard_retry">Повторить</string>
+    <string name="leaderboard_loading">Загрузка…</string>
+    <string name="leaderboard_updated_ago">Обновлено %1$d мин назад</string>
+    <string name="leaderboard_refresh">Обновить</string>
     <string name="status_game_over">ИГРА  ОКОНЧЕНА</string>
     <string name="status_split">Разделено пополам.</string>
     <string name="status_frame_opened">Рамка открыта!</string>
-    <string name="status_hint_match_or_split">Коснись пары · двойное касание — разделить</string>
-    <string name="status_hint_match">Коснись соседней пары</string>
-
+    <string name="status_hint_match_or_split">Тапни пару · двойной тап для разделения</string>
+    <string name="status_hint_match">Тапни соседнюю пару</string>
     <string name="hazard_fire_subtitle">ОГОНЬ %1$dt</string>
     <string name="hazard_ice_subtitle">ЛЁД %1$dt</string>
     <string name="hazard_poison_subtitle">ЯД %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="one">Снято %d угроза!</item>
-        <item quantity="few">Снято %d угрозы!</item>
-        <item quantity="many">Снято %d угроз!</item>
-        <item quantity="other">Снято %d угроз!</item>
+        <item quantity="one">Очищена %d опасность!</item>
+        <item quantity="few">Очищено %d опасности!</item>
+        <item quantity="many">Очищено %d опасностей!</item>
+        <item quantity="other">Очищено %d опасности!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">Как играть</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">Понятно</string>
-    <string name="tutorial_cta_skip">Пропустить обучение</string>
-    <string name="tutorial_step_merge_instruction">Перетащи плитку на совпадающую плитку, чтобы объединить их.</string>
-    <string name="tutorial_step_frame_instruction">Объедини эти плитки, чтобы открыть новые ячейки рамки.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Эти заблокированные плитки опасны. Нажми, чтобы узнать, как их убрать.</string>
+    <string name="tutorial_cta_skip">Пропустить</string>
+    <string name="tutorial_step_merge_instruction">Перетащи плитку на такую же, чтобы объединить.</string>
+    <string name="tutorial_step_frame_instruction">Объединяй плитки, чтобы открыть новые ячейки рамки.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Эти заблокированные плитки опасны. Тапни, чтобы узнать, как их убирать.</string>
     <string name="tutorial_step_hazards_and_shield_action">Используй щит, чтобы убрать опасность.</string>
-    <string name="tutorial_step_shield_subhint">Нажми на карту щита, чтобы посмотреть видео и получить ещё 3 щита.</string>
+    <string name="tutorial_step_shield_subhint">Тапни по карточке щита, чтобы посмотреть видео и получить ещё 3 щита.</string>
     <string name="tutorial_step_leaderboard_instruction">Твои рекорды автоматически отправляются в глобальную таблицу лидеров. Открой её из меню, чтобы увидеть своё место.</string>
     <string name="tutorial_hint_drag_to_merge">Попробуй перетащить плитки вместе…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
+    <string name="tutorial_success_merge">Отлично!</string>
+    <string name="tutorial_success_frame">Рамка открыта!</string>
+    <string name="tutorial_success_shield">Опасность убрана!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Нажми «Таблица лидеров», чтобы увидеть мировой рейтинг.</string>
+    <string name="tutorial_step_username_instruction">Тапни по своей строке, чтобы выбрать имя.</string>
+    <string name="username_dialog_title_first">Выбери имя</string>
+    <string name="username_dialog_title_change">Изменить имя</string>
+    <string name="username_input_hint">Имя</string>
+    <string name="username_too_short">Минимум 2 символа</string>
+    <string name="username_too_long">Максимум 20 символов</string>
+    <string name="username_checking">Проверка…</string>
+    <string name="username_available">Свободно</string>
+    <string name="username_taken">Уже занято</string>
+    <string name="username_network_error">Ошибка соединения</string>
+    <string name="username_save">Сохранить</string>
+    <string name="username_cancel">Отмена</string>
+    <string name="username_cooldown">Сменить имя можно через %d дн.</string>
+    <string name="username_change_failed">Не удалось сохранить</string>
+    <string name="username_change_saved">Имя сохранено</string>
     <string name="update_available">Доступно обновление — нажми, чтобы установить</string>
-    <string name="update_ready_to_install">Обновление загружено — нажми, чтобы установить сейчас</string>
+    <string name="update_ready_to_install">Обновление загружено — нажми, чтобы установить</string>
 </resources>
