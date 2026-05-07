@@ -8,12 +8,11 @@ on:
   workflow_dispatch:
 
 concurrency:
-  # Dedupe push + pull_request triggers on the same source branch.
-  # github.head_ref is the PR's source branch on pull_request events
-  # and empty on push events; github.ref_name is the branch on push.
-  # Result: a push to claude/foo and a pull_request synchronize from
-  # claude/foo share one group, so cancel-in-progress collapses them
-  # into a single queued run.
+  # One in-flight build per source branch. The job-level `if:` below
+  # already prevents the push + pull_request:synchronize duplicate from
+  # being scheduled, so this block only kicks in for back-to-back pushes:
+  # a second push to the same branch cancels the still-running build for
+  # the older SHA, leaving the latest commit as the only check on the PR.
   group: android-native-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
@@ -21,6 +20,19 @@ jobs:
   build:
     name: Build debug APK + release AAB
     runs-on: ubuntu-latest
+    # Suppress the duplicate trigger at its source. For bot branches
+    # (claude/** and codex/**) the `push` trigger above already covers
+    # every commit, so the matching `pull_request: synchronize` event
+    # would queue a second run on the same SHA — which the concurrency
+    # block then cancels, leaving a "cancelled" check on the PR even
+    # though the real run succeeded. Skipping the synchronize here means
+    # only one run is ever created. PR `opened` / `reopened` events still
+    # trigger normally, and non-bot source branches (which push doesn't
+    # cover) still get synchronize coverage.
+    if: |
+      github.event_name != 'pull_request' ||
+      github.event.action != 'synchronize' ||
+      (!startsWith(github.head_ref, 'claude/') && !startsWith(github.head_ref, 'codex/'))
     # GitHub-hosted ubuntu-latest is a 2-core, 7GB RAM box. The 50-locale
     # AAPT2 compile step kills the runner with the default Gradle heap, so
     # cap the JVM at 5GB and force single-worker execution at the JOB level
