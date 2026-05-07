@@ -1,128 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tagline">ghép · tách · mở rộng</string>
-
+    <string name="tagline">ghép · chia · mở rộng</string>
     <string name="stat_score">ĐIỂM</string>
     <string name="stat_turn">LƯỢT</string>
     <string name="stat_combo">COMBO</string>
     <string name="stat_shield">KHIÊN</string>
-
+    <string name="shield_dialog_title">Nhận khiên</string>
+    <string name="shield_dialog_body">Xem video ngắn để nhận 3 khiên. Dùng để xoá ô Lửa, Băng hoặc Độc.</string>
+    <string name="shield_dialog_watch">Xem</string>
+    <string name="shield_dialog_cancel">Để sau</string>
+    <string name="shield_ad_unavailable">Quảng cáo tạm không khả dụng. Hãy thử lại sau.</string>
+    <string name="shield_ad_loading">Đang tải quảng cáo…</string>
+    <string name="shield_ad_skipped">Xem hết video để nhận khiên.</string>
+    <string name="shield_ad_rewarded">Đã thêm 3 khiên.</string>
     <string name="btn_play_again">Chơi lại</string>
-    <string name="btn_restart">Khởi động lại</string>
+    <string name="btn_restart">Bắt đầu lại</string>
     <string name="btn_leaderboard">Bảng xếp hạng</string>
     <string name="btn_close">Đóng</string>
     <string name="btn_clear">Xoá</string>
-
     <string name="leaderboard_title">BẢNG XẾP HẠNG</string>
     <string name="leaderboard_tab_global">Toàn cầu</string>
     <string name="leaderboard_tab_local">Cục bộ</string>
     <string name="leaderboard_local_subtitle">Top 10 · thiết bị này</string>
-    <string name="leaderboard_empty">Chưa có ván nào. Hoàn thành một ván để có tên trong bảng.</string>
-    <string name="leaderboard_powered_by">Được hỗ trợ bởi Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_empty">Chưa có ván nào. Hoàn thành 1 ván để vào bảng.</string>
+    <string name="leaderboard_powered_by">Xếp hạng toàn cầu</string>
+    <string name="leaderboard_load_failed">Không tải được điểm toàn cầu.</string>
+    <string name="leaderboard_empty_global">Chưa có điểm. Chơi một ván để là người đầu tiên.</string>
+    <string name="leaderboard_retry">Thử lại</string>
+    <string name="leaderboard_loading">Đang tải…</string>
+    <string name="leaderboard_updated_ago">Cập nhật %1$d phút trước</string>
+    <string name="leaderboard_refresh">Làm mới</string>
     <string name="status_game_over">KẾT  THÚC</string>
-    <string name="status_split">Đã tách đôi.</string>
-    <string name="status_frame_opened">Đã mở khung!</string>
-    <string name="status_hint_match_or_split">Chạm vào cặp · chạm hai lần để tách</string>
-    <string name="status_hint_match">Chạm vào cặp lân cận</string>
-
+    <string name="status_split">Đã chia đôi.</string>
+    <string name="status_frame_opened">Khung đã mở!</string>
+    <string name="status_hint_match_or_split">Chạm để ghép · chạm đúp để chia</string>
+    <string name="status_hint_match">Chạm cặp ghép kề bên</string>
     <string name="hazard_fire_subtitle">LỬA %1$dt</string>
     <string name="hazard_ice_subtitle">BĂNG %1$dt</string>
     <string name="hazard_poison_subtitle">ĐỘC %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="other">Đã thanh tẩy %d hiểm hoạ!</item>
+        <item quantity="one">Đã xoá %d nguy hiểm!</item>
+        <item quantity="other">Đã xoá %d nguy hiểm!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">Cách chơi</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">Đã hiểu</string>
     <string name="tutorial_cta_skip">Bỏ qua hướng dẫn</string>
-    <string name="tutorial_step_merge_instruction">Kéo một ô lên ô khớp để hợp nhất chúng.</string>
-    <string name="tutorial_step_frame_instruction">Hợp nhất các ô này để mở khóa ô khung mới.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Những ô bị khóa này rất nguy hiểm. Chạm để học cách loại bỏ chúng.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Dùng khiên để loại bỏ nguy hiểm.</string>
-    <string name="tutorial_step_shield_subhint">Chạm vào thẻ khiên để xem video và nhận thêm 3 khiên.</string>
+    <string name="tutorial_step_merge_instruction">Kéo một ô lên ô khớp để ghép chúng.</string>
+    <string name="tutorial_step_frame_instruction">Ghép các ô này để mở các ô khung mới.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Các ô khoá này nguy hiểm. Chạm để học cách xoá chúng.</string>
+    <string name="tutorial_step_hazards_and_shield_action">Dùng khiên để xoá nguy hiểm.</string>
+    <string name="tutorial_step_shield_subhint">Chạm thẻ khiên để xem video và nhận thêm 3 khiên.</string>
     <string name="tutorial_step_leaderboard_instruction">Điểm số cao của bạn tự động gửi lên bảng xếp hạng toàn cầu. Mở từ menu để xem thứ hạng.</string>
     <string name="tutorial_hint_drag_to_merge">Thử kéo các ô lại với nhau…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">Có bản cập nhật — chạm để cài đặt</string>
-    <string name="update_ready_to_install">Đã tải bản cập nhật — chạm để cài đặt ngay</string>
+    <string name="tutorial_success_merge">Ghép tuyệt!</string>
+    <string name="tutorial_success_frame">Khung đã mở!</string>
+    <string name="tutorial_success_shield">Đã xoá nguy hiểm!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Chạm Bảng xếp hạng để xem xếp hạng toàn cầu.</string>
+    <string name="tutorial_step_username_instruction">Chạm hàng của bạn để chọn tên.</string>
+    <string name="username_dialog_title_first">Chọn tên</string>
+    <string name="username_dialog_title_change">Đổi tên</string>
+    <string name="username_input_hint">Tên</string>
+    <string name="username_too_short">Tối thiểu 2 ký tự</string>
+    <string name="username_too_long">Tối đa 20 ký tự</string>
+    <string name="username_checking">Đang kiểm tra…</string>
+    <string name="username_available">Có sẵn</string>
+    <string name="username_taken">Đã được dùng</string>
+    <string name="username_network_error">Lỗi kết nối</string>
+    <string name="username_save">Lưu</string>
+    <string name="username_cancel">Huỷ</string>
+    <string name="username_cooldown">Bạn có thể đổi tên sau %d ngày</string>
+    <string name="username_change_failed">Lưu thất bại</string>
+    <string name="username_change_saved">Đã lưu tên</string>
+    <string name="update_available">Có bản cập nhật — chạm để cài</string>
+    <string name="update_ready_to_install">Đã tải bản cập nhật — chạm để cài ngay</string>
 </resources>

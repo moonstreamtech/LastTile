@@ -1,133 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="tagline">ادمج · قسّم · وسّع</string>
-
-    <string name="stat_score">النتيجة</string>
-    <string name="stat_turn">الدور</string>
+    <string name="stat_score">النقاط</string>
+    <string name="stat_turn">دور</string>
     <string name="stat_combo">كومبو</string>
     <string name="stat_shield">درع</string>
-
+    <string name="shield_dialog_title">احصل على دروع</string>
+    <string name="shield_dialog_body">شاهد فيديو قصيرًا للحصول على 3 دروع. استخدمها لإزالة قطع النار والجليد والسم.</string>
+    <string name="shield_dialog_watch">مشاهدة</string>
+    <string name="shield_dialog_cancel">ليس الآن</string>
+    <string name="shield_ad_unavailable">الإعلان غير متاح حاليًا. حاول لاحقًا.</string>
+    <string name="shield_ad_loading">جارٍ تحميل الإعلان…</string>
+    <string name="shield_ad_skipped">شاهد الفيديو كاملًا للحصول على الدروع.</string>
+    <string name="shield_ad_rewarded">تمت إضافة 3 دروع.</string>
     <string name="btn_play_again">العب مجددًا</string>
-    <string name="btn_restart">إعادة التشغيل</string>
-    <string name="btn_leaderboard">المتصدرون</string>
+    <string name="btn_restart">إعادة</string>
+    <string name="btn_leaderboard">لوحة المتصدرين</string>
     <string name="btn_close">إغلاق</string>
     <string name="btn_clear">مسح</string>
-
-    <string name="leaderboard_title">المتصدرون</string>
+    <string name="leaderboard_title">لوحة المتصدرين</string>
     <string name="leaderboard_tab_global">عالمي</string>
     <string name="leaderboard_tab_local">محلي</string>
     <string name="leaderboard_local_subtitle">أفضل 10 · هذا الجهاز</string>
-    <string name="leaderboard_empty">لا توجد جولات بعد. أكمل جولة لتدخل قائمة المتصدرين.</string>
-    <string name="leaderboard_powered_by">مدعوم من Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_empty">لا توجد جولات بعد. أكمل جولة لتظهر في القائمة.</string>
+    <string name="leaderboard_powered_by">ترتيب عالمي</string>
+    <string name="leaderboard_load_failed">تعذّر تحميل النتائج العالمية.</string>
+    <string name="leaderboard_empty_global">لا توجد نقاط بعد. العب جولة لتكون الأول.</string>
+    <string name="leaderboard_retry">إعادة المحاولة</string>
+    <string name="leaderboard_loading">جارٍ التحميل…</string>
+    <string name="leaderboard_updated_ago">تم التحديث قبل %1$d د</string>
+    <string name="leaderboard_refresh">تحديث</string>
     <string name="status_game_over">انتهت  اللعبة</string>
-    <string name="status_split">قُسّمت إلى نصفين.</string>
-    <string name="status_frame_opened">فُتح الإطار!</string>
-    <string name="status_hint_match_or_split">انقر على المطابق · انقر مرتين للتقسيم</string>
-    <string name="status_hint_match">انقر على مطابق مجاور</string>
-
+    <string name="status_split">تم تقسيمه إلى نصفين.</string>
+    <string name="status_frame_opened">تم فتح الإطار!</string>
+    <string name="status_hint_match_or_split">انقر للمطابقة · نقر مزدوج للتقسيم</string>
+    <string name="status_hint_match">انقر على مطابقة مجاورة</string>
     <string name="hazard_fire_subtitle">نار %1$dt</string>
     <string name="hazard_ice_subtitle">جليد %1$dt</string>
     <string name="hazard_poison_subtitle">سم %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="zero">لا أخطار للتطهير!</item>
-        <item quantity="one">طُهِّر خطر واحد!</item>
-        <item quantity="two">طُهِّرت خطران!</item>
-        <item quantity="few">طُهِّرت %d أخطار!</item>
-        <item quantity="many">طُهِّر %d خطرًا!</item>
-        <item quantity="other">طُهِّر %d خطر!</item>
+        <item quantity="zero">لم تتم إزالة أي خطر!</item>
+        <item quantity="one">تمت إزالة خطر واحد!</item>
+        <item quantity="two">تمت إزالة خطرين!</item>
+        <item quantity="few">تمت إزالة %d أخطار!</item>
+        <item quantity="many">تمت إزالة %d خطرًا!</item>
+        <item quantity="other">تمت إزالة %d خطر!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
-    <string name="btn_tutorial">كيف تلعب</string>
-    <!-- TODO i18n: needs translation -->
+    <string name="btn_tutorial">كيفية اللعب</string>
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <string name="tutorial_cta_got_it">فهمت</string>
-    <string name="tutorial_cta_skip">تخطي البرنامج التعليمي</string>
-    <string name="tutorial_step_merge_instruction">اسحب قطعة فوق قطعة مطابقة لدمجهما.</string>
-    <string name="tutorial_step_frame_instruction">ادمج هذه القطع لفتح خلايا إطار جديدة.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">هذه القطع المقفلة خطيرة. اضغط لتتعلم كيفية إزالتها.</string>
-    <string name="tutorial_step_hazards_and_shield_action">استخدم درعك لإزالة خطر.</string>
-    <string name="tutorial_step_shield_subhint">اضغط على بطاقة الدرع لمشاهدة فيديو والحصول على 3 دروع إضافية.</string>
+    <string name="tutorial_cta_got_it">حسنًا</string>
+    <string name="tutorial_cta_skip">تخطي الشرح</string>
+    <string name="tutorial_step_merge_instruction">اسحب قطعة فوق قطعة مماثلة لدمجهما.</string>
+    <string name="tutorial_step_frame_instruction">ادمج هذه القطع لفتح خانات جديدة في الإطار.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">هذه القطع المقفلة خطيرة. انقر لتعلّم كيفية إزالتها.</string>
+    <string name="tutorial_step_hazards_and_shield_action">استخدم درعك لإزالة الخطر.</string>
+    <string name="tutorial_step_shield_subhint">انقر على بطاقة الدرع لمشاهدة فيديو والحصول على 3 دروع إضافية.</string>
     <string name="tutorial_step_leaderboard_instruction">تُرسل أعلى نتائجك تلقائيًا إلى لوحة المتصدرين العالمية. افتحها من القائمة لمعرفة ترتيبك.</string>
     <string name="tutorial_hint_drag_to_merge">جرّب سحب القطع معًا…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">تحديث متاح — اضغط للتثبيت</string>
-    <string name="update_ready_to_install">تم تنزيل التحديث — اضغط للتثبيت الآن</string>
+    <string name="tutorial_success_merge">دمج رائع!</string>
+    <string name="tutorial_success_frame">تم فتح الإطار!</string>
+    <string name="tutorial_success_shield">تمت إزالة الخطر!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">انقر على لوحة المتصدرين لرؤية الترتيب العالمي.</string>
+    <string name="tutorial_step_username_instruction">انقر على صفّك لاختيار اسم.</string>
+    <string name="username_dialog_title_first">اختر اسمًا</string>
+    <string name="username_dialog_title_change">تغيير الاسم</string>
+    <string name="username_input_hint">الاسم</string>
+    <string name="username_too_short">حرفان على الأقل</string>
+    <string name="username_too_long">20 حرفًا كحد أقصى</string>
+    <string name="username_checking">جارٍ التحقق…</string>
+    <string name="username_available">متاح</string>
+    <string name="username_taken">مستخدم بالفعل</string>
+    <string name="username_network_error">خطأ في الاتصال</string>
+    <string name="username_save">حفظ</string>
+    <string name="username_cancel">إلغاء</string>
+    <string name="username_cooldown">يمكنك تغيير اسمك بعد %d يومًا</string>
+    <string name="username_change_failed">فشل الحفظ</string>
+    <string name="username_change_saved">تم حفظ الاسم</string>
+    <string name="update_available">يتوفر تحديث — انقر للتثبيت</string>
+    <string name="update_ready_to_install">تم تنزيل التحديث — انقر للتثبيت الآن</string>
 </resources>

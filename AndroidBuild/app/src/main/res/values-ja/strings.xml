@@ -1,128 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="tagline">合成 · 分割 · 拡張</string>
-
+    <string name="tagline">結合 · 分割 · 拡張</string>
     <string name="stat_score">スコア</string>
     <string name="stat_turn">ターン</string>
     <string name="stat_combo">コンボ</string>
     <string name="stat_shield">シールド</string>
-
-    <string name="btn_play_again">もう一度遊ぶ</string>
+    <string name="shield_dialog_title">シールドを獲得</string>
+    <string name="shield_dialog_body">短い動画を見るとシールドが3個もらえます。火・氷・毒のタイルを浄化するのに使えます。</string>
+    <string name="shield_dialog_watch">視聴</string>
+    <string name="shield_dialog_cancel">あとで</string>
+    <string name="shield_ad_unavailable">広告は現在利用できません。しばらくしてからお試しください。</string>
+    <string name="shield_ad_loading">広告を読み込み中…</string>
+    <string name="shield_ad_skipped">シールドを獲得するには動画を最後まで見てください。</string>
+    <string name="shield_ad_rewarded">シールドを3個追加しました。</string>
+    <string name="btn_play_again">もう一度</string>
     <string name="btn_restart">リスタート</string>
-    <string name="btn_leaderboard">ランキング</string>
+    <string name="btn_leaderboard">リーダーボード</string>
     <string name="btn_close">閉じる</string>
     <string name="btn_clear">クリア</string>
-
-    <string name="leaderboard_title">ランキング</string>
+    <string name="leaderboard_title">リーダーボード</string>
     <string name="leaderboard_tab_global">グローバル</string>
     <string name="leaderboard_tab_local">ローカル</string>
     <string name="leaderboard_local_subtitle">トップ10 · この端末</string>
-    <string name="leaderboard_empty">まだ記録がありません。1ゲーム完走するとランキング入りします。</string>
-    <string name="leaderboard_powered_by">Powered by Google Play Games</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_load_failed">Couldn\'t load global scores.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_empty_global">No scores yet. Play a round to be the first.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_retry">Retry</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_loading">Loading…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_updated_ago">Updated %1$d min ago</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="leaderboard_refresh">Refresh</string>
-
+    <string name="leaderboard_empty">まだ記録がありません。1ラウンドプレイしてランクインしよう。</string>
+    <string name="leaderboard_powered_by">グローバルランキング</string>
+    <string name="leaderboard_load_failed">グローバルスコアを読み込めませんでした。</string>
+    <string name="leaderboard_empty_global">まだスコアがありません。最初のプレイヤーになろう。</string>
+    <string name="leaderboard_retry">再試行</string>
+    <string name="leaderboard_loading">読み込み中…</string>
+    <string name="leaderboard_updated_ago">%1$d分前に更新</string>
+    <string name="leaderboard_refresh">更新</string>
     <string name="status_game_over">ゲーム  オーバー</string>
-    <string name="status_split">半分に分割しました。</string>
-    <string name="status_frame_opened">フレームが開放されました！</string>
-    <string name="status_hint_match_or_split">同じ数字をタップ · ダブルタップで分割</string>
-    <string name="status_hint_match">隣接する同じ数字をタップ</string>
-
-    <string name="hazard_fire_subtitle">炎 %1$dt</string>
+    <string name="status_split">二分割しました。</string>
+    <string name="status_frame_opened">フレームが開いた!</string>
+    <string name="status_hint_match_or_split">一致をタップ · ダブルタップで分割</string>
+    <string name="status_hint_match">隣り合う一致をタップ</string>
+    <string name="hazard_fire_subtitle">火 %1$dt</string>
     <string name="hazard_ice_subtitle">氷 %1$dt</string>
     <string name="hazard_poison_subtitle">毒 %1$dt</string>
-
     <plurals name="cleansed_hazards">
-        <item quantity="other">%d個の災いを浄化！</item>
+        <item quantity="one">%d個の危険を浄化!</item>
+        <item quantity="other">%d個の危険を浄化!</item>
     </plurals>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_title">Earn shields</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_body">Watch a short video to earn 3 shields. Use them to cleanse Fire, Ice or Poison tiles.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_watch">Watch</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_dialog_cancel">Not now</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_unavailable">Ad isn\'t available right now. Please try again later.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_loading">Loading ad…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_skipped">Watch the full video to earn shields.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="shield_ad_rewarded">3 shields added.</string>
-
     <string name="leaderboard_rank_format">#%1$d</string>
-    <!-- TODO i18n: needs translation -->
     <string name="leaderboard_entry_meta">t%1$d · %2$d×%2$d</string>
-
-    <!-- TODO i18n: needs translation -->
     <string name="combo_value_format">×%1$d</string>
     <string name="btn_tutorial">遊び方</string>
-    <!-- TODO i18n: needs translation -->
     <string name="tutorial_step_counter">%1$d / %2$d</string>
-    <string name="tutorial_cta_got_it">了解</string>
+    <string name="tutorial_cta_got_it">OK</string>
     <string name="tutorial_cta_skip">チュートリアルをスキップ</string>
-    <string name="tutorial_step_merge_instruction">タイルを同じ値のタイルにドラッグして合体させましょう。</string>
-    <string name="tutorial_step_frame_instruction">これらのタイルを合体させて新しいフレームセルを解放しましょう。</string>
-    <string name="tutorial_step_hazards_and_shield_initial">これらのロックされたタイルは危険です。タップして除去方法を学びましょう。</string>
-    <string name="tutorial_step_hazards_and_shield_action">シールドを使って危険を除去しましょう。</string>
-    <string name="tutorial_step_shield_subhint">シールドカードをタップして動画を見ると、シールドが3つ追加されます。</string>
+    <string name="tutorial_step_merge_instruction">同じタイルにドラッグして合体させよう。</string>
+    <string name="tutorial_step_frame_instruction">これらのタイルを合体させて新しいセルを解放しよう。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">このロックされたタイルは危険。消し方を学ぶにはタップ。</string>
+    <string name="tutorial_step_hazards_and_shield_action">シールドを使って危険を消そう。</string>
+    <string name="tutorial_step_shield_subhint">シールドカードをタップして動画を見ると、さらに3個もらえます。</string>
     <string name="tutorial_step_leaderboard_instruction">ハイスコアは自動的にグローバルランキングに送信されます。メニューから開いて順位を確認しましょう。</string>
     <string name="tutorial_hint_drag_to_merge">タイルをドラッグして合体させてみましょう…</string>
-
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_merge">Nice merge!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_frame">Frame opened!</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_success_shield">Hazard cleared!</string>
-
-    <!-- v0.2.0: Username system. TODO i18n: needs translation. -->
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_first">Pick your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_dialog_title_change">Change your name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_input_hint">Name</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_short">At least 2 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_too_long">Max 20 characters</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_checking">Checking…</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_available">Available</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_taken">Already taken</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_network_error">Connection error</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_save">Save</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cancel">Cancel</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_cooldown">You can change your name in %d days</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_failed">Save failed</string>
-    <!-- TODO i18n: needs translation -->
-    <string name="username_change_saved">Name saved</string>
-    <string name="update_available">アップデートがあります — タップしてインストール</string>
-    <string name="update_ready_to_install">アップデートをダウンロードしました — タップして今すぐインストール</string>
+    <string name="tutorial_success_merge">ナイス合体!</string>
+    <string name="tutorial_success_frame">フレームが開いた!</string>
+    <string name="tutorial_success_shield">危険を消した!</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">リーダーボードをタップしてグローバルランキングを表示。</string>
+    <string name="tutorial_step_username_instruction">自分の行をタップして名前を選ぼう。</string>
+    <string name="username_dialog_title_first">名前を選ぶ</string>
+    <string name="username_dialog_title_change">名前を変更</string>
+    <string name="username_input_hint">名前</string>
+    <string name="username_too_short">2文字以上</string>
+    <string name="username_too_long">20文字以内</string>
+    <string name="username_checking">確認中…</string>
+    <string name="username_available">使用可能</string>
+    <string name="username_taken">使用中</string>
+    <string name="username_network_error">接続エラー</string>
+    <string name="username_save">保存</string>
+    <string name="username_cancel">キャンセル</string>
+    <string name="username_cooldown">あと%d日で名前を変更できます</string>
+    <string name="username_change_failed">保存に失敗</string>
+    <string name="username_change_saved">名前を保存しました</string>
+    <string name="update_available">アップデートあり — タップしてインストール</string>
+    <string name="update_ready_to_install">アップデートをダウンロード済み — タップで今すぐインストール</string>
 </resources>
