@@ -1,18 +1,23 @@
 name: Android APK & AAB
 
 on:
+  # Only push events on protected branches (post-merge into main/master).
+  # All feature/bot/PR work runs through the pull_request trigger below
+  # so each commit gets exactly one CI run via PR `synchronize`. Listing
+  # source branches here too would create a second workflow run on the
+  # same SHA — concurrency would cancel one of them and the PR would
+  # carry a stale "cancelled" check, blocking mergeable_state.
   push:
-    branches: [main, master, 'claude/**', 'codex/**']
+    branches: [main, master]
   pull_request:
     branches: [main, master]
   workflow_dispatch:
 
 concurrency:
-  # One in-flight build per source branch. The job-level `if:` below
-  # already prevents the push + pull_request:synchronize duplicate from
-  # being scheduled, so this block only kicks in for back-to-back pushes:
-  # a second push to the same branch cancels the still-running build for
-  # the older SHA, leaving the latest commit as the only check on the PR.
+  # Cancel a still-running build when a newer commit lands on the same
+  # source branch. With duplicate triggers eliminated above, this block
+  # only fires for back-to-back commits (push #2 cancels push #1's CI),
+  # so the PR ends up showing only the latest SHA's check.
   group: android-native-${{ github.workflow }}-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 
@@ -20,19 +25,6 @@ jobs:
   build:
     name: Build debug APK + release AAB
     runs-on: ubuntu-latest
-    # Suppress the duplicate trigger at its source. For bot branches
-    # (claude/** and codex/**) the `push` trigger above already covers
-    # every commit, so the matching `pull_request: synchronize` event
-    # would queue a second run on the same SHA — which the concurrency
-    # block then cancels, leaving a "cancelled" check on the PR even
-    # though the real run succeeded. Skipping the synchronize here means
-    # only one run is ever created. PR `opened` / `reopened` events still
-    # trigger normally, and non-bot source branches (which push doesn't
-    # cover) still get synchronize coverage.
-    if: |
-      github.event_name != 'pull_request' ||
-      github.event.action != 'synchronize' ||
-      (!startsWith(github.head_ref, 'claude/') && !startsWith(github.head_ref, 'codex/'))
     # GitHub-hosted ubuntu-latest is a 2-core, 7GB RAM box. The 50-locale
     # AAPT2 compile step kills the runner with the default Gradle heap, so
     # cap the JVM at 5GB and force single-worker execution at the JOB level
