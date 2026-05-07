@@ -258,7 +258,7 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
 
-    // v0.1.11: Google Play Core In-App Updates. Drives the small
+    // Google Play Core In-App Updates. Drives the small
     // "update available" indicator next to the title bar — when the
     // Play Store has a newer version, [UpdateChecker] flips to
     // Available and the user can tap to launch the FLEXIBLE update

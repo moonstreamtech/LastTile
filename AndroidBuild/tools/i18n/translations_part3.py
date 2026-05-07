@@ -47,7 +47,6 @@ T["cs"] = {
     "cleansed_hazards": {
         "one": "Odstraněno %d nebezpečí!",
         "few": "Odstraněna %d nebezpečí!",
-        "many": "Odstraněno %d nebezpečí!",
         "other": "Odstraněno %d nebezpečí!",
     },
     "leaderboard_rank_format": "#%1$d",
@@ -130,7 +129,6 @@ T["sk"] = {
     "cleansed_hazards": {
         "one": "Odstránené %d nebezpečenstvo!",
         "few": "Odstránené %d nebezpečenstvá!",
-        "many": "Odstránených %d nebezpečenstiev!",
         "other": "Odstránených %d nebezpečenstiev!",
     },
     "leaderboard_rank_format": "#%1$d",

@@ -41,7 +41,6 @@
     <plurals name="cleansed_hazards">
         <item quantity="one">Odstraněno %d nebezpečí!</item>
         <item quantity="few">Odstraněna %d nebezpečí!</item>
-        <item quantity="many">Odstraněno %d nebezpečí!</item>
         <item quantity="other">Odstraněno %d nebezpečí!</item>
     </plurals>
     <string name="leaderboard_rank_format">#%1$d</string>

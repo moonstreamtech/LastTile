@@ -89,28 +89,28 @@
          convention differs. -->
     <string name="combo_value_format">×%1$d</string>
 
-    <!-- v0.1.7 / v0.1.11: Interactive 5-step tutorial. Auto-runs on
-         first launch and is re-openable from the menu. Each instruction
-         sits on a card at the bottom of the screen above a dimmed
-         background, with a Got it CTA and a Skip Tutorial text button.
-         The Merge and Frame steps auto-advance when the user performs
-         the scripted action; the combined Hazard step auto-advances
-         when the player consumes the demo shield to clear a hazard;
-         the Leaderboard step advances on the Leaderboard-button tap;
-         the Username step advances on a successful name save. v0.1.11
-         merged the former separate Hazard (intro) and Shield (use)
-         steps into one combined step with two internal sub-phases. -->
+    <!-- Interactive 5-step tutorial. Auto-runs on first launch and is
+         re-openable from the menu. Each instruction sits on a card at
+         the bottom of the screen above a dimmed background, with a
+         Got it CTA and a Skip Tutorial text button. The Merge and
+         Frame steps auto-advance when the user performs the scripted
+         action; the combined Hazard step auto-advances when the
+         player consumes the demo shield to clear a hazard; the
+         Leaderboard step advances on the Leaderboard-button tap; the
+         Username step advances on a successful name save. The
+         combined Hazard step has two internal sub-phases (the earlier
+         flow had two separate Hazard and Shield steps). -->
     <string name="btn_tutorial">How to play</string>
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">Got it</string>
     <string name="tutorial_cta_skip">Skip Tutorial</string>
     <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
     <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- v0.1.11: combined Hazard step. Sub-phase 0 introduces the
-         locked hazard tiles; sub-phase 1 prompts the player to use
-         the shield to clear one. Replaces the former
-         tutorial_step_hazard_instruction + tutorial_step_shield_instruction
-         pair. -->
+    <!-- Combined Hazard step. Sub-phase 0 introduces the locked
+         hazard tiles; sub-phase 1 prompts the player to use the
+         shield to clear one. Replaces the former
+         tutorial_step_hazard_instruction +
+         tutorial_step_shield_instruction pair. -->
     <string name="tutorial_step_hazards_and_shield_initial">These locked tiles are dangerous. Tap to learn how to clear them.</string>
     <string name="tutorial_step_hazards_and_shield_action">Use your shield to clear a hazard.</string>
     <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
@@ -149,10 +149,10 @@
     <string name="username_change_failed">Save failed</string>
     <string name="username_change_saved">Name saved</string>
 
-    <!-- v0.1.11: in-app update indicator strings. Used as
-         contentDescription on the small badge next to the LAST TILE
-         wordmark when Google Play surfaces a newer version through
-         the FLEXIBLE in-app update API. -->
+    <!-- In-app update indicator strings. Used as contentDescription
+         on the small badge next to the LAST TILE wordmark when
+         Google Play surfaces a newer version through the FLEXIBLE
+         in-app update API. -->
     <string name="update_available">Update available — tap to install</string>
     <string name="update_ready_to_install">Update downloaded — tap to install now</string>
 </resources>
