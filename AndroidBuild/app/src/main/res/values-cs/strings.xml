@@ -76,6 +76,6 @@
     <string name="username_cooldown">Jméno můžeš změnit za %d dní</string>
     <string name="username_change_failed">Uložení selhalo</string>
     <string name="username_change_saved">Jméno uloženo</string>
-    <string name="update_available">Aktualizace je k dispozici — klepni a nainstaluj</string>
-    <string name="update_ready_to_install">Aktualizace stažena — klepni pro okamžitou instalaci</string>
+    <string name="update_available">Aktualizovat</string>
+    <string name="update_downloaded">Nainstalovat</string>
 </resources>

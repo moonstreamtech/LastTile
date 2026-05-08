@@ -75,6 +75,6 @@
     <string name="username_cooldown">Bạn có thể đổi tên sau %d ngày</string>
     <string name="username_change_failed">Lưu thất bại</string>
     <string name="username_change_saved">Đã lưu tên</string>
-    <string name="update_available">Có bản cập nhật — chạm để cài</string>
-    <string name="update_ready_to_install">Đã tải bản cập nhật — chạm để cài ngay</string>
+    <string name="update_available">Cập nhật</string>
+    <string name="update_downloaded">Cài đặt</string>
 </resources>

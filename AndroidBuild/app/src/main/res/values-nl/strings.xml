@@ -75,6 +75,6 @@
     <string name="username_cooldown">Je kunt je naam over %d dagen wijzigen</string>
     <string name="username_change_failed">Opslaan mislukt</string>
     <string name="username_change_saved">Naam opgeslagen</string>
-    <string name="update_available">Update beschikbaar — tik om te installeren</string>
-    <string name="update_ready_to_install">Update gedownload — tik om nu te installeren</string>
+    <string name="update_available">Bijwerken</string>
+    <string name="update_downloaded">Installeren</string>
 </resources>

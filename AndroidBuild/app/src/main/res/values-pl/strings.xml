@@ -77,6 +77,6 @@
     <string name="username_cooldown">Możesz zmienić nazwę za %d dni</string>
     <string name="username_change_failed">Zapis nie powiódł się</string>
     <string name="username_change_saved">Nazwa zapisana</string>
-    <string name="update_available">Dostępna aktualizacja — stuknij, aby zainstalować</string>
-    <string name="update_ready_to_install">Aktualizacja pobrana — stuknij, aby teraz zainstalować</string>
+    <string name="update_available">Aktualizuj</string>
+    <string name="update_downloaded">Zainstaluj</string>
 </resources>

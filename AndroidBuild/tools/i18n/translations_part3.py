@@ -82,8 +82,8 @@ T["cs"] = {
     "username_cooldown": "Jméno můžeš změnit za %d dní",
     "username_change_failed": "Uložení selhalo",
     "username_change_saved": "Jméno uloženo",
-    "update_available": "Aktualizace je k dispozici — klepni a nainstaluj",
-    "update_ready_to_install": "Aktualizace stažena — klepni pro okamžitou instalaci",
+    "update_available": "Aktualizovat",
+    "update_downloaded": "Nainstalovat",
 }
 
 # Slovak (SK)
@@ -164,8 +164,8 @@ T["sk"] = {
     "username_cooldown": "Meno môžeš zmeniť o %d dní",
     "username_change_failed": "Uloženie zlyhalo",
     "username_change_saved": "Meno uložené",
-    "update_available": "Aktualizácia dostupná — klepni na inštaláciu",
-    "update_ready_to_install": "Aktualizácia stiahnutá — klepni pre okamžitú inštaláciu",
+    "update_available": "Aktualizovať",
+    "update_downloaded": "Nainštalovať",
 }
 
 # Romanian (RO)
@@ -246,8 +246,8 @@ T["ro"] = {
     "username_cooldown": "Poți schimba numele în %d zile",
     "username_change_failed": "Salvarea a eșuat",
     "username_change_saved": "Nume salvat",
-    "update_available": "Actualizare disponibilă — atinge pentru instalare",
-    "update_ready_to_install": "Actualizare descărcată — atinge pentru instalare acum",
+    "update_available": "Actualizează",
+    "update_downloaded": "Instalează",
 }
 
 # Bulgarian (BG)
@@ -324,8 +324,8 @@ T["bg"] = {
     "username_cooldown": "Можеш да смениш името след %d дни",
     "username_change_failed": "Запазването не успя",
     "username_change_saved": "Името е запазено",
-    "update_available": "Налична е актуализация — докосни за инсталиране",
-    "update_ready_to_install": "Актуализацията е изтеглена — докосни за инсталиране сега",
+    "update_available": "Актуализирай",
+    "update_downloaded": "Инсталирай",
 }
 
 # Croatian (HR)
@@ -406,8 +406,8 @@ T["hr"] = {
     "username_cooldown": "Ime možeš promijeniti za %d dana",
     "username_change_failed": "Spremanje neuspjelo",
     "username_change_saved": "Ime spremljeno",
-    "update_available": "Dostupno ažuriranje — dodirni za instalaciju",
-    "update_ready_to_install": "Ažuriranje preuzeto — dodirni za instalaciju sada",
+    "update_available": "Ažuriraj",
+    "update_downloaded": "Instaliraj",
 }
 
 # Serbian Latin (SR)
@@ -488,8 +488,8 @@ T["sr"] = {
     "username_cooldown": "Ime možeš da promeniš za %d dana",
     "username_change_failed": "Čuvanje neuspešno",
     "username_change_saved": "Ime sačuvano",
-    "update_available": "Dostupno ažuriranje — dodirni za instalaciju",
-    "update_ready_to_install": "Ažuriranje preuzeto — dodirni za instalaciju sad",
+    "update_available": "Ažuriraj",
+    "update_downloaded": "Instaliraj",
 }
 
 # Slovenian (SL)
@@ -571,6 +571,6 @@ T["sl"] = {
     "username_cooldown": "Ime lahko spremeniš čez %d dni",
     "username_change_failed": "Shranjevanje ni uspelo",
     "username_change_saved": "Ime shranjeno",
-    "update_available": "Posodobitev na voljo — tapni za namestitev",
-    "update_ready_to_install": "Posodobitev prenesena — tapni za takojšnjo namestitev",
+    "update_available": "Posodobi",
+    "update_downloaded": "Namesti",
 }

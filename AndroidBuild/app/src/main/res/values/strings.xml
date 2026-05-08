@@ -149,10 +149,12 @@
     <string name="username_change_failed">Save failed</string>
     <string name="username_change_saved">Name saved</string>
 
-    <!-- In-app update indicator strings. Used as contentDescription
-         on the small badge next to the LAST TILE wordmark when
+    <!-- In-app update pill button labels. Rendered as the visible
+         text inside the pill next to the LAST TILE wordmark when
          Google Play surfaces a newer version through the FLEXIBLE
-         in-app update API. -->
-    <string name="update_available">Update available — tap to install</string>
-    <string name="update_ready_to_install">Update downloaded — tap to install now</string>
+         in-app update API. Single word per locale so the pill
+         fits comfortably even on narrow phones; the same string
+         doubles as the contentDescription for screen readers. -->
+    <string name="update_available">Update</string>
+    <string name="update_downloaded">Install</string>
 </resources>

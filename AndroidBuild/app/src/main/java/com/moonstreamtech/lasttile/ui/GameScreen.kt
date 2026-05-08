@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -37,16 +38,17 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.activity.ComponentActivity
@@ -83,6 +85,7 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
@@ -419,12 +422,19 @@ fun GameScreen() {
                     rootContentOriginInWindow = coords.boundsInWindow().topLeft
                 }
         ) {
+            // The gameplay column flexes to fill the height left over
+            // after the bottom ad banner. The board sits inside a
+            // weight(1f) container so on tall flagships and small
+            // phones alike the board, status line, and minimap remain
+            // simultaneously visible without a scroll. The previous
+            // verticalScroll wrapper hid this overflow on ~6.7"
+            // 20:9 phones — players never realised content was
+            // scrolled past and reported the minimap as missing.
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
-                    .verticalScroll(rememberScrollState())
-                    .padding(horizontal = 16.dp, vertical = 16.dp),
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 // v0.1.11: optional update-available indicator next
@@ -432,35 +442,73 @@ fun GameScreen() {
                 // Core probe says we're current (or fails outright on
                 // devices without Play Services), so the title row
                 // keeps its centered single-element shape in the
-                // common case.
+                // common case. v0.1.13: redesigned as a pill button
+                // with localized "Update"/"Install" label; on
+                // ultra-narrow screens (<320dp granted width) the
+                // pill drops below the wordmark to a second line so
+                // neither element gets clipped.
                 val updateState by UpdateChecker.uiState.collectAsState()
-                Row(
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.title_wordmark),
-                        fontSize = 30.sp,
-                        fontWeight = FontWeight.Black,
-                        color = TextPrimary,
-                        letterSpacing = 6.sp
-                    )
-                    if (updateState !is UpdateChecker.UpdateState.Idle) {
-                        Spacer(Modifier.width(8.dp))
-                        UpdateBadge(
-                            state = updateState,
-                            onClick = click@{
-                                val ca = activity as? ComponentActivity
-                                    ?: return@click
-                                when (updateState) {
-                                    is UpdateChecker.UpdateState.Available ->
-                                        UpdateChecker.startUpdate(ca)
-                                    is UpdateChecker.UpdateState.Downloaded ->
-                                        UpdateChecker.completeInstall()
-                                    UpdateChecker.UpdateState.Idle -> Unit
-                                }
+                val showBadge = updateState !is UpdateChecker.UpdateState.Idle
+                val onUpdateClick: () -> Unit = click@{
+                    val ca = activity as? ComponentActivity
+                        ?: return@click
+                    when (updateState) {
+                        is UpdateChecker.UpdateState.Available ->
+                            UpdateChecker.startUpdate(ca)
+                        is UpdateChecker.UpdateState.Downloaded ->
+                            UpdateChecker.completeInstall()
+                        UpdateChecker.UpdateState.Idle -> Unit
+                    }
+                }
+                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                    val inline = maxWidth >= 320.dp
+                    if (inline) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(R.string.title_wordmark),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Black,
+                                color = TextPrimary,
+                                letterSpacing = 4.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                            if (showBadge) {
+                                Spacer(Modifier.width(8.dp))
+                                UpdateBadge(
+                                    state = updateState,
+                                    onClick = onUpdateClick
+                                )
                             }
-                        )
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.title_wordmark),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Black,
+                                color = TextPrimary,
+                                letterSpacing = 4.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                            if (showBadge) {
+                                Spacer(Modifier.height(6.dp))
+                                UpdateBadge(
+                                    state = updateState,
+                                    onClick = onUpdateClick
+                                )
+                            }
+                        }
                     }
                 }
                 Spacer(Modifier.height(4.dp))
@@ -468,25 +516,43 @@ fun GameScreen() {
                     text = stringResource(R.string.tagline),
                     fontSize = 10.sp,
                     color = TextSecondary,
-                    letterSpacing = 3.sp
+                    letterSpacing = 3.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center
                 )
 
-                Spacer(Modifier.height(18.dp))
+                Spacer(Modifier.height(14.dp))
 
+            // Equal-width stat cards. Switched from
+            // Arrangement.SpaceEvenly + wrap-content cards (which
+            // overflowed on narrow devices once labels like KALKAN /
+            // KOMBO were rendered) to spacedBy + Modifier.weight(1f)
+            // so each of the four cards always claims a quarter of
+            // the row no matter the device width or font scale.
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.SpaceEvenly
+                horizontalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                StatCard(stringResource(R.string.stat_score), state.score.toString())
-                StatCard(stringResource(R.string.stat_turn), state.turn.toString())
                 StatCard(
-                    stringResource(R.string.stat_combo),
-                    if (state.combo > 1) {
+                    label = stringResource(R.string.stat_score),
+                    value = state.score.toString(),
+                    modifier = Modifier.weight(1f)
+                )
+                StatCard(
+                    label = stringResource(R.string.stat_turn),
+                    value = state.turn.toString(),
+                    modifier = Modifier.weight(1f)
+                )
+                StatCard(
+                    label = stringResource(R.string.stat_combo),
+                    value = if (state.combo > 1) {
                         stringResource(R.string.combo_value_format, state.combo)
                     } else {
                         stringResource(R.string.combo_inactive)
                     },
-                    highlight = state.combo > 1
+                    highlight = state.combo > 1,
+                    modifier = Modifier.weight(1f)
                 )
                 ShieldStatCard(
                     count = state.shieldCount,
@@ -505,38 +571,49 @@ fun GameScreen() {
                     },
                     onDragFinish = { handleShieldDragEnd() },
                     highlighted = tutorialShieldCardHighlighted,
+                    pulseAlpha = tutorialPulseAlpha,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(16.dp))
+
+            // Board container — weight(1f) here distributes the
+            // remaining vertical space to the board+minimap region,
+            // which itself sizes the cells from the granted width
+            // (BoxWithConstraints inside BoardView). The cap
+            // (widthIn max 540.dp) keeps the board sensible on tablets.
+            Box(
+                modifier = Modifier
+                    .weight(1f, fill = true)
+                    .fillMaxWidth()
+                    .widthIn(max = 540.dp),
+                contentAlignment = Alignment.TopCenter
+            ) {
+                BoardView(
+                    state = state,
+                    onLayoutChange = { boardLayout = it },
+                    highlightedCells = tutorial.state.highlightedCells,
+                    spotlightActive = tutorialSpotlightActive,
                     pulseAlpha = tutorialPulseAlpha
                 )
             }
 
-            Spacer(Modifier.height(20.dp))
-
-            BoardView(
-                state = state,
-                onLayoutChange = { boardLayout = it },
-                highlightedCells = tutorial.state.highlightedCells,
-                spotlightActive = tutorialSpotlightActive,
-                pulseAlpha = tutorialPulseAlpha
-            )
-
-            Spacer(Modifier.height(14.dp))
+            Spacer(Modifier.height(8.dp))
 
             StatusLine(state)
 
+            // Action buttons. Each Button uses Modifier.weight(1f)
+            // and Text(maxLines=1, ellipsis) so that long localized
+            // labels (e.g. Turkish "Skor Tablosu", "Yeniden Başlat")
+            // never wrap to multiple lines on narrow phones or under
+            // larger system font scales. The "?" help button keeps
+            // its fixed 48dp Material touch target.
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Compact "?" help icon, 48dp Material touch target. Sits
-                // to the left of Restart so the two main CTAs stay where
-                // returning players expect them. Replaces the wide
-                // "How to play" button from v0.1.7 — that button wrapped
-                // its label to three lines because the row was too tight
-                // for three full-width buttons. The "?" character is
-                // inlined (no string resource) because it reads identically
-                // across every supported locale, like the other universal
-                // symbols already inlined in this file.
                 val helpDescription = stringResource(R.string.btn_tutorial)
                 IconButton(
                     onClick = { tutorial.start() },
@@ -551,21 +628,38 @@ fun GameScreen() {
                         fontWeight = FontWeight.Black
                     )
                 }
-                Spacer(Modifier.size(8.dp))
                 Button(
                     onClick = { state.restart() },
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = AccentAmber,
                         contentColor = Color(0xFF2B1810)
                     )
                 ) {
                     Text(
-                        stringResource(if (state.gameOver) R.string.btn_play_again else R.string.btn_restart),
+                        text = stringResource(if (state.gameOver) R.string.btn_play_again else R.string.btn_restart),
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
+                        letterSpacing = 0.5.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center
                     )
                 }
-                Spacer(Modifier.size(12.dp))
+                val leaderboardModifier = Modifier
+                    .weight(1f)
+                    .then(
+                        if (tutorial.state.active &&
+                            !tutorial.state.stepCompleted &&
+                            tutorial.state.currentStep == TutorialStep.Leaderboard
+                        ) {
+                            Modifier.border(
+                                3.dp,
+                                TutorialSpotlight.copy(alpha = tutorialPulseAlpha),
+                                RoundedCornerShape(20.dp)
+                            )
+                        } else Modifier
+                    )
                 Button(
                     onClick = {
                         // v0.2.0: the Leaderboard tutorial step
@@ -584,25 +678,20 @@ fun GameScreen() {
                         }
                         showLeaderboard = true
                     },
+                    modifier = leaderboardModifier,
+                    contentPadding = PaddingValues(horizontal = 12.dp, vertical = 10.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = CardAccent,
                         contentColor = TextPrimary
-                    ),
-                    modifier = if (tutorial.state.active &&
-                        !tutorial.state.stepCompleted &&
-                        tutorial.state.currentStep == TutorialStep.Leaderboard
-                    ) {
-                        Modifier.border(
-                            3.dp,
-                            TutorialSpotlight.copy(alpha = tutorialPulseAlpha),
-                            RoundedCornerShape(20.dp)
-                        )
-                    } else Modifier
+                    )
                 ) {
                     Text(
-                        stringResource(R.string.btn_leaderboard),
+                        text = stringResource(R.string.btn_leaderboard),
                         fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
+                        letterSpacing = 0.5.sp,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -849,7 +938,8 @@ private fun ShieldStatCard(
     // renders identically — the existing tap and long-press-drag
     // gestures are unaffected.
     highlighted: Boolean = false,
-    pulseAlpha: Float = 1f
+    pulseAlpha: Float = 1f,
+    modifier: Modifier = Modifier
 ) {
     var cardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
     val container = if (count == 0) {
@@ -867,12 +957,12 @@ private fun ShieldStatCard(
         Modifier
     }
     Box(
-        modifier = Modifier
+        modifier = modifier
             .shadow(4.dp, RoundedCornerShape(14.dp), clip = false)
             .clip(RoundedCornerShape(14.dp))
             .background(container)
             .then(highlightModifier)
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = 8.dp, vertical = 10.dp)
             .onGloballyPositioned { coords ->
                 cardWindowOrigin = coords.boundsInWindow().topLeft
             }
@@ -902,15 +992,19 @@ private fun ShieldStatCard(
                 text = stringResource(R.string.stat_shield),
                 fontSize = 10.sp,
                 color = TextSecondary,
-                letterSpacing = 2.sp,
-                fontWeight = FontWeight.SemiBold
+                letterSpacing = 1.5.sp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(2.dp))
             Text(
                 text = count.toString(),
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Black,
-                color = TextPrimary
+                color = TextPrimary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -1580,70 +1674,100 @@ private fun LeaderboardRow(rank: Int, entry: LeaderboardEntry) {
 }
 
 /**
- * v0.1.11: Compact tap target rendered next to the LAST TILE wordmark
- * when [UpdateChecker] surfaces a Play Store update. Two visual
- * states:
- *   - Available: amber down-arrow, slow pulse to draw the eye without
- *     being noisy. Tap → kicks off the FLEXIBLE update flow (download
+ * v0.1.13: Pill-shaped tap target rendered next to the LAST TILE
+ * wordmark when [UpdateChecker] surfaces a Play Store update. Two
+ * visual states:
+ *   - Available: amber pill, "↓" glyph + localized "Update" label,
+ *     subtle scale pulse 1.0↔1.04 to draw the eye without being
+ *     noisy. Tap → kicks off the FLEXIBLE update flow (download
  *     in background while the player keeps playing).
- *   - Downloaded: green check, steady (no pulse — the user shouldn't
- *     wait for anything else). Tap → completeUpdate(), which restarts
- *     the app onto the new version.
+ *   - Downloaded: green pill, "✓" glyph + localized "Install" label,
+ *     steady (no pulse — the user shouldn't wait for anything else).
+ *     Tap → completeUpdate(), which restarts the app onto the new
+ *     version.
  *
  * Uses Unicode glyphs rather than a Material icon dependency so we
  * stay consistent with the rest of the UI ("?", "+", "🔒") and avoid
- * pulling in `material-icons-extended` for two characters.
+ * pulling in `material-icons-extended` for two characters. The
+ * accompanying short label (single word, 50 locales) is what makes
+ * the pill self-explanatory — the previous v0.1.11 glyph-only badge
+ * was too cryptic for non-Android-native players.
  */
 @Composable
 private fun UpdateBadge(
     state: UpdateChecker.UpdateState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val glyph: String
-    val tint: Color
-    val description: String
+    val bgColor: Color
+    val contentColor: Color
+    val labelRes: Int
     when (state) {
         is UpdateChecker.UpdateState.Available -> {
             glyph = "↓"
-            tint = AccentAmber
-            description = stringResource(R.string.update_available)
+            bgColor = Color(0xFFFFB300)
+            contentColor = Color(0xFF1F1A0E)
+            labelRes = R.string.update_available
         }
         is UpdateChecker.UpdateState.Downloaded -> {
             glyph = "✓"
-            tint = Color(0xFF66BB6A)
-            description = stringResource(R.string.update_ready_to_install)
+            bgColor = Color(0xFF66BB6A)
+            contentColor = Color(0xFF0D2818)
+            labelRes = R.string.update_downloaded
         }
         UpdateChecker.UpdateState.Idle -> return
     }
-    // Pulse only while Available, so the badge feels like it's
-    // asking for attention. Once Downloaded the action is one
-    // simple tap-to-install — a steady glyph reads as "ready".
-    val pulseAlpha: Float = if (state is UpdateChecker.UpdateState.Available) {
+    // Subtle scale pulse only while Available — once Downloaded the
+    // tap target is "ready" so a steady pill reads as final state.
+    // Pulse range chosen at 1.0↔1.04 (4%) so the motion is noticeable
+    // but doesn't visually fight with the title wordmark next to it.
+    val scale: Float = if (state is UpdateChecker.UpdateState.Available) {
         val transition = rememberInfiniteTransition(label = "updateBadgePulse")
         transition.animateFloat(
-            initialValue = 0.65f,
-            targetValue = 1f,
+            initialValue = 1f,
+            targetValue = 1.04f,
             animationSpec = infiniteRepeatable(
                 animation = tween(1500, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             ),
-            label = "updateBadgeAlpha"
+            label = "updateBadgeScale"
         ).value
     } else {
         1f
     }
-    IconButton(
+    val description = stringResource(labelRes)
+    Surface(
         onClick = onClick,
-        modifier = Modifier
-            .size(32.dp)
+        shape = CircleShape,
+        color = bgColor,
+        contentColor = contentColor,
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
             .semantics { contentDescription = description }
     ) {
-        Text(
-            text = glyph,
-            color = tint.copy(alpha = pulseAlpha),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Black
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = glyph,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Black
+            )
+            Text(
+                text = description,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                letterSpacing = 0.5.sp
+            )
+        }
     }
 }
 
@@ -1684,30 +1808,39 @@ private fun StatusLine(state: GameState) {
 }
 
 @Composable
-private fun StatCard(label: String, value: String, highlight: Boolean = false) {
+private fun StatCard(
+    label: String,
+    value: String,
+    highlight: Boolean = false,
+    modifier: Modifier = Modifier
+) {
     val container = if (highlight) Brush.verticalGradient(listOf(Color(0xFF3C2A1A), Color(0xFF2A1F14))) else Brush.verticalGradient(listOf(CardAccent, CardBg))
     val valueColor = if (highlight) AccentAmber else TextPrimary
     Box(
-        modifier = Modifier
+        modifier = modifier
             .shadow(4.dp, RoundedCornerShape(14.dp), clip = false)
             .clip(RoundedCornerShape(14.dp))
             .background(container)
-            .padding(horizontal = 20.dp, vertical = 10.dp)
+            .padding(horizontal = 8.dp, vertical = 10.dp)
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             Text(
                 text = label,
                 fontSize = 10.sp,
                 color = TextSecondary,
-                letterSpacing = 2.sp,
-                fontWeight = FontWeight.SemiBold
+                letterSpacing = 1.5.sp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
             Spacer(Modifier.height(2.dp))
             Text(
                 text = value,
                 fontSize = 22.sp,
                 fontWeight = FontWeight.Black,
-                color = valueColor
+                color = valueColor,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
         }
     }
@@ -1728,43 +1861,21 @@ private fun BoardView(
     spotlightActive: Boolean = false,
     pulseAlpha: Float = 1f
 ) {
-    val cellSize: Dp = 48.dp
     val tilePadding = 3.dp
-    val cellSlot = cellSize + tilePadding * 2
     val boardPadding = 8.dp
-
-    var draggedFrom by remember { mutableStateOf<Pair<Int, Int>?>(null) }
-    var dragOffset by remember { mutableStateOf(Offset.Zero) }
-
-    val density = LocalDensity.current
-    val cellSlotPx = with(density) { cellSlot.toPx() }
-    val boardPaddingPx = with(density) { boardPadding.toPx() }
 
     val viewCount = VIEWPORT_SIZE
     val needsPan = state.size > viewCount
     val maxOrigin = (state.size - viewCount).coerceAtLeast(0)
+
+    var draggedFrom by remember { mutableStateOf<Pair<Int, Int>?>(null) }
+    var dragOffset by remember { mutableStateOf(Offset.Zero) }
 
     var originRow by remember(state.size) {
         mutableStateOf(((state.size - viewCount) / 2).coerceIn(0, maxOrigin))
     }
     var originCol by remember(state.size) {
         mutableStateOf(((state.size - viewCount) / 2).coerceIn(0, maxOrigin))
-    }
-
-    // Republish layout whenever viewport state changes so the parent
-    // shield drag overlay knows where to hit-test.
-    var boardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
-    LaunchedEffect(boardWindowOrigin, originRow, originCol, cellSlotPx) {
-        onLayoutChange(
-            BoardLayout(
-                rootOriginPx = boardWindowOrigin,
-                cellSlotPx = cellSlotPx,
-                viewCount = viewCount,
-                originRow = originRow,
-                originCol = originCol,
-                padding = boardPaddingPx
-            )
-        )
     }
 
     // Auto-follow: whenever the engine tags a new focus tile (last merge,
@@ -1786,7 +1897,44 @@ private fun BoardView(
         originCol = (fc - viewCount / 2).coerceIn(0, maxOrigin)
     }
 
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+    // Adaptive cell sizing: derive cellSize from the parent-granted
+    // width so the 7×7 viewport always fits horizontally regardless
+    // of device width or system font scale. The cap (56dp) prevents
+    // the board from looking absurdly large on tablets, and the
+    // floor (28dp) keeps tiles tappable on the smallest supported
+    // devices (~320dp wide). The previous fixed 48.dp sizing
+    // overflowed by ~30dp on 360dp-wide phones, which is why the
+    // 7th column was clipped on flagships with display cutouts.
+    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+        val cellSlot: Dp = ((maxWidth - boardPadding * 2) / viewCount)
+            .coerceIn(28.dp + tilePadding * 2, 56.dp + tilePadding * 2)
+        val cellSize: Dp = (cellSlot - tilePadding * 2).coerceAtLeast(20.dp)
+
+        val density = LocalDensity.current
+        val cellSlotPx = with(density) { cellSlot.toPx() }
+        val boardPaddingPx = with(density) { boardPadding.toPx() }
+
+        // Republish layout whenever viewport state OR cell size
+        // changes so the parent shield drag overlay knows where to
+        // hit-test. cellSlotPx is now reactive to container width.
+        var boardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
+        LaunchedEffect(boardWindowOrigin, originRow, originCol, cellSlotPx) {
+            onLayoutChange(
+                BoardLayout(
+                    rootOriginPx = boardWindowOrigin,
+                    cellSlotPx = cellSlotPx,
+                    viewCount = viewCount,
+                    originRow = originRow,
+                    originCol = originCol,
+                    padding = boardPaddingPx
+                )
+            )
+        }
+
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Box(
             modifier = Modifier
                 .shadow(6.dp, RoundedCornerShape(18.dp), clip = false)
@@ -1869,6 +2017,7 @@ private fun BoardView(
                     originCol = (c - viewCount / 2).coerceIn(0, maxOrigin)
                 }
             )
+        }
         }
     }
 }

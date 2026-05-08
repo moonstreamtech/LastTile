@@ -77,6 +77,6 @@
     <string name="username_cooldown">Ime lahko spremeniš čez %d dni</string>
     <string name="username_change_failed">Shranjevanje ni uspelo</string>
     <string name="username_change_saved">Ime shranjeno</string>
-    <string name="update_available">Posodobitev na voljo — tapni za namestitev</string>
-    <string name="update_ready_to_install">Posodobitev prenesena — tapni za takojšnjo namestitev</string>
+    <string name="update_available">Posodobi</string>
+    <string name="update_downloaded">Namesti</string>
 </resources>

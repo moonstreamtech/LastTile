@@ -77,6 +77,6 @@
     <string name="username_cooldown">תוכל לשנות שם בעוד %d ימים</string>
     <string name="username_change_failed">שמירה נכשלה</string>
     <string name="username_change_saved">השם נשמר</string>
-    <string name="update_available">עדכון זמין — הקש להתקנה</string>
-    <string name="update_ready_to_install">העדכון הורד — הקש להתקנה כעת</string>
+    <string name="update_available">עדכן</string>
+    <string name="update_downloaded">התקן</string>
 </resources>

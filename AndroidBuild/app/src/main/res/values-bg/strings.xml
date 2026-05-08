@@ -75,6 +75,6 @@
     <string name="username_cooldown">Можеш да смениш името след %d дни</string>
     <string name="username_change_failed">Запазването не успя</string>
     <string name="username_change_saved">Името е запазено</string>
-    <string name="update_available">Налична е актуализация — докосни за инсталиране</string>
-    <string name="update_ready_to_install">Актуализацията е изтеглена — докосни за инсталиране сега</string>
+    <string name="update_available">Актуализирай</string>
+    <string name="update_downloaded">Инсталирай</string>
 </resources>

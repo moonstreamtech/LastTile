@@ -93,8 +93,8 @@ T["tr"] = {
     "username_cooldown": "İsmini %d gün sonra değiştirebilirsin",
     "username_change_failed": "Kaydedilemedi",
     "username_change_saved": "İsim kaydedildi",
-    "update_available": "Güncelleme mevcut — yüklemek için dokun",
-    "update_ready_to_install": "Güncelleme indirildi — şimdi yüklemek için dokun",
+    "update_available": "Güncelle",
+    "update_downloaded": "Yükle",
 }
 
 # ---------------------------------------------------------------------------
@@ -173,8 +173,8 @@ T["de"] = {
     "username_cooldown": "Du kannst deinen Namen in %d Tagen ändern",
     "username_change_failed": "Speichern fehlgeschlagen",
     "username_change_saved": "Name gespeichert",
-    "update_available": "Update verfügbar — zum Installieren tippen",
-    "update_ready_to_install": "Update heruntergeladen — jetzt zum Installieren tippen",
+    "update_available": "Aktualisieren",
+    "update_downloaded": "Installieren",
 }
 
 # ---------------------------------------------------------------------------
@@ -253,8 +253,8 @@ T["es"] = {
     "username_cooldown": "Podrás cambiar tu nombre en %d días",
     "username_change_failed": "Error al guardar",
     "username_change_saved": "Nombre guardado",
-    "update_available": "Actualización disponible — toca para instalar",
-    "update_ready_to_install": "Actualización descargada — toca para instalar ahora",
+    "update_available": "Actualizar",
+    "update_downloaded": "Instalar",
 }
 
 # ---------------------------------------------------------------------------
@@ -333,8 +333,8 @@ T["fr"] = {
     "username_cooldown": "Tu pourras changer ton nom dans %d jours",
     "username_change_failed": "Échec de l'enregistrement",
     "username_change_saved": "Nom enregistré",
-    "update_available": "Mise à jour disponible — touche pour installer",
-    "update_ready_to_install": "Mise à jour téléchargée — touche pour installer",
+    "update_available": "Mettre à jour",
+    "update_downloaded": "Installer",
 }
 
 # ---------------------------------------------------------------------------
@@ -413,8 +413,8 @@ T["it"] = {
     "username_cooldown": "Potrai cambiare il nome tra %d giorni",
     "username_change_failed": "Salvataggio fallito",
     "username_change_saved": "Nome salvato",
-    "update_available": "Aggiornamento disponibile — tocca per installare",
-    "update_ready_to_install": "Aggiornamento scaricato — tocca per installare ora",
+    "update_available": "Aggiorna",
+    "update_downloaded": "Installa",
 }
 
 # ---------------------------------------------------------------------------
@@ -493,8 +493,8 @@ T["pt-BR"] = {
     "username_cooldown": "Você poderá mudar o nome em %d dias",
     "username_change_failed": "Falha ao salvar",
     "username_change_saved": "Nome salvo",
-    "update_available": "Atualização disponível — toque para instalar",
-    "update_ready_to_install": "Atualização baixada — toque para instalar agora",
+    "update_available": "Atualizar",
+    "update_downloaded": "Instalar",
 }
 
 # ---------------------------------------------------------------------------
@@ -578,8 +578,8 @@ T["ru"] = {
     "username_cooldown": "Сменить имя можно через %d дн.",
     "username_change_failed": "Не удалось сохранить",
     "username_change_saved": "Имя сохранено",
-    "update_available": "Доступно обновление — нажми, чтобы установить",
-    "update_ready_to_install": "Обновление загружено — нажми, чтобы установить",
+    "update_available": "Обновить",
+    "update_downloaded": "Установить",
 }
 
 # ---------------------------------------------------------------------------
@@ -658,8 +658,8 @@ T["ja"] = {
     "username_cooldown": "あと%d日で名前を変更できます",
     "username_change_failed": "保存に失敗",
     "username_change_saved": "名前を保存しました",
-    "update_available": "アップデートあり — タップしてインストール",
-    "update_ready_to_install": "アップデートをダウンロード済み — タップで今すぐインストール",
+    "update_available": "更新",
+    "update_downloaded": "インストール",
 }
 
 # ---------------------------------------------------------------------------
@@ -738,8 +738,8 @@ T["ko"] = {
     "username_cooldown": "%d일 후 이름을 변경할 수 있습니다",
     "username_change_failed": "저장 실패",
     "username_change_saved": "이름 저장됨",
-    "update_available": "업데이트 있음 — 탭해서 설치",
-    "update_ready_to_install": "업데이트 다운로드 완료 — 탭해서 설치",
+    "update_available": "업데이트",
+    "update_downloaded": "설치",
 }
 
 # ---------------------------------------------------------------------------
@@ -818,8 +818,8 @@ T["zh-CN"] = {
     "username_cooldown": "你将在%d天后可以更改名字",
     "username_change_failed": "保存失败",
     "username_change_saved": "名字已保存",
-    "update_available": "有可用更新 — 点击安装",
-    "update_ready_to_install": "更新已下载 — 点击立即安装",
+    "update_available": "更新",
+    "update_downloaded": "安装",
 }
 
 # ---------------------------------------------------------------------------
@@ -898,8 +898,8 @@ T["zh-TW"] = {
     "username_cooldown": "你可在%d天後變更名稱",
     "username_change_failed": "儲存失敗",
     "username_change_saved": "名稱已儲存",
-    "update_available": "有更新 — 點擊安裝",
-    "update_ready_to_install": "更新已下載 — 點擊立即安裝",
+    "update_available": "更新",
+    "update_downloaded": "安裝",
 }
 
 # ---------------------------------------------------------------------------
@@ -985,8 +985,8 @@ T["ar"] = {
     "username_cooldown": "يمكنك تغيير اسمك بعد %d يومًا",
     "username_change_failed": "فشل الحفظ",
     "username_change_saved": "تم حفظ الاسم",
-    "update_available": "يتوفر تحديث — انقر للتثبيت",
-    "update_ready_to_install": "تم تنزيل التحديث — انقر للتثبيت الآن",
+    "update_available": "تحديث",
+    "update_downloaded": "تثبيت",
 }
 
 # ---------------------------------------------------------------------------
@@ -1065,8 +1065,8 @@ T["hi"] = {
     "username_cooldown": "%d दिन में नाम बदल सकते हैं",
     "username_change_failed": "सहेजना विफल",
     "username_change_saved": "नाम सहेजा गया",
-    "update_available": "अपडेट उपलब्ध — इंस्टॉल के लिए टैप करें",
-    "update_ready_to_install": "अपडेट डाउनलोड — अभी इंस्टॉल के लिए टैप करें",
+    "update_available": "अपडेट",
+    "update_downloaded": "इंस्टॉल",
 }
 
 # ---------------------------------------------------------------------------
@@ -1145,8 +1145,8 @@ T["in"] = {
     "username_cooldown": "Kamu bisa ubah nama dalam %d hari",
     "username_change_failed": "Gagal menyimpan",
     "username_change_saved": "Nama disimpan",
-    "update_available": "Pembaruan tersedia — ketuk untuk memasang",
-    "update_ready_to_install": "Pembaruan terunduh — ketuk untuk memasang sekarang",
+    "update_available": "Perbarui",
+    "update_downloaded": "Pasang",
 }
 
 # ---------------------------------------------------------------------------
@@ -1225,8 +1225,8 @@ T["vi"] = {
     "username_cooldown": "Bạn có thể đổi tên sau %d ngày",
     "username_change_failed": "Lưu thất bại",
     "username_change_saved": "Đã lưu tên",
-    "update_available": "Có bản cập nhật — chạm để cài",
-    "update_ready_to_install": "Đã tải bản cập nhật — chạm để cài ngay",
+    "update_available": "Cập nhật",
+    "update_downloaded": "Cài đặt",
 }
 
 # ---------------------------------------------------------------------------
@@ -1305,8 +1305,8 @@ T["th"] = {
     "username_cooldown": "เปลี่ยนชื่อได้อีกใน %d วัน",
     "username_change_failed": "บันทึกไม่สำเร็จ",
     "username_change_saved": "บันทึกชื่อแล้ว",
-    "update_available": "มีอัปเดต — แตะเพื่อติดตั้ง",
-    "update_ready_to_install": "ดาวน์โหลดอัปเดตแล้ว — แตะเพื่อติดตั้งเลย",
+    "update_available": "อัปเดต",
+    "update_downloaded": "ติดตั้ง",
 }
 
 # ---------------------------------------------------------------------------
@@ -1390,8 +1390,8 @@ T["pl"] = {
     "username_cooldown": "Możesz zmienić nazwę za %d dni",
     "username_change_failed": "Zapis nie powiódł się",
     "username_change_saved": "Nazwa zapisana",
-    "update_available": "Dostępna aktualizacja — stuknij, aby zainstalować",
-    "update_ready_to_install": "Aktualizacja pobrana — stuknij, aby teraz zainstalować",
+    "update_available": "Aktualizuj",
+    "update_downloaded": "Zainstaluj",
 }
 
 # ---------------------------------------------------------------------------
@@ -1470,8 +1470,8 @@ T["nl"] = {
     "username_cooldown": "Je kunt je naam over %d dagen wijzigen",
     "username_change_failed": "Opslaan mislukt",
     "username_change_saved": "Naam opgeslagen",
-    "update_available": "Update beschikbaar — tik om te installeren",
-    "update_ready_to_install": "Update gedownload — tik om nu te installeren",
+    "update_available": "Bijwerken",
+    "update_downloaded": "Installeren",
 }
 
 # ---------------------------------------------------------------------------
@@ -1555,6 +1555,6 @@ T["uk"] = {
     "username_cooldown": "Зміниш ім'я через %d дн.",
     "username_change_failed": "Не вдалося зберегти",
     "username_change_saved": "Ім'я збережено",
-    "update_available": "Доступне оновлення — натисни, щоб встановити",
-    "update_ready_to_install": "Оновлення завантажено — натисни, щоб встановити",
+    "update_available": "Оновити",
+    "update_downloaded": "Встановити",
 }

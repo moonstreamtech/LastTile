@@ -75,6 +75,6 @@
     <string name="username_cooldown">Poderás mudar o nome dentro de %d dias</string>
     <string name="username_change_failed">Falha ao guardar</string>
     <string name="username_change_saved">Nome guardado</string>
-    <string name="update_available">Atualização disponível — toca para instalar</string>
-    <string name="update_ready_to_install">Atualização transferida — toca para instalar agora</string>
+    <string name="update_available">Atualizar</string>
+    <string name="update_downloaded">Instalar</string>
 </resources>

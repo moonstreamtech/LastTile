@@ -81,8 +81,8 @@ T["iw"] = {
     "username_cooldown": "תוכל לשנות שם בעוד %d ימים",
     "username_change_failed": "שמירה נכשלה",
     "username_change_saved": "השם נשמר",
-    "update_available": "עדכון זמין — הקש להתקנה",
-    "update_ready_to_install": "העדכון הורד — הקש להתקנה כעת",
+    "update_available": "עדכן",
+    "update_downloaded": "התקן",
 }
 
 # Persian (FA) — RTL
@@ -159,8 +159,8 @@ T["fa"] = {
     "username_cooldown": "%d روز دیگر می‌توانی نام را تغییر دهی",
     "username_change_failed": "ذخیره نشد",
     "username_change_saved": "نام ذخیره شد",
-    "update_available": "به‌روزرسانی موجود است — برای نصب بزن",
-    "update_ready_to_install": "به‌روزرسانی دانلود شد — برای نصب بزن",
+    "update_available": "به‌روزرسانی",
+    "update_downloaded": "نصب",
 }
 
 # Urdu (UR) — RTL
@@ -237,8 +237,8 @@ T["ur"] = {
     "username_cooldown": "%d دن میں نام تبدیل کر سکیں گے",
     "username_change_failed": "محفوظ نہ ہو سکا",
     "username_change_saved": "نام محفوظ",
-    "update_available": "اپ ڈیٹ دستیاب — انسٹال کے لیے ٹیپ",
-    "update_ready_to_install": "اپ ڈیٹ ڈاؤن لوڈ — ابھی انسٹال کے لیے ٹیپ",
+    "update_available": "اپ ڈیٹ",
+    "update_downloaded": "انسٹال",
 }
 
 # Bengali (BN)
@@ -315,8 +315,8 @@ T["bn"] = {
     "username_cooldown": "%d দিন পরে নাম পরিবর্তন করা যাবে",
     "username_change_failed": "সংরক্ষণ ব্যর্থ",
     "username_change_saved": "নাম সংরক্ষিত",
-    "update_available": "আপডেট পাওয়া যাচ্ছে — ইনস্টল করতে ট্যাপ করুন",
-    "update_ready_to_install": "আপডেট ডাউনলোড — এখনই ইনস্টল করতে ট্যাপ করুন",
+    "update_available": "আপডেট",
+    "update_downloaded": "ইনস্টল",
 }
 
 # Tamil (TA)
@@ -393,8 +393,8 @@ T["ta"] = {
     "username_cooldown": "%d நாட்களில் பெயரை மாற்றலாம்",
     "username_change_failed": "சேமிப்பு தோல்வி",
     "username_change_saved": "பெயர் சேமிக்கப்பட்டது",
-    "update_available": "புதுப்பிப்பு உள்ளது — நிறுவ தட்டு",
-    "update_ready_to_install": "புதுப்பிப்பு பதிவிறக்கப்பட்டது — இப்போது நிறுவ தட்டு",
+    "update_available": "புதுப்பி",
+    "update_downloaded": "நிறுவு",
 }
 
 # Telugu (TE)
@@ -471,8 +471,8 @@ T["te"] = {
     "username_cooldown": "%d రోజుల్లో పేరు మార్చవచ్చు",
     "username_change_failed": "సేవ్ విఫలం",
     "username_change_saved": "పేరు సేవ్ చేయబడింది",
-    "update_available": "నవీకరణ అందుబాటులో — ఇన్‌స్టాల్ చేయడానికి ట్యాప్",
-    "update_ready_to_install": "నవీకరణ డౌన్‌లోడ్ — ఇప్పుడు ఇన్‌స్టాల్ చేయడానికి ట్యాప్",
+    "update_available": "అప్డేట్",
+    "update_downloaded": "ఇన్‌స్టాల్",
 }
 
 # Marathi (MR)
@@ -549,8 +549,8 @@ T["mr"] = {
     "username_cooldown": "%d दिवसांत नाव बदलू शकाल",
     "username_change_failed": "सेव्ह अयशस्वी",
     "username_change_saved": "नाव सेव्ह झाले",
-    "update_available": "अद्यतन उपलब्ध — स्थापित करण्यासाठी टॅप",
-    "update_ready_to_install": "अद्यतन डाउनलोड — आता स्थापित करण्यासाठी टॅप",
+    "update_available": "अपडेट",
+    "update_downloaded": "इन्स्टॉल",
 }
 
 # Malayalam (ML)
@@ -627,8 +627,8 @@ T["ml"] = {
     "username_cooldown": "%d ദിവസത്തിനുള്ളിൽ പേര് മാറ്റാം",
     "username_change_failed": "സംരക്ഷണം പരാജയപ്പെട്ടു",
     "username_change_saved": "പേര് സംരക്ഷിച്ചു",
-    "update_available": "അപ്ഡേറ്റ് ലഭ്യമാണ് — ഇൻസ്റ്റാൾ ചെയ്യാൻ ടാപ്പ്",
-    "update_ready_to_install": "അപ്ഡേറ്റ് ഡൗൺലോഡ് — ഇപ്പോൾ ഇൻസ്റ്റാൾ ചെയ്യാൻ ടാപ്പ്",
+    "update_available": "അപ്ഡേറ്റ്",
+    "update_downloaded": "ഇൻസ്റ്റാൾ",
 }
 
 # Gujarati (GU)
@@ -705,8 +705,8 @@ T["gu"] = {
     "username_cooldown": "%d દિવસમાં નામ બદલી શકશો",
     "username_change_failed": "સાચવણ નિષ્ફળ",
     "username_change_saved": "નામ સચવાયું",
-    "update_available": "અપડેટ ઉપલબ્ધ — ઇન્સ્ટોલ માટે ટેપ",
-    "update_ready_to_install": "અપડેટ ડાઉનલોડ — હવે ઇન્સ્ટોલ માટે ટેપ",
+    "update_available": "અપડેટ",
+    "update_downloaded": "ઇન્સ્ટોલ",
 }
 
 # Kannada (KN)
@@ -783,8 +783,8 @@ T["kn"] = {
     "username_cooldown": "%d ದಿನಗಳಲ್ಲಿ ಹೆಸರು ಬದಲಾಯಿಸಬಹುದು",
     "username_change_failed": "ಉಳಿತಾಯ ವಿಫಲ",
     "username_change_saved": "ಹೆಸರು ಉಳಿಸಲಾಗಿದೆ",
-    "update_available": "ಅಪ್‌ಡೇಟ್ ಲಭ್ಯ — ಸ್ಥಾಪಿಸಲು ಟ್ಯಾಪ್",
-    "update_ready_to_install": "ಅಪ್‌ಡೇಟ್ ಡೌನ್‌ಲೋಡ್ — ಈಗ ಸ್ಥಾಪಿಸಲು ಟ್ಯಾಪ್",
+    "update_available": "ಅಪ್‌ಡೇಟ್",
+    "update_downloaded": "ಸ್ಥಾಪಿಸಿ",
 }
 
 # Punjabi (PA)
@@ -861,8 +861,8 @@ T["pa"] = {
     "username_cooldown": "%d ਦਿਨਾਂ ਵਿੱਚ ਨਾਮ ਬਦਲ ਸਕੋਗੇ",
     "username_change_failed": "ਸੰਭਾਲ ਅਸਫਲ",
     "username_change_saved": "ਨਾਮ ਸੰਭਾਲਿਆ",
-    "update_available": "ਅੱਪਡੇਟ ਉਪਲਬਧ — ਇੰਸਟਾਲ ਲਈ ਟੈਪ",
-    "update_ready_to_install": "ਅੱਪਡੇਟ ਡਾਊਨਲੋਡ — ਹੁਣੇ ਇੰਸਟਾਲ ਲਈ ਟੈਪ",
+    "update_available": "ਅੱਪਡੇਟ",
+    "update_downloaded": "ਇੰਸਟਾਲ",
 }
 
 # Filipino (FIL)
@@ -939,8 +939,8 @@ T["fil"] = {
     "username_cooldown": "Mababago mo ang pangalan sa %d araw",
     "username_change_failed": "Hindi nag-save",
     "username_change_saved": "Na-save ang pangalan",
-    "update_available": "May update — i-tap para i-install",
-    "update_ready_to_install": "Na-download ang update — i-tap para i-install ngayon",
+    "update_available": "I-update",
+    "update_downloaded": "I-install",
 }
 
 # Malay (MS)
@@ -1017,8 +1017,8 @@ T["ms"] = {
     "username_cooldown": "Anda boleh tukar nama dalam %d hari",
     "username_change_failed": "Gagal disimpan",
     "username_change_saved": "Nama disimpan",
-    "update_available": "Kemas kini tersedia — ketik untuk pasang",
-    "update_ready_to_install": "Kemas kini dimuat turun — ketik untuk pasang sekarang",
+    "update_available": "Kemaskini",
+    "update_downloaded": "Pasang",
 }
 
 # Swahili (SW)
@@ -1095,6 +1095,6 @@ T["sw"] = {
     "username_cooldown": "Unaweza kubadilisha jina baada ya siku %d",
     "username_change_failed": "Imeshindikana kuhifadhi",
     "username_change_saved": "Jina limehifadhiwa",
-    "update_available": "Sasisho linapatikana — gusa kusakinisha",
-    "update_ready_to_install": "Sasisho limepakuliwa — gusa kusakinisha sasa",
+    "update_available": "Sasisha",
+    "update_downloaded": "Sakinisha",
 }

@@ -75,6 +75,6 @@
     <string name="username_cooldown">Anda boleh tukar nama dalam %d hari</string>
     <string name="username_change_failed">Gagal disimpan</string>
     <string name="username_change_saved">Nama disimpan</string>
-    <string name="update_available">Kemas kini tersedia — ketik untuk pasang</string>
-    <string name="update_ready_to_install">Kemas kini dimuat turun — ketik untuk pasang sekarang</string>
+    <string name="update_available">Kemaskini</string>
+    <string name="update_downloaded">Pasang</string>
 </resources>

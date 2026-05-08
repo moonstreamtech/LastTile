@@ -76,6 +76,6 @@
     <string name="username_cooldown">Meno môžeš zmeniť o %d dní</string>
     <string name="username_change_failed">Uloženie zlyhalo</string>
     <string name="username_change_saved">Meno uložené</string>
-    <string name="update_available">Aktualizácia dostupná — klepni na inštaláciu</string>
-    <string name="update_ready_to_install">Aktualizácia stiahnutá — klepni pre okamžitú inštaláciu</string>
+    <string name="update_available">Aktualizovať</string>
+    <string name="update_downloaded">Nainštalovať</string>
 </resources>

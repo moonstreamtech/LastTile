@@ -79,6 +79,6 @@
     <string name="username_cooldown">يمكنك تغيير اسمك بعد %d يومًا</string>
     <string name="username_change_failed">فشل الحفظ</string>
     <string name="username_change_saved">تم حفظ الاسم</string>
-    <string name="update_available">يتوفر تحديث — انقر للتثبيت</string>
-    <string name="update_ready_to_install">تم تنزيل التحديث — انقر للتثبيت الآن</string>
+    <string name="update_available">تحديث</string>
+    <string name="update_downloaded">تثبيت</string>
 </resources>

@@ -75,6 +75,6 @@
     <string name="username_cooldown">เปลี่ยนชื่อได้อีกใน %d วัน</string>
     <string name="username_change_failed">บันทึกไม่สำเร็จ</string>
     <string name="username_change_saved">บันทึกชื่อแล้ว</string>
-    <string name="update_available">มีอัปเดต — แตะเพื่อติดตั้ง</string>
-    <string name="update_ready_to_install">ดาวน์โหลดอัปเดตแล้ว — แตะเพื่อติดตั้งเลย</string>
+    <string name="update_available">อัปเดต</string>
+    <string name="update_downloaded">ติดตั้ง</string>
 </resources>

@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -14,17 +15,20 @@ import com.moonstreamtech.lasttile.ui.LastTileTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        // enableEdgeToEdge() draws the window behind the system bars and
+        // installs the Android 15-aware default inset behaviour. The
+        // Compose root then consumes WindowInsets.safeDrawing explicitly
+        // so touch coordinates and rendered tile positions stay aligned
+        // across stock Android and OEM skins (Huawei, Xiaomi, OnePlus
+        // — which historically misreported inset metrics under the
+        // older setDecorFitsSystemWindows call). Must run BEFORE
+        // super.onCreate so the activity attaches to a window that is
+        // already in edge-to-edge mode.
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        // Run edge-to-edge so the window has a single deterministic mode
-        // across stock Android and OEM skins (Huawei, Xiaomi, etc. that
-        // sometimes mis-report system bar insets). The Compose root then
-        // consumes safeDrawing insets explicitly, keeping touch coordinates
-        // and rendered tile positions aligned even when the gesture pill
-        // shows or hides at runtime.
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         Log.d(
             "LastTile-window",
-            "edge-to-edge enabled: decorFitsSystemWindows=false; controller=" +
+            "edge-to-edge enabled via enableEdgeToEdge(); controller=" +
                 WindowCompat.getInsetsController(window, window.decorView)
         )
         setContent {
