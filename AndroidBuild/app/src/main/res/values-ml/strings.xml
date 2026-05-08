@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d ദിവസത്തിനുള്ളിൽ പേര് മാറ്റാം</string>
     <string name="username_change_failed">സംരക്ഷണം പരാജയപ്പെട്ടു</string>
     <string name="username_change_saved">പേര് സംരക്ഷിച്ചു</string>
-    <string name="update_available">അപ്ഡേറ്റ് ലഭ്യമാണ് — ഇൻസ്റ്റാൾ ചെയ്യാൻ ടാപ്പ്</string>
-    <string name="update_ready_to_install">അപ്ഡേറ്റ് ഡൗൺലോഡ് — ഇപ്പോൾ ഇൻസ്റ്റാൾ ചെയ്യാൻ ടാപ്പ്</string>
+    <string name="update_available">അപ്ഡേറ്റ്</string>
+    <string name="update_downloaded">ഇൻസ്റ്റാൾ</string>
 </resources>

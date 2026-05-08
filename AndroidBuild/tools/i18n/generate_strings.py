@@ -95,7 +95,7 @@ MASTER_KEYS = [
     ("username_change_failed", "string"),
     ("username_change_saved", "string"),
     ("update_available", "string"),
-    ("update_ready_to_install", "string"),
+    ("update_downloaded", "string"),
 ]
 
 # Translation tables.
@@ -185,8 +185,8 @@ T["en"] = {
     "username_cooldown": "You can change your name in %d days",
     "username_change_failed": "Save failed",
     "username_change_saved": "Name saved",
-    "update_available": "Update available — tap to install",
-    "update_ready_to_install": "Update downloaded — tap to install now",
+    "update_available": "Update",
+    "update_downloaded": "Install",
 }
 
 

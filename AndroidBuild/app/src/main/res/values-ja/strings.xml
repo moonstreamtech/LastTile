@@ -75,6 +75,6 @@
     <string name="username_cooldown">あと%d日で名前を変更できます</string>
     <string name="username_change_failed">保存に失敗</string>
     <string name="username_change_saved">名前を保存しました</string>
-    <string name="update_available">アップデートあり — タップしてインストール</string>
-    <string name="update_ready_to_install">アップデートをダウンロード済み — タップで今すぐインストール</string>
+    <string name="update_available">更新</string>
+    <string name="update_downloaded">インストール</string>
 </resources>

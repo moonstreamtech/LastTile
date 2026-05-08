@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d ದಿನಗಳಲ್ಲಿ ಹೆಸರು ಬದಲಾಯಿಸಬಹುದು</string>
     <string name="username_change_failed">ಉಳಿತಾಯ ವಿಫಲ</string>
     <string name="username_change_saved">ಹೆಸರು ಉಳಿಸಲಾಗಿದೆ</string>
-    <string name="update_available">ಅಪ್‌ಡೇಟ್ ಲಭ್ಯ — ಸ್ಥಾಪಿಸಲು ಟ್ಯಾಪ್</string>
-    <string name="update_ready_to_install">ಅಪ್‌ಡೇಟ್ ಡೌನ್‌ಲೋಡ್ — ಈಗ ಸ್ಥಾಪಿಸಲು ಟ್ಯಾಪ್</string>
+    <string name="update_available">ಅಪ್‌ಡೇಟ್</string>
+    <string name="update_downloaded">ಸ್ಥಾಪಿಸಿ</string>
 </resources>

@@ -75,6 +75,6 @@
     <string name="username_cooldown">Voit vaihtaa nimen %d päivän kuluttua</string>
     <string name="username_change_failed">Tallennus epäonnistui</string>
     <string name="username_change_saved">Nimi tallennettu</string>
-    <string name="update_available">Päivitys saatavilla — napauta asentaaksesi</string>
-    <string name="update_ready_to_install">Päivitys ladattu — napauta asentaaksesi nyt</string>
+    <string name="update_available">Päivitä</string>
+    <string name="update_downloaded">Asenna</string>
 </resources>

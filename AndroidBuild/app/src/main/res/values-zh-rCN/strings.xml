@@ -75,6 +75,6 @@
     <string name="username_cooldown">你将在%d天后可以更改名字</string>
     <string name="username_change_failed">保存失败</string>
     <string name="username_change_saved">名字已保存</string>
-    <string name="update_available">有可用更新 — 点击安装</string>
-    <string name="update_ready_to_install">更新已下载 — 点击立即安装</string>
+    <string name="update_available">更新</string>
+    <string name="update_downloaded">安装</string>
 </resources>

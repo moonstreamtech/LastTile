@@ -76,6 +76,6 @@
     <string name="username_cooldown">Poți schimba numele în %d zile</string>
     <string name="username_change_failed">Salvarea a eșuat</string>
     <string name="username_change_saved">Nume salvat</string>
-    <string name="update_available">Actualizare disponibilă — atinge pentru instalare</string>
-    <string name="update_ready_to_install">Actualizare descărcată — atinge pentru instalare acum</string>
+    <string name="update_available">Actualizează</string>
+    <string name="update_downloaded">Instalează</string>
 </resources>

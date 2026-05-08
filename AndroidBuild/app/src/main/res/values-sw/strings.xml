@@ -75,6 +75,6 @@
     <string name="username_cooldown">Unaweza kubadilisha jina baada ya siku %d</string>
     <string name="username_change_failed">Imeshindikana kuhifadhi</string>
     <string name="username_change_saved">Jina limehifadhiwa</string>
-    <string name="update_available">Sasisho linapatikana — gusa kusakinisha</string>
-    <string name="update_ready_to_install">Sasisho limepakuliwa — gusa kusakinisha sasa</string>
+    <string name="update_available">Sasisha</string>
+    <string name="update_downloaded">Sakinisha</string>
 </resources>

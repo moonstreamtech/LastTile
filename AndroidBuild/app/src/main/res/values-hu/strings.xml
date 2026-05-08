@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d nap múlva módosíthatod a nevet</string>
     <string name="username_change_failed">Mentés sikertelen</string>
     <string name="username_change_saved">Név mentve</string>
-    <string name="update_available">Frissítés elérhető — érintsd meg a telepítéshez</string>
-    <string name="update_ready_to_install">Frissítés letöltve — érintsd meg a telepítéshez most</string>
+    <string name="update_available">Frissítés</string>
+    <string name="update_downloaded">Telepítés</string>
 </resources>

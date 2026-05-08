@@ -41,12 +41,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.activity.ComponentActivity
@@ -440,39 +442,73 @@ fun GameScreen() {
                 // Core probe says we're current (or fails outright on
                 // devices without Play Services), so the title row
                 // keeps its centered single-element shape in the
-                // common case.
+                // common case. v0.1.13: redesigned as a pill button
+                // with localized "Update"/"Install" label; on
+                // ultra-narrow screens (<320dp granted width) the
+                // pill drops below the wordmark to a second line so
+                // neither element gets clipped.
                 val updateState by UpdateChecker.uiState.collectAsState()
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = stringResource(R.string.title_wordmark),
-                        fontSize = 28.sp,
-                        fontWeight = FontWeight.Black,
-                        color = TextPrimary,
-                        letterSpacing = 4.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        textAlign = TextAlign.Center
-                    )
-                    if (updateState !is UpdateChecker.UpdateState.Idle) {
-                        Spacer(Modifier.width(8.dp))
-                        UpdateBadge(
-                            state = updateState,
-                            onClick = click@{
-                                val ca = activity as? ComponentActivity
-                                    ?: return@click
-                                when (updateState) {
-                                    is UpdateChecker.UpdateState.Available ->
-                                        UpdateChecker.startUpdate(ca)
-                                    is UpdateChecker.UpdateState.Downloaded ->
-                                        UpdateChecker.completeInstall()
-                                    UpdateChecker.UpdateState.Idle -> Unit
-                                }
+                val showBadge = updateState !is UpdateChecker.UpdateState.Idle
+                val onUpdateClick: () -> Unit = click@{
+                    val ca = activity as? ComponentActivity
+                        ?: return@click
+                    when (updateState) {
+                        is UpdateChecker.UpdateState.Available ->
+                            UpdateChecker.startUpdate(ca)
+                        is UpdateChecker.UpdateState.Downloaded ->
+                            UpdateChecker.completeInstall()
+                        UpdateChecker.UpdateState.Idle -> Unit
+                    }
+                }
+                BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                    val inline = maxWidth >= 320.dp
+                    if (inline) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.Center,
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Text(
+                                text = stringResource(R.string.title_wordmark),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Black,
+                                color = TextPrimary,
+                                letterSpacing = 4.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                            if (showBadge) {
+                                Spacer(Modifier.width(8.dp))
+                                UpdateBadge(
+                                    state = updateState,
+                                    onClick = onUpdateClick
+                                )
                             }
-                        )
+                        }
+                    } else {
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.title_wordmark),
+                                fontSize = 28.sp,
+                                fontWeight = FontWeight.Black,
+                                color = TextPrimary,
+                                letterSpacing = 4.sp,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
+                                textAlign = TextAlign.Center
+                            )
+                            if (showBadge) {
+                                Spacer(Modifier.height(6.dp))
+                                UpdateBadge(
+                                    state = updateState,
+                                    onClick = onUpdateClick
+                                )
+                            }
+                        }
                     }
                 }
                 Spacer(Modifier.height(4.dp))
@@ -1638,70 +1674,100 @@ private fun LeaderboardRow(rank: Int, entry: LeaderboardEntry) {
 }
 
 /**
- * v0.1.11: Compact tap target rendered next to the LAST TILE wordmark
- * when [UpdateChecker] surfaces a Play Store update. Two visual
- * states:
- *   - Available: amber down-arrow, slow pulse to draw the eye without
- *     being noisy. Tap → kicks off the FLEXIBLE update flow (download
+ * v0.1.13: Pill-shaped tap target rendered next to the LAST TILE
+ * wordmark when [UpdateChecker] surfaces a Play Store update. Two
+ * visual states:
+ *   - Available: amber pill, "↓" glyph + localized "Update" label,
+ *     subtle scale pulse 1.0↔1.04 to draw the eye without being
+ *     noisy. Tap → kicks off the FLEXIBLE update flow (download
  *     in background while the player keeps playing).
- *   - Downloaded: green check, steady (no pulse — the user shouldn't
- *     wait for anything else). Tap → completeUpdate(), which restarts
- *     the app onto the new version.
+ *   - Downloaded: green pill, "✓" glyph + localized "Install" label,
+ *     steady (no pulse — the user shouldn't wait for anything else).
+ *     Tap → completeUpdate(), which restarts the app onto the new
+ *     version.
  *
  * Uses Unicode glyphs rather than a Material icon dependency so we
  * stay consistent with the rest of the UI ("?", "+", "🔒") and avoid
- * pulling in `material-icons-extended` for two characters.
+ * pulling in `material-icons-extended` for two characters. The
+ * accompanying short label (single word, 50 locales) is what makes
+ * the pill self-explanatory — the previous v0.1.11 glyph-only badge
+ * was too cryptic for non-Android-native players.
  */
 @Composable
 private fun UpdateBadge(
     state: UpdateChecker.UpdateState,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val glyph: String
-    val tint: Color
-    val description: String
+    val bgColor: Color
+    val contentColor: Color
+    val labelRes: Int
     when (state) {
         is UpdateChecker.UpdateState.Available -> {
             glyph = "↓"
-            tint = AccentAmber
-            description = stringResource(R.string.update_available)
+            bgColor = Color(0xFFFFB300)
+            contentColor = Color(0xFF1F1A0E)
+            labelRes = R.string.update_available
         }
         is UpdateChecker.UpdateState.Downloaded -> {
             glyph = "✓"
-            tint = Color(0xFF66BB6A)
-            description = stringResource(R.string.update_ready_to_install)
+            bgColor = Color(0xFF66BB6A)
+            contentColor = Color(0xFF0D2818)
+            labelRes = R.string.update_downloaded
         }
         UpdateChecker.UpdateState.Idle -> return
     }
-    // Pulse only while Available, so the badge feels like it's
-    // asking for attention. Once Downloaded the action is one
-    // simple tap-to-install — a steady glyph reads as "ready".
-    val pulseAlpha: Float = if (state is UpdateChecker.UpdateState.Available) {
+    // Subtle scale pulse only while Available — once Downloaded the
+    // tap target is "ready" so a steady pill reads as final state.
+    // Pulse range chosen at 1.0↔1.04 (4%) so the motion is noticeable
+    // but doesn't visually fight with the title wordmark next to it.
+    val scale: Float = if (state is UpdateChecker.UpdateState.Available) {
         val transition = rememberInfiniteTransition(label = "updateBadgePulse")
         transition.animateFloat(
-            initialValue = 0.65f,
-            targetValue = 1f,
+            initialValue = 1f,
+            targetValue = 1.04f,
             animationSpec = infiniteRepeatable(
                 animation = tween(1500, easing = LinearEasing),
                 repeatMode = RepeatMode.Reverse
             ),
-            label = "updateBadgeAlpha"
+            label = "updateBadgeScale"
         ).value
     } else {
         1f
     }
-    IconButton(
+    val description = stringResource(labelRes)
+    Surface(
         onClick = onClick,
-        modifier = Modifier
-            .size(32.dp)
+        shape = CircleShape,
+        color = bgColor,
+        contentColor = contentColor,
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
             .semantics { contentDescription = description }
     ) {
-        Text(
-            text = glyph,
-            color = tint.copy(alpha = pulseAlpha),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Black
-        )
+        Row(
+            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
+        ) {
+            Text(
+                text = glyph,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Black
+            )
+            Text(
+                text = description,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                letterSpacing = 0.5.sp
+            )
+        }
     }
 }
 

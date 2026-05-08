@@ -75,6 +75,6 @@
     <string name="username_cooldown">Μπορείς να αλλάξεις όνομα σε %d ημέρες</string>
     <string name="username_change_failed">Αποτυχία αποθήκευσης</string>
     <string name="username_change_saved">Το όνομα αποθηκεύτηκε</string>
-    <string name="update_available">Διαθέσιμη ενημέρωση — άγγιξε για εγκατάσταση</string>
-    <string name="update_ready_to_install">Η ενημέρωση κατέβηκε — άγγιξε για άμεση εγκατάσταση</string>
+    <string name="update_available">Ενημέρωση</string>
+    <string name="update_downloaded">Εγκατάσταση</string>
 </resources>

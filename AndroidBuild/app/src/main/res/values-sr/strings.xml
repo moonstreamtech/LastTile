@@ -76,6 +76,6 @@
     <string name="username_cooldown">Ime možeš da promeniš za %d dana</string>
     <string name="username_change_failed">Čuvanje neuspešno</string>
     <string name="username_change_saved">Ime sačuvano</string>
-    <string name="update_available">Dostupno ažuriranje — dodirni za instalaciju</string>
-    <string name="update_ready_to_install">Ažuriranje preuzeto — dodirni za instalaciju sad</string>
+    <string name="update_available">Ažuriraj</string>
+    <string name="update_downloaded">Instaliraj</string>
 </resources>

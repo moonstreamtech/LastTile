@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d दिवसांत नाव बदलू शकाल</string>
     <string name="username_change_failed">सेव्ह अयशस्वी</string>
     <string name="username_change_saved">नाव सेव्ह झाले</string>
-    <string name="update_available">अद्यतन उपलब्ध — स्थापित करण्यासाठी टॅप</string>
-    <string name="update_ready_to_install">अद्यतन डाउनलोड — आता स्थापित करण्यासाठी टॅप</string>
+    <string name="update_available">अपडेट</string>
+    <string name="update_downloaded">इन्स्टॉल</string>
 </resources>

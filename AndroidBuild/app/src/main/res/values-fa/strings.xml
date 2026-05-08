@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d روز دیگر می‌توانی نام را تغییر دهی</string>
     <string name="username_change_failed">ذخیره نشد</string>
     <string name="username_change_saved">نام ذخیره شد</string>
-    <string name="update_available">به‌روزرسانی موجود است — برای نصب بزن</string>
-    <string name="update_ready_to_install">به‌روزرسانی دانلود شد — برای نصب بزن</string>
+    <string name="update_available">به‌روزرسانی</string>
+    <string name="update_downloaded">نصب</string>
 </resources>

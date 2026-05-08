@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d دن میں نام تبدیل کر سکیں گے</string>
     <string name="username_change_failed">محفوظ نہ ہو سکا</string>
     <string name="username_change_saved">نام محفوظ</string>
-    <string name="update_available">اپ ڈیٹ دستیاب — انسٹال کے لیے ٹیپ</string>
-    <string name="update_ready_to_install">اپ ڈیٹ ڈاؤن لوڈ — ابھی انسٹال کے لیے ٹیپ</string>
+    <string name="update_available">اپ ڈیٹ</string>
+    <string name="update_downloaded">انسٹال</string>
 </resources>

@@ -75,6 +75,6 @@
     <string name="username_cooldown">Du kan byta namn om %d dagar</string>
     <string name="username_change_failed">Det gick inte att spara</string>
     <string name="username_change_saved">Namn sparat</string>
-    <string name="update_available">Uppdatering tillgänglig — tryck för att installera</string>
-    <string name="update_ready_to_install">Uppdateringen är hämtad — tryck för att installera nu</string>
+    <string name="update_available">Uppdatera</string>
+    <string name="update_downloaded">Installera</string>
 </resources>

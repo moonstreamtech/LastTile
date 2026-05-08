@@ -75,6 +75,6 @@
     <string name="username_cooldown">Du kan skifte navn om %d dage</string>
     <string name="username_change_failed">Kunne ikke gemmes</string>
     <string name="username_change_saved">Navn gemt</string>
-    <string name="update_available">Opdatering tilgængelig — tryk for at installere</string>
-    <string name="update_ready_to_install">Opdatering hentet — tryk for at installere nu</string>
+    <string name="update_available">Opdater</string>
+    <string name="update_downloaded">Installer</string>
 </resources>

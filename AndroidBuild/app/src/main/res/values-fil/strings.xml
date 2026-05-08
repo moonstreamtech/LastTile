@@ -75,6 +75,6 @@
     <string name="username_cooldown">Mababago mo ang pangalan sa %d araw</string>
     <string name="username_change_failed">Hindi nag-save</string>
     <string name="username_change_saved">Na-save ang pangalan</string>
-    <string name="update_available">May update — i-tap para i-install</string>
-    <string name="update_ready_to_install">Na-download ang update — i-tap para i-install ngayon</string>
+    <string name="update_available">I-update</string>
+    <string name="update_downloaded">I-install</string>
 </resources>

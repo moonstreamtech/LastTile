@@ -77,6 +77,6 @@
     <string name="username_cooldown">Зміниш ім\'я через %d дн.</string>
     <string name="username_change_failed">Не вдалося зберегти</string>
     <string name="username_change_saved">Ім\'я збережено</string>
-    <string name="update_available">Доступне оновлення — натисни, щоб встановити</string>
-    <string name="update_ready_to_install">Оновлення завантажено — натисни, щоб встановити</string>
+    <string name="update_available">Оновити</string>
+    <string name="update_downloaded">Встановити</string>
 </resources>

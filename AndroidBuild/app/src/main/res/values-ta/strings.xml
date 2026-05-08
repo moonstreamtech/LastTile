@@ -75,6 +75,6 @@
     <string name="username_cooldown">%d நாட்களில் பெயரை மாற்றலாம்</string>
     <string name="username_change_failed">சேமிப்பு தோல்வி</string>
     <string name="username_change_saved">பெயர் சேமிக்கப்பட்டது</string>
-    <string name="update_available">புதுப்பிப்பு உள்ளது — நிறுவ தட்டு</string>
-    <string name="update_ready_to_install">புதுப்பிப்பு பதிவிறக்கப்பட்டது — இப்போது நிறுவ தட்டு</string>
+    <string name="update_available">புதுப்பி</string>
+    <string name="update_downloaded">நிறுவு</string>
 </resources>

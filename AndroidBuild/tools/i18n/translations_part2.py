@@ -78,8 +78,8 @@ T["es-419"] = {
     "username_cooldown": "Podrás cambiar tu nombre en %d días",
     "username_change_failed": "Error al guardar",
     "username_change_saved": "Nombre guardado",
-    "update_available": "Actualización disponible — toca para instalar",
-    "update_ready_to_install": "Actualización descargada — toca para instalar ahora",
+    "update_available": "Actualizar",
+    "update_downloaded": "Instalar",
 }
 
 # ---------------------------------------------------------------------------
@@ -158,8 +158,8 @@ T["pt-PT"] = {
     "username_cooldown": "Poderás mudar o nome dentro de %d dias",
     "username_change_failed": "Falha ao guardar",
     "username_change_saved": "Nome guardado",
-    "update_available": "Atualização disponível — toca para instalar",
-    "update_ready_to_install": "Atualização transferida — toca para instalar agora",
+    "update_available": "Atualizar",
+    "update_downloaded": "Instalar",
 }
 
 # ---------------------------------------------------------------------------
@@ -238,8 +238,8 @@ T["fr-CA"] = {
     "username_cooldown": "Tu pourras changer ton nom dans %d jours",
     "username_change_failed": "Échec de l'enregistrement",
     "username_change_saved": "Nom enregistré",
-    "update_available": "Mise à jour disponible — touche pour installer",
-    "update_ready_to_install": "Mise à jour téléchargée — touche pour installer",
+    "update_available": "Mettre à jour",
+    "update_downloaded": "Installer",
 }
 
 # ---------------------------------------------------------------------------
@@ -318,8 +318,8 @@ T["da"] = {
     "username_cooldown": "Du kan skifte navn om %d dage",
     "username_change_failed": "Kunne ikke gemmes",
     "username_change_saved": "Navn gemt",
-    "update_available": "Opdatering tilgængelig — tryk for at installere",
-    "update_ready_to_install": "Opdatering hentet — tryk for at installere nu",
+    "update_available": "Opdater",
+    "update_downloaded": "Installer",
 }
 
 # ---------------------------------------------------------------------------
@@ -398,8 +398,8 @@ T["sv"] = {
     "username_cooldown": "Du kan byta namn om %d dagar",
     "username_change_failed": "Det gick inte att spara",
     "username_change_saved": "Namn sparat",
-    "update_available": "Uppdatering tillgänglig — tryck för att installera",
-    "update_ready_to_install": "Uppdateringen är hämtad — tryck för att installera nu",
+    "update_available": "Uppdatera",
+    "update_downloaded": "Installera",
 }
 
 # ---------------------------------------------------------------------------
@@ -478,8 +478,8 @@ T["nb"] = {
     "username_cooldown": "Du kan endre navn om %d dager",
     "username_change_failed": "Kunne ikke lagre",
     "username_change_saved": "Navn lagret",
-    "update_available": "Oppdatering tilgjengelig — trykk for å installere",
-    "update_ready_to_install": "Oppdatering lastet ned — trykk for å installere nå",
+    "update_available": "Oppdater",
+    "update_downloaded": "Installer",
 }
 
 # ---------------------------------------------------------------------------
@@ -558,8 +558,8 @@ T["fi"] = {
     "username_cooldown": "Voit vaihtaa nimen %d päivän kuluttua",
     "username_change_failed": "Tallennus epäonnistui",
     "username_change_saved": "Nimi tallennettu",
-    "update_available": "Päivitys saatavilla — napauta asentaaksesi",
-    "update_ready_to_install": "Päivitys ladattu — napauta asentaaksesi nyt",
+    "update_available": "Päivitä",
+    "update_downloaded": "Asenna",
 }
 
 # ---------------------------------------------------------------------------
@@ -638,8 +638,8 @@ T["el"] = {
     "username_cooldown": "Μπορείς να αλλάξεις όνομα σε %d ημέρες",
     "username_change_failed": "Αποτυχία αποθήκευσης",
     "username_change_saved": "Το όνομα αποθηκεύτηκε",
-    "update_available": "Διαθέσιμη ενημέρωση — άγγιξε για εγκατάσταση",
-    "update_ready_to_install": "Η ενημέρωση κατέβηκε — άγγιξε για άμεση εγκατάσταση",
+    "update_available": "Ενημέρωση",
+    "update_downloaded": "Εγκατάσταση",
 }
 
 # ---------------------------------------------------------------------------
@@ -718,6 +718,6 @@ T["hu"] = {
     "username_cooldown": "%d nap múlva módosíthatod a nevet",
     "username_change_failed": "Mentés sikertelen",
     "username_change_saved": "Név mentve",
-    "update_available": "Frissítés elérhető — érintsd meg a telepítéshez",
-    "update_ready_to_install": "Frissítés letöltve — érintsd meg a telepítéshez most",
+    "update_available": "Frissítés",
+    "update_downloaded": "Telepítés",
 }
