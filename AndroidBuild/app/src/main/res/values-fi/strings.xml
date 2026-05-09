@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Ohita opastus</string>
     <string name="tutorial_step_merge_instruction">Vedä laatta vastaavan päälle yhdistääksesi ne.</string>
     <string name="tutorial_step_frame_instruction">Yhdistä nämä laatat avataksesi uusia kehysruutuja.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Nämä lukitut laatat ovat vaarallisia. Napauta oppiaksesi poistamaan ne.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Käytä kilpeä vaaran poistamiseen.</string>
-    <string name="tutorial_step_shield_subhint">Napauta kilpikorttia katsoaksesi videon ja saadaksesi 3 kilpeä lisää.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Nämä ovat vaarallisia ruutuja — ne vahingoittavat sinua jos jäävät laudalle.
+Poistaaksesi, paina KILPEÄ pohjassa ja vedä se vaaralliseen ruutuun.</string>
     <string name="tutorial_step_leaderboard_instruction">Parhaat pisteesi lähetetään automaattisesti globaaliin tulostauluun. Avaa se valikosta nähdäksesi sijoituksesi.</string>
     <string name="tutorial_hint_drag_to_merge">Yritä vetää laatat yhteen…</string>
     <string name="tutorial_success_merge">Hieno yhdistys!</string>
     <string name="tutorial_success_frame">Kehys avattu!</string>
     <string name="tutorial_success_shield">Vaara poistettu!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Napauta Tulostaulu nähdäksesi globaalin sijoituksen.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Napauta TULOSTAULU-painiketta ja napauta sitten omaa rivisi asettaaksesi nimesi.</string>
     <string name="tutorial_step_username_instruction">Napauta riviäsi valitaksesi nimen.</string>
     <string name="username_dialog_title_first">Valitse nimi</string>
     <string name="username_dialog_title_change">Vaihda nimi</string>

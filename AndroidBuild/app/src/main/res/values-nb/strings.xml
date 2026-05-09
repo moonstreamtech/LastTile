@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Hopp over</string>
     <string name="tutorial_step_merge_instruction">Dra en brikke over den matchende for å slå dem sammen.</string>
     <string name="tutorial_step_frame_instruction">Slå sammen disse brikkene for å åpne nye rammeruter.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Disse låste brikkene er farlige. Trykk for å lære hvordan du fjerner dem.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Bruk skjoldet ditt til å fjerne en fare.</string>
-    <string name="tutorial_step_shield_subhint">Trykk på skjoldkortet for å se en video og få 3 skjold til.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Disse er farlige fliser — de skader deg om de blir igjen på brettet.
+For å fjerne, hold SKJOLDET inne og dra det over en farlig flise.</string>
     <string name="tutorial_step_leaderboard_instruction">Dine toppscore sendes automatisk til den globale topplisten. Åpne den fra menyen for å se plasseringen din.</string>
     <string name="tutorial_hint_drag_to_merge">Prøv å dra brikkene sammen…</string>
     <string name="tutorial_success_merge">Flott sammenslåing!</string>
     <string name="tutorial_success_frame">Ramme åpnet!</string>
     <string name="tutorial_success_shield">Fare fjernet!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Trykk på Topplist for å se den globale rangeringen.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Trykk på TOPPLISTE-knappen, og trykk deretter på din egen rad for å angi navnet ditt.</string>
     <string name="tutorial_step_username_instruction">Trykk på raden din for å velge navn.</string>
     <string name="username_dialog_title_first">Velg navnet ditt</string>
     <string name="username_dialog_title_change">Endre navn</string>

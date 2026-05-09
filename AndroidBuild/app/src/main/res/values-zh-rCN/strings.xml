@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">跳过教程</string>
     <string name="tutorial_step_merge_instruction">将一个方块拖到匹配的方块上以合并它们。</string>
     <string name="tutorial_step_frame_instruction">合并这些方块以解锁新的框架格子。</string>
-    <string name="tutorial_step_hazards_and_shield_initial">这些锁定的方块很危险。点击了解如何清除它们。</string>
-    <string name="tutorial_step_hazards_and_shield_action">用护盾清除一个危险。</string>
-    <string name="tutorial_step_shield_subhint">点击护盾卡观看视频再获得3个护盾。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">这些是危险方块 — 留在棋盘上会造成伤害。
+要清除,请长按盾牌并拖到危险方块上。</string>
     <string name="tutorial_step_leaderboard_instruction">你的高分会自动提交到全球排行榜。从菜单打开它查看你的排名。</string>
     <string name="tutorial_hint_drag_to_merge">尝试将方块拖到一起…</string>
     <string name="tutorial_success_merge">合并成功!</string>
     <string name="tutorial_success_frame">框架已打开!</string>
     <string name="tutorial_success_shield">危险已清除!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">点击排行榜按钮查看全球排名。</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">点击排行榜按钮,然后点击你自己的一行来设置名字。</string>
     <string name="tutorial_step_username_instruction">点击你的一行来选择名字。</string>
     <string name="username_dialog_title_first">选择名字</string>
     <string name="username_dialog_title_change">更改名字</string>

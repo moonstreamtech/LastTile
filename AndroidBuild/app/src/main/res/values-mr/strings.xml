@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ट्युटोरियल वगळा</string>
     <string name="tutorial_step_merge_instruction">एक टाइल जुळणाऱ्या टाइलवर ओढून जोडा.</string>
     <string name="tutorial_step_frame_instruction">नवीन फ्रेम सेल उघडण्यासाठी या टाइल्स जोडा.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">या लॉक केलेल्या टाइल्स धोकादायक आहेत. साफ करण्याची पद्धत शिकण्यासाठी टॅप करा.</string>
-    <string name="tutorial_step_hazards_and_shield_action">धोका साफ करण्यासाठी ढालीचा वापर करा.</string>
-    <string name="tutorial_step_shield_subhint">ढाल कार्ड टॅप करून व्हिडिओ पाहा आणि आणखी 3 ढाली मिळवा.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">या धोकादायक टाइल्स आहेत — बोर्डवर राहिल्यास नुकसान करतात.
+काढण्यासाठी, शील्ड दाबून ठेवा आणि धोकादायक टाइलवर ओढा.</string>
     <string name="tutorial_step_leaderboard_instruction">तुमचे सर्वोच्च स्कोर आपोआप जागतिक लीडरबोर्डवर पाठवले जातात. तुमची रँक पाहण्यासाठी मेनूमधून उघडा.</string>
     <string name="tutorial_hint_drag_to_merge">टाइल्स एकत्र ओढण्याचा प्रयत्न करा…</string>
     <string name="tutorial_success_merge">छान जोडणी!</string>
     <string name="tutorial_success_frame">फ्रेम उघडली!</string>
     <string name="tutorial_success_shield">धोका साफ!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">जागतिक रँकिंग पाहण्यासाठी लीडरबोर्ड बटण टॅप करा.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">लीडरबोर्ड बटण दाबा, नंतर तुमचे नाव सेट करण्यासाठी तुमची ओळ दाबा.</string>
     <string name="tutorial_step_username_instruction">नाव निवडण्यासाठी तुमची ओळ टॅप करा.</string>
     <string name="username_dialog_title_first">नाव निवडा</string>
     <string name="username_dialog_title_change">नाव बदला</string>

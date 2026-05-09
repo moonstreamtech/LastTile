@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Salta tutorial</string>
     <string name="tutorial_step_merge_instruction">Trascina una tessera su quella corrispondente per unirle.</string>
     <string name="tutorial_step_frame_instruction">Unisci queste tessere per sbloccare nuove celle della cornice.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Queste tessere bloccate sono pericolose. Tocca per imparare a eliminarle.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Usa lo scudo per eliminare una minaccia.</string>
-    <string name="tutorial_step_shield_subhint">Tocca la carta scudo per guardare un video e ottenere 3 scudi in più.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Queste sono caselle pericolose — ti danneggiano se restano sul tabellone.
+Per rimuoverne una, tieni premuto SCUDO e trascinalo su una casella pericolosa.</string>
     <string name="tutorial_step_leaderboard_instruction">I tuoi punteggi migliori vengono inviati automaticamente alla classifica globale. Aprila dal menu per vedere la tua posizione.</string>
     <string name="tutorial_hint_drag_to_merge">Prova a trascinare insieme le tessere…</string>
     <string name="tutorial_success_merge">Bella unione!</string>
     <string name="tutorial_success_frame">Cornice aperta!</string>
     <string name="tutorial_success_shield">Minaccia eliminata!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Tocca Classifica per vedere il ranking globale.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tocca il pulsante CLASSIFICA, poi tocca la tua riga per impostare il tuo nome.</string>
     <string name="tutorial_step_username_instruction">Tocca la tua riga per scegliere un nome.</string>
     <string name="username_dialog_title_first">Scegli un nome</string>
     <string name="username_dialog_title_change">Cambia nome</string>

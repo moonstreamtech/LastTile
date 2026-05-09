@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Kihagyás</string>
     <string name="tutorial_step_merge_instruction">Húzz egy lapot a megfelelőre, hogy egyesítsd őket.</string>
     <string name="tutorial_step_frame_instruction">Egyesítsd ezeket a lapokat új keretmezők megnyitásához.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Ezek a zárolt lapok veszélyesek. Érintsd meg, hogy megtanuld, hogyan tüntesd el őket.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Használd a pajzsot a veszély eltávolításához.</string>
-    <string name="tutorial_step_shield_subhint">Érintsd meg a pajzs kártyát egy videóért és újabb 3 pajzsért.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ezek veszélyes mezők — sebzést okoznak, ha a táblán maradnak.
+Eltávolításhoz tartsd nyomva a PAJZSOT és húzd egy veszélyes mezőre.</string>
     <string name="tutorial_step_leaderboard_instruction">A legjobb pontszámaid automatikusan felkerülnek a globális ranglistára. Nyisd meg a menüből, hogy lásd a helyezésed.</string>
     <string name="tutorial_hint_drag_to_merge">Próbáld a lapokat egymásra húzni…</string>
     <string name="tutorial_success_merge">Szép egyesítés!</string>
     <string name="tutorial_success_frame">Keret megnyitva!</string>
     <string name="tutorial_success_shield">Veszély eltávolítva!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Érintsd meg a Ranglista gombot a globális helyezésekért.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Koppints a RANGLISTA gombra, majd koppints a saját sorodra a név megadásához.</string>
     <string name="tutorial_step_username_instruction">Érintsd meg a saját sorodat névválasztáshoz.</string>
     <string name="username_dialog_title_first">Válassz nevet</string>
     <string name="username_dialog_title_change">Név módosítása</string>

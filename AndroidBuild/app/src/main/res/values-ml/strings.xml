@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ട്യൂട്ടോറിയൽ ഒഴിവാക്കുക</string>
     <string name="tutorial_step_merge_instruction">ഒരു ടൈൽ പൊരുത്തപ്പെടുന്ന ടൈലിലേക്ക് വലിച്ച് ലയിപ്പിക്കുക.</string>
     <string name="tutorial_step_frame_instruction">പുതിയ ഫ്രെയിം സെല്ലുകൾ തുറക്കാൻ ഈ ടൈലുകൾ ലയിപ്പിക്കുക.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ഈ ലോക്ക് ചെയ്ത ടൈലുകൾ അപകടകരമാണ്. നീക്കം ചെയ്യാൻ പഠിക്കാൻ ടാപ്പ് ചെയ്യുക.</string>
-    <string name="tutorial_step_hazards_and_shield_action">അപകടം നീക്കാൻ കവചം ഉപയോഗിക്കുക.</string>
-    <string name="tutorial_step_shield_subhint">കവച കാർഡ് ടാപ്പ് ചെയ്ത് വീഡിയോ കാണുക, 3 കവചങ്ങൾ കൂടി നേടുക.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ഇവ അപകടകരമായ ടൈലുകളാണ് — ബോർഡിൽ ശേഷിച്ചാൽ നാശമുണ്ടാക്കും.
+നീക്കം ചെയ്യാൻ, ഷീൽഡ് അമർത്തിപ്പിടിച്ച് അപകട ടൈലിലേക്ക് വലിക്കുക.</string>
     <string name="tutorial_step_leaderboard_instruction">നിങ്ങളുടെ ഏറ്റവും ഉയർന്ന സ്കോറുകൾ സ്വയമേവ ഗ്ലോബൽ ലീഡർബോർഡിലേക്ക് അയയ്ക്കും. നിങ്ങളുടെ റാങ്ക് കാണാൻ മെനുവിൽ നിന്ന് തുറക്കുക.</string>
     <string name="tutorial_hint_drag_to_merge">ടൈലുകൾ ഒരുമിച്ച് വലിക്കാൻ ശ്രമിക്കുക…</string>
     <string name="tutorial_success_merge">മികച്ച ലയനം!</string>
     <string name="tutorial_success_frame">ഫ്രെയിം തുറന്നു!</string>
     <string name="tutorial_success_shield">അപകടം നീക്കി!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">ഗ്ലോബൽ റാങ്കിംഗ് കാണാൻ ലീഡർബോർഡ് ബട്ടൺ ടാപ്പ് ചെയ്യുക.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">ലീഡർബോർഡ് ബട്ടണിൽ ടാപ്പ് ചെയ്യുക, പിന്നെ പേര് സജ്ജമാക്കാൻ നിങ്ങളുടെ വരിയിൽ ടാപ്പ് ചെയ്യുക.</string>
     <string name="tutorial_step_username_instruction">പേര് തിരഞ്ഞെടുക്കാൻ നിങ്ങളുടെ വരി ടാപ്പ് ചെയ്യുക.</string>
     <string name="username_dialog_title_first">പേര് തിരഞ്ഞെടുക്കുക</string>
     <string name="username_dialog_title_change">പേര് മാറ്റുക</string>

@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ข้ามบทช่วยสอน</string>
     <string name="tutorial_step_merge_instruction">ลากไทล์หนึ่งมาทับไทล์ที่ตรงกันเพื่อรวมกัน</string>
     <string name="tutorial_step_frame_instruction">รวมไทล์เหล่านี้เพื่อปลดล็อกเซลล์เฟรมใหม่</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ไทล์ที่ล็อกเหล่านี้อันตราย แตะเพื่อเรียนรู้วิธีล้าง</string>
-    <string name="tutorial_step_hazards_and_shield_action">ใช้โล่เพื่อล้างภัยอันตราย</string>
-    <string name="tutorial_step_shield_subhint">แตะการ์ดโล่เพื่อดูวิดีโอและรับโล่อีก 3 อัน</string>
+    <string name="tutorial_step_hazards_and_shield_initial">นี่คือไทล์อันตราย — จะสร้างความเสียหายหากปล่อยไว้บนกระดาน
+เพื่อกำจัด กดค้างที่โล่แล้วลากไปยังไทล์อันตราย</string>
     <string name="tutorial_step_leaderboard_instruction">คะแนนสูงของคุณจะถูกส่งไปยังกระดานผู้นำทั่วโลกโดยอัตโนมัติ เปิดจากเมนูเพื่อดูอันดับของคุณ</string>
     <string name="tutorial_hint_drag_to_merge">ลองลากไทล์มาวางใกล้กัน…</string>
     <string name="tutorial_success_merge">รวมเยี่ยม!</string>
     <string name="tutorial_success_frame">เปิดเฟรมแล้ว!</string>
     <string name="tutorial_success_shield">ล้างภัยอันตรายแล้ว!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">แตะปุ่มกระดานผู้นำเพื่อดูอันดับโลก</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">แตะปุ่มลีดเดอร์บอร์ด แล้วแตะแถวของคุณเพื่อตั้งชื่อ</string>
     <string name="tutorial_step_username_instruction">แตะแถวของคุณเพื่อเลือกชื่อ</string>
     <string name="username_dialog_title_first">เลือกชื่อของคุณ</string>
     <string name="username_dialog_title_change">เปลี่ยนชื่อ</string>

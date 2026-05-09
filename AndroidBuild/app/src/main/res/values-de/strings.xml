@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Anleitung überspringen</string>
     <string name="tutorial_step_merge_instruction">Ziehe eine Kachel auf eine passende Kachel, um sie zu verschmelzen.</string>
     <string name="tutorial_step_frame_instruction">Verschmelze diese Kacheln, um neue Rahmenfelder freizuschalten.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Diese gesperrten Kacheln sind gefährlich. Tippe, um zu lernen, wie du sie entfernst.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Nutze deinen Schild, um eine Gefahr zu entfernen.</string>
-    <string name="tutorial_step_shield_subhint">Tippe auf die Schildkarte, um ein Video anzusehen und 3 weitere Schilde zu erhalten.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Diese Felder sind gefährlich — sie schaden dir, wenn sie auf dem Brett bleiben.
+Um eines zu entfernen, halte den SCHILD gedrückt und ziehe es auf das gefährliche Feld.</string>
     <string name="tutorial_step_leaderboard_instruction">Deine Highscores werden automatisch an die globale Bestenliste gesendet. Öffne sie im Menü, um deine Platzierung zu sehen.</string>
     <string name="tutorial_hint_drag_to_merge">Versuche, die Kacheln zusammenzuziehen…</string>
     <string name="tutorial_success_merge">Gut gemacht!</string>
     <string name="tutorial_success_frame">Rahmen geöffnet!</string>
     <string name="tutorial_success_shield">Gefahr entfernt!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Tippe auf Bestenliste, um die globale Rangliste zu sehen.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tippe auf BESTENLISTE, dann tippe auf deine eigene Zeile, um deinen Namen einzugeben.</string>
     <string name="tutorial_step_username_instruction">Tippe deine Zeile an, um einen Namen zu wählen.</string>
     <string name="username_dialog_title_first">Wähle deinen Namen</string>
     <string name="username_dialog_title_change">Namen ändern</string>

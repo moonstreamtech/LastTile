@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Hoppa över</string>
     <string name="tutorial_step_merge_instruction">Dra en bricka till den matchande för att slå ihop dem.</string>
     <string name="tutorial_step_frame_instruction">Slå ihop dessa brickor för att låsa upp nya ramrutor.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">De här låsta brickorna är farliga. Tryck för att lära dig hur du rensar dem.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Använd din sköld för att rensa en fara.</string>
-    <string name="tutorial_step_shield_subhint">Tryck på sköldkortet för att titta på en video och få 3 sköldar till.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Dessa är farliga rutor — de skadar dig om de stannar på brädet.
+För att ta bort, håll SKÖLDEN intryckt och dra den över en farlig ruta.</string>
     <string name="tutorial_step_leaderboard_instruction">Dina topplaceringar skickas automatiskt till den globala topplistan. Öppna den från menyn för att se din placering.</string>
     <string name="tutorial_hint_drag_to_merge">Prova att dra brickorna ihop…</string>
     <string name="tutorial_success_merge">Snyggt slagit ihop!</string>
     <string name="tutorial_success_frame">Ramen öppnad!</string>
     <string name="tutorial_success_shield">Fara rensad!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Tryck på Topplista för att se den globala rankningen.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tryck på TOPPLISTA-knappen och tryck sedan på din egen rad för att ange ditt namn.</string>
     <string name="tutorial_step_username_instruction">Tryck på din rad för att välja ett namn.</string>
     <string name="username_dialog_title_first">Välj ditt namn</string>
     <string name="username_dialog_title_change">Byt namn</string>

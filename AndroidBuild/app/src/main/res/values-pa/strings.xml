@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ਟਿਊਟੋਰਿਅਲ ਛੱਡੋ</string>
     <string name="tutorial_step_merge_instruction">ਟਾਈਲ ਨੂੰ ਮੇਲ ਖਾਂਦੀ ਟਾਈਲ ਉੱਤੇ ਖਿੱਚ ਕੇ ਜੋੜੋ।</string>
     <string name="tutorial_step_frame_instruction">ਨਵੇਂ ਫ੍ਰੇਮ ਸੈੱਲ ਖੋਲ੍ਹਣ ਲਈ ਇਹ ਟਾਈਲਾਂ ਜੋੜੋ।</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ਇਹ ਲੌਕ ਟਾਈਲਾਂ ਖਤਰਨਾਕ ਹਨ। ਸਾਫ਼ ਕਰਨ ਦਾ ਤਰੀਕਾ ਸਿੱਖਣ ਲਈ ਟੈਪ ਕਰੋ।</string>
-    <string name="tutorial_step_hazards_and_shield_action">ਖ਼ਤਰਾ ਸਾਫ਼ ਕਰਨ ਲਈ ਢਾਲ ਵਰਤੋ।</string>
-    <string name="tutorial_step_shield_subhint">ਢਾਲ ਕਾਰਡ ਟੈਪ ਕਰਕੇ ਵੀਡੀਓ ਦੇਖੋ ਅਤੇ 3 ਹੋਰ ਢਾਲਾਂ ਪਾਓ।</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ਇਹ ਖ਼ਤਰਨਾਕ ਟਾਈਲਾਂ ਹਨ — ਬੋਰਡ \'ਤੇ ਰਹਿਣ \'ਤੇ ਨੁਕਸਾਨ ਕਰਦੀਆਂ ਹਨ।
+ਹਟਾਉਣ ਲਈ, ਸ਼ੀਲਡ ਨੂੰ ਦਬਾ ਕੇ ਰੱਖੋ ਅਤੇ ਖ਼ਤਰਨਾਕ ਟਾਈਲ \'ਤੇ ਖਿੱਚੋ।</string>
     <string name="tutorial_step_leaderboard_instruction">ਤੁਹਾਡੇ ਉੱਚ ਸਕੋਰ ਆਪਣੇ ਆਪ ਗਲੋਬਲ ਲੀਡਰਬੋਰਡ ਉੱਤੇ ਭੇਜੇ ਜਾਂਦੇ ਹਨ। ਆਪਣੀ ਰੈਂਕ ਦੇਖਣ ਲਈ ਮੀਨੂ ਤੋਂ ਖੋਲ੍ਹੋ।</string>
     <string name="tutorial_hint_drag_to_merge">ਟਾਈਲਾਂ ਨੂੰ ਇਕੱਠੇ ਖਿੱਚਣ ਦੀ ਕੋਸ਼ਿਸ਼ ਕਰੋ…</string>
     <string name="tutorial_success_merge">ਵਧੀਆ ਜੋੜ!</string>
     <string name="tutorial_success_frame">ਫ੍ਰੇਮ ਖੁੱਲ੍ਹਿਆ!</string>
     <string name="tutorial_success_shield">ਖ਼ਤਰਾ ਸਾਫ਼!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">ਗਲੋਬਲ ਰੈਂਕਿੰਗ ਦੇਖਣ ਲਈ ਲੀਡਰਬੋਰਡ ਬਟਨ ਟੈਪ ਕਰੋ।</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">ਲੀਡਰਬੋਰਡ ਬਟਨ \'ਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ ਆਪਣਾ ਨਾਮ ਸੈੱਟ ਕਰਨ ਲਈ ਆਪਣੀ ਕਤਾਰ \'ਤੇ ਟੈਪ ਕਰੋ।</string>
     <string name="tutorial_step_username_instruction">ਨਾਮ ਚੁਣਨ ਲਈ ਆਪਣੀ ਕਤਾਰ ਟੈਪ ਕਰੋ।</string>
     <string name="username_dialog_title_first">ਆਪਣਾ ਨਾਮ ਚੁਣੋ</string>
     <string name="username_dialog_title_change">ਨਾਮ ਬਦਲੋ</string>

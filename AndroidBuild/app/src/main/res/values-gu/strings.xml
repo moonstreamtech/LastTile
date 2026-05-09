@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ટ્યુટોરિયલ છોડો</string>
     <string name="tutorial_step_merge_instruction">એક ટાઇલને મેળ ખાતી ટાઇલ પર ખેંચીને જોડો.</string>
     <string name="tutorial_step_frame_instruction">નવા ફ્રેમ સેલ ખોલવા આ ટાઇલ્સ જોડો.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">આ લોક કરેલી ટાઇલ્સ ખતરનાક છે. સાફ કરવાનું શીખવા ટેપ કરો.</string>
-    <string name="tutorial_step_hazards_and_shield_action">ભય સાફ કરવા ઢાલ વાપરો.</string>
-    <string name="tutorial_step_shield_subhint">ઢાલ કાર્ડ પર ટેપ કરી વિડિઓ જુઓ, વધુ 3 ઢાલ મેળવો.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">આ ખતરનાક ટાઇલ્સ છે — બોર્ડ પર રહેશે તો નુકસાન કરશે.
+દૂર કરવા માટે, શિલ્ડને દબાવી રાખો અને ખતરનાક ટાઇલ પર ખેંચો.</string>
     <string name="tutorial_step_leaderboard_instruction">તમારા ઊંચા સ્કોર આપોઆપ ગ્લોબલ લીડરબોર્ડ પર મોકલવામાં આવે છે. તમારી રેન્ક જોવા મેનુથી ખોલો.</string>
     <string name="tutorial_hint_drag_to_merge">ટાઇલ્સને એકસાથે ખેંચવાનો પ્રયાસ કરો…</string>
     <string name="tutorial_success_merge">સરસ જોડાણ!</string>
     <string name="tutorial_success_frame">ફ્રેમ ખુલી!</string>
     <string name="tutorial_success_shield">ભય સાફ!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">ગ્લોબલ રેન્કિંગ જોવા લીડરબોર્ડ બટન ટેપ કરો.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">લીડરબોર્ડ બટન પર ટેપ કરો, પછી તમારું નામ સેટ કરવા તમારી પંક્તિ પર ટેપ કરો.</string>
     <string name="tutorial_step_username_instruction">નામ પસંદ કરવા તમારી પંક્તિ ટેપ કરો.</string>
     <string name="username_dialog_title_first">નામ પસંદ કરો</string>
     <string name="username_dialog_title_change">નામ બદલો</string>

@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ٹیوٹوریل چھوڑیں</string>
     <string name="tutorial_step_merge_instruction">ایک ٹائل کو ملتی جلتی ٹائل پر گھسیٹ کر ملاؤ۔</string>
     <string name="tutorial_step_frame_instruction">نئے فریم خانے کھولنے کے لیے ان ٹائلوں کو ملاؤ۔</string>
-    <string name="tutorial_step_hazards_and_shield_initial">یہ بند ٹائلیں خطرناک ہیں۔ صاف کرنے کا طریقہ سیکھنے کے لیے ٹیپ کریں۔</string>
-    <string name="tutorial_step_hazards_and_shield_action">خطرہ صاف کرنے کے لیے ڈھال استعمال کریں۔</string>
-    <string name="tutorial_step_shield_subhint">ڈھال کارڈ پر ٹیپ کر کے ویڈیو دیکھیں اور 3 مزید ڈھالیں پائیں۔</string>
+    <string name="tutorial_step_hazards_and_shield_initial">یہ خطرناک ٹائلیں ہیں — اگر بورڈ پر رہیں تو نقصان پہنچائیں گی۔
+ہٹانے کے لیے، شیلڈ کو دبا کر رکھیں اور خطرناک ٹائل پر گھسیٹیں۔</string>
     <string name="tutorial_step_leaderboard_instruction">آپ کے بہترین اسکور خودکار طور پر عالمی لیڈر بورڈ پر بھیجے جاتے ہیں۔ مینو سے کھول کر اپنی رینک دیکھیں۔</string>
     <string name="tutorial_hint_drag_to_merge">ٹائلوں کو ایک ساتھ گھسیٹنے کی کوشش کریں…</string>
     <string name="tutorial_success_merge">بہترین ملاپ!</string>
     <string name="tutorial_success_frame">فریم کھل گیا!</string>
     <string name="tutorial_success_shield">خطرہ صاف!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">عالمی درجہ بندی دیکھنے کے لیے لیڈر بورڈ پر ٹیپ کریں۔</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">لیڈر بورڈ بٹن پر ٹیپ کریں، پھر اپنا نام سیٹ کرنے کے لیے اپنی قطار پر ٹیپ کریں۔</string>
     <string name="tutorial_step_username_instruction">نام منتخب کرنے کے لیے اپنی قطار پر ٹیپ کریں۔</string>
     <string name="username_dialog_title_first">نام منتخب کریں</string>
     <string name="username_dialog_title_change">نام تبدیل کریں</string>

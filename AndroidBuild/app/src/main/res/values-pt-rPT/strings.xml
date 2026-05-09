@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Saltar tutorial</string>
     <string name="tutorial_step_merge_instruction">Arrasta uma peça sobre outra peça igual para juntá-las.</string>
     <string name="tutorial_step_frame_instruction">Junta estas peças para abrir novas células da moldura.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Estas peças bloqueadas são perigosas. Toca para aprender a limpá-las.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Usa o teu escudo para limpar um perigo.</string>
-    <string name="tutorial_step_shield_subhint">Toca no cartão de escudo para ver um vídeo e ganhar mais 3 escudos.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Estas peças são perigosas — causam dano se ficarem no tabuleiro.
+Para remover, mantenha pressionado o ESCUDO e arraste sobre uma peça perigosa.</string>
     <string name="tutorial_step_leaderboard_instruction">As tuas melhores pontuações são enviadas automaticamente para a classificação global. Abre-a pelo menu para veres a tua posição.</string>
     <string name="tutorial_hint_drag_to_merge">Tenta arrastar as peças juntas…</string>
     <string name="tutorial_success_merge">Boa combinação!</string>
     <string name="tutorial_success_frame">Moldura aberta!</string>
     <string name="tutorial_success_shield">Perigo eliminado!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Toca em Classificação para veres o ranking global.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Toque no botão CLASSIFICAÇÃO, depois toque na sua linha para definir o seu nome.</string>
     <string name="tutorial_step_username_instruction">Toca na tua linha para escolheres um nome.</string>
     <string name="username_dialog_title_first">Escolhe um nome</string>
     <string name="username_dialog_title_change">Alterar nome</string>

@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">தாண்டிச் செல்</string>
     <string name="tutorial_step_merge_instruction">ஒரு தட்டை பொருந்தும் தட்டுக்கு இழுத்து இணை.</string>
     <string name="tutorial_step_frame_instruction">புதிய சட்டக் கட்டங்களைத் திறக்க இவற்றை இணை.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">இந்த பூட்டிய தட்டுகள் ஆபத்தானவை. அழிக்கும் வழியைக் கற்க தட்டு.</string>
-    <string name="tutorial_step_hazards_and_shield_action">ஆபத்தை அழிக்க கேடயத்தைப் பயன்படுத்து.</string>
-    <string name="tutorial_step_shield_subhint">கேடய அட்டையைத் தட்டி வீடியோவைப் பார்த்து மேலும் 3 கேடயங்களைப் பெறு.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">இவை ஆபத்தான ஓடுகள் — பலகையில் இருந்தால் சேதம் ஏற்படுத்தும்.
+அகற்ற, கேடயத்தை அழுத்திப் பிடித்து ஆபத்தான ஓட்டின் மீது இழுக்கவும்.</string>
     <string name="tutorial_step_leaderboard_instruction">உங்கள் உயர் மதிப்பெண்கள் தானாக உலகளாவிய முன்னணிப் பட்டியலுக்கு அனுப்பப்படும். உங்கள் இடத்தைக் காண மெனுவிலிருந்து திற.</string>
     <string name="tutorial_hint_drag_to_merge">தட்டுகளை ஒன்றாக இழுக்க முயற்சி…</string>
     <string name="tutorial_success_merge">அருமையான இணைப்பு!</string>
     <string name="tutorial_success_frame">சட்டம் திறந்தது!</string>
     <string name="tutorial_success_shield">ஆபத்து அழிக்கப்பட்டது!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">உலகளாவிய தரவரிசையைக் காண முன்னணி பட்டியல் பொத்தானைத் தட்டு.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">லீடர்போர்டு பொத்தானை அழுத்தவும், பின்னர் உங்கள் பெயரை அமைக்க உங்கள் வரிசையை அழுத்தவும்.</string>
     <string name="tutorial_step_username_instruction">பெயரைத் தேர்வு செய்ய உங்கள் வரிசையைத் தட்டு.</string>
     <string name="username_dialog_title_first">பெயரைத் தேர்வு செய்</string>
     <string name="username_dialog_title_change">பெயரை மாற்று</string>

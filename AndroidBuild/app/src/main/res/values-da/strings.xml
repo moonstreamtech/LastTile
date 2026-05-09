@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Spring tutorial over</string>
     <string name="tutorial_step_merge_instruction">Træk en brik hen på den matchende brik for at slå dem sammen.</string>
     <string name="tutorial_step_frame_instruction">Slå disse brikker sammen for at åbne nye rammefelter.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Disse låste brikker er farlige. Tryk for at lære at fjerne dem.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Brug dit skjold til at fjerne en fare.</string>
-    <string name="tutorial_step_shield_subhint">Tryk på skjoldkortet for at se en video og få 3 skjolde mere.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Disse er farlige felter — de skader dig, hvis de bliver på brættet.
+Tryk og hold SKJOLDET nede, og træk det over et farligt felt.</string>
     <string name="tutorial_step_leaderboard_instruction">Dine topscorer sendes automatisk til den globale topliste. Åbn den fra menuen for at se din placering.</string>
     <string name="tutorial_hint_drag_to_merge">Prøv at trække brikkerne sammen…</string>
     <string name="tutorial_success_merge">Flot kombineret!</string>
     <string name="tutorial_success_frame">Ramme åbnet!</string>
     <string name="tutorial_success_shield">Fare fjernet!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Tryk på Topliste for at se den globale rangering.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tryk på SCOREBOARD-knappen, og tryk derefter på din egen række for at angive dit navn.</string>
     <string name="tutorial_step_username_instruction">Tryk på din række for at vælge et navn.</string>
     <string name="username_dialog_title_first">Vælg dit navn</string>
     <string name="username_dialog_title_change">Skift navn</string>

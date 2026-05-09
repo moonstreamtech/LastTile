@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Lewati tutorial</string>
     <string name="tutorial_step_merge_instruction">Seret satu ubin ke ubin yang cocok untuk menggabungkan.</string>
     <string name="tutorial_step_frame_instruction">Gabungkan ubin-ubin ini untuk membuka sel bingkai baru.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Ubin terkunci ini berbahaya. Ketuk untuk belajar membersihkannya.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Gunakan perisai untuk membersihkan bahaya.</string>
-    <string name="tutorial_step_shield_subhint">Ketuk kartu perisai untuk menonton video dan dapat 3 perisai lagi.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ini ubin berbahaya — akan merusak jika dibiarkan di papan.
+Untuk membersihkan, tekan dan tahan PERISAI lalu seret ke ubin berbahaya.</string>
     <string name="tutorial_step_leaderboard_instruction">Skor tertinggi kamu otomatis dikirim ke papan peringkat global. Buka dari menu untuk melihat peringkatmu.</string>
     <string name="tutorial_hint_drag_to_merge">Coba seret ubin-ubin bersama…</string>
     <string name="tutorial_success_merge">Gabungan keren!</string>
     <string name="tutorial_success_frame">Bingkai terbuka!</string>
     <string name="tutorial_success_shield">Bahaya dibersihkan!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Ketuk Papan peringkat untuk melihat peringkat global.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Ketuk tombol PAPAN PERINGKAT, lalu ketuk baris Anda untuk mengatur nama.</string>
     <string name="tutorial_step_username_instruction">Ketuk barismu untuk memilih nama.</string>
     <string name="username_dialog_title_first">Pilih nama</string>
     <string name="username_dialog_title_change">Ubah nama</string>

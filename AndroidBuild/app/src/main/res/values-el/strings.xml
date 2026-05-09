@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Παράλειψη</string>
     <string name="tutorial_step_merge_instruction">Σύρε ένα πλακίδιο πάνω στο αντίστοιχο για να ενωθούν.</string>
     <string name="tutorial_step_frame_instruction">Ένωσε αυτά τα πλακίδια για να ξεκλειδώσεις νέα κελιά.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Αυτά τα κλειδωμένα πλακίδια είναι επικίνδυνα. Άγγιξε για να μάθεις πώς να τα καθαρίζεις.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Χρησιμοποίησε την ασπίδα για να καθαρίσεις έναν κίνδυνο.</string>
-    <string name="tutorial_step_shield_subhint">Άγγιξε την κάρτα ασπίδας για να δεις βίντεο και να κερδίσεις 3 ασπίδες ακόμη.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Αυτά είναι επικίνδυνα πλακίδια — σου κάνουν ζημιά αν μείνουν στο ταμπλό.
+Για να αφαιρέσεις, πάτα παρατεταμένα την ΑΣΠΙΔΑ και σύρε την πάνω σε επικίνδυνο πλακίδιο.</string>
     <string name="tutorial_step_leaderboard_instruction">Τα ψηλότερα σκορ σου στέλνονται αυτόματα στον παγκόσμιο πίνακα. Άνοιξέ τον από το μενού για να δεις την κατάταξή σου.</string>
     <string name="tutorial_hint_drag_to_merge">Δοκίμασε να σύρεις τα πλακίδια μαζί…</string>
     <string name="tutorial_success_merge">Ωραία ένωση!</string>
     <string name="tutorial_success_frame">Το πλαίσιο άνοιξε!</string>
     <string name="tutorial_success_shield">Ο κίνδυνος καθαρίστηκε!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Άγγιξε Πίνακας κατάταξης για την παγκόσμια κατάταξη.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Πατήστε το κουμπί ΠΙΝΑΚΑΣ ΚΟΡΥΦΑΙΩΝ, μετά πατήστε τη δική σας σειρά για να ορίσετε το όνομά σας.</string>
     <string name="tutorial_step_username_instruction">Άγγιξε τη γραμμή σου για να επιλέξεις όνομα.</string>
     <string name="username_dialog_title_first">Διάλεξε όνομα</string>
     <string name="username_dialog_title_change">Αλλαγή ονόματος</string>

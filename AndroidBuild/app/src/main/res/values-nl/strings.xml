@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Tutorial overslaan</string>
     <string name="tutorial_step_merge_instruction">Sleep een tegel op een passende tegel om ze samen te voegen.</string>
     <string name="tutorial_step_frame_instruction">Voeg deze tegels samen om nieuwe framecellen vrij te spelen.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Deze vergrendelde tegels zijn gevaarlijk. Tik om te leren hoe je ze opruimt.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Gebruik je schild om een gevaar op te ruimen.</string>
-    <string name="tutorial_step_shield_subhint">Tik op de schildkaart om een video te bekijken en 3 extra schilden te verdienen.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Dit zijn gevaarlijke tegels — ze beschadigen je als ze op het bord blijven.
+Om er een te verwijderen, houd het SCHILD ingedrukt en sleep het op een gevaarlijke tegel.</string>
     <string name="tutorial_step_leaderboard_instruction">Je hoogste scores worden automatisch verstuurd naar het wereldwijde scorebord. Open het via het menu om je ranking te zien.</string>
     <string name="tutorial_hint_drag_to_merge">Probeer de tegels samen te slepen…</string>
     <string name="tutorial_success_merge">Goed samengevoegd!</string>
     <string name="tutorial_success_frame">Frame geopend!</string>
     <string name="tutorial_success_shield">Gevaar opgeruimd!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Tik op Scorebord om de wereldranglijst te zien.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tik op de LEADERBOARD-knop en tik vervolgens op je eigen rij om je naam in te stellen.</string>
     <string name="tutorial_step_username_instruction">Tik op je rij om een naam te kiezen.</string>
     <string name="username_dialog_title_first">Kies je naam</string>
     <string name="username_dialog_title_change">Naam wijzigen</string>

@@ -53,15 +53,14 @@
     <string name="tutorial_cta_skip">Preskoči</string>
     <string name="tutorial_step_merge_instruction">Povleci ploščico na ujemajočo, da ju združiš.</string>
     <string name="tutorial_step_frame_instruction">Združi te ploščice, da odkleneš nova polja okvira.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Te zaklenjene ploščice so nevarne. Tapni, da se naučiš, kako jih odstraniti.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Uporabi ščit za odstranitev nevarnosti.</string>
-    <string name="tutorial_step_shield_subhint">Tapni kartico ščita za video in še 3 ščite.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">To so nevarne ploščice — poškodujejo te, če ostanejo na plošči.
+Za odstranitev pridrži ŠČIT in ga povleci na nevarno ploščico.</string>
     <string name="tutorial_step_leaderboard_instruction">Tvoji najboljši rezultati se samodejno pošljejo na globalno lestvico. Odpri jo iz menija, da vidiš svoje mesto.</string>
     <string name="tutorial_hint_drag_to_merge">Poskusi povleči ploščici skupaj…</string>
     <string name="tutorial_success_merge">Odlično združeno!</string>
     <string name="tutorial_success_frame">Okvir odprt!</string>
     <string name="tutorial_success_shield">Nevarnost odstranjena!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Tapni Lestvica za globalno razvrstitev.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Tapni gumb LESTVICA, nato tapni svojo vrstico za nastavitev imena.</string>
     <string name="tutorial_step_username_instruction">Tapni svojo vrstico za izbiro imena.</string>
     <string name="username_dialog_title_first">Izberi ime</string>
     <string name="username_dialog_title_change">Spremeni ime</string>
