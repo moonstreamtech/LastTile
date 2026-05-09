@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ಟ್ಯುಟೋರಿಯಲ್ ಬಿಟ್ಟುಬಿಡಿ</string>
     <string name="tutorial_step_merge_instruction">ಒಂದು ಟೈಲ್ ಅನ್ನು ಹೊಂದಾಣಿಕೆಯಾಗುವ ಟೈಲ್‌ಗೆ ಎಳೆದು ವಿಲೀನಗೊಳಿಸಿ.</string>
     <string name="tutorial_step_frame_instruction">ಹೊಸ ಫ್ರೇಮ್ ಸೆಲ್‌ಗಳನ್ನು ತೆರೆಯಲು ಈ ಟೈಲ್‌ಗಳನ್ನು ವಿಲೀನಗೊಳಿಸಿ.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ಈ ಲಾಕ್ ಮಾಡಿದ ಟೈಲ್‌ಗಳು ಅಪಾಯಕಾರಿ. ತೆಗೆದುಹಾಕಲು ಕಲಿಯಲು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
-    <string name="tutorial_step_hazards_and_shield_action">ಅಪಾಯವನ್ನು ತೆಗೆದುಹಾಕಲು ಗುರಾಣಿಯನ್ನು ಬಳಸಿ.</string>
-    <string name="tutorial_step_shield_subhint">ಗುರಾಣಿ ಕಾರ್ಡ್ ಟ್ಯಾಪ್ ಮಾಡಿ ವಿಡಿಯೋ ನೋಡಿ, ಮತ್ತೆ 3 ಗುರಾಣಿಗಳನ್ನು ಪಡೆಯಿರಿ.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ಇವು ಅಪಾಯಕಾರಿ ಟೈಲ್‌ಗಳು — ಬೋರ್ಡ್‌ನಲ್ಲಿ ಉಳಿದರೆ ಹಾನಿಯಾಗುತ್ತದೆ.
+ತೆಗೆದುಹಾಕಲು, ಶೀಲ್ಡ್ ಒತ್ತಿಹಿಡಿದು ಅಪಾಯಕಾರಿ ಟೈಲ್ ಮೇಲೆ ಎಳೆಯಿರಿ.</string>
     <string name="tutorial_step_leaderboard_instruction">ನಿಮ್ಮ ಅತಿ ಹೆಚ್ಚಿನ ಸ್ಕೋರ್‌ಗಳು ಸ್ವಯಂಚಾಲಿತವಾಗಿ ಜಾಗತಿಕ ಲೀಡರ್‌ಬೋರ್ಡ್‌ಗೆ ಕಳುಹಿಸಲ್ಪಡುತ್ತವೆ. ನಿಮ್ಮ ಶ್ರೇಯಾಂಕ ನೋಡಲು ಮೆನುವಿನಿಂದ ತೆರೆಯಿರಿ.</string>
     <string name="tutorial_hint_drag_to_merge">ಟೈಲ್‌ಗಳನ್ನು ಒಟ್ಟಿಗೆ ಎಳೆಯಲು ಪ್ರಯತ್ನಿಸಿ…</string>
     <string name="tutorial_success_merge">ಉತ್ತಮ ವಿಲೀನ!</string>
     <string name="tutorial_success_frame">ಫ್ರೇಮ್ ತೆರೆಯಿತು!</string>
     <string name="tutorial_success_shield">ಅಪಾಯ ಶುದ್ಧೀಕರಿಸಲಾಗಿದೆ!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">ಜಾಗತಿಕ ಶ್ರೇಯಾಂಕ ನೋಡಲು ಲೀಡರ್‌ಬೋರ್ಡ್ ಬಟನ್ ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">ಲೀಡರ್‌ಬೋರ್ಡ್ ಬಟನ್ ಒತ್ತಿರಿ, ನಂತರ ಹೆಸರನ್ನು ಹೊಂದಿಸಲು ನಿಮ್ಮ ಸಾಲನ್ನು ಒತ್ತಿರಿ.</string>
     <string name="tutorial_step_username_instruction">ಹೆಸರು ಆಯ್ಕೆ ಮಾಡಲು ನಿಮ್ಮ ಸಾಲನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.</string>
     <string name="username_dialog_title_first">ಹೆಸರು ಆಯ್ಕೆ ಮಾಡಿ</string>
     <string name="username_dialog_title_change">ಹೆಸರು ಬದಲಾಯಿಸಿ</string>

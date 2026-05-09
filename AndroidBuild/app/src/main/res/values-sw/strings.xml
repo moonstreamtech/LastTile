@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Ruka mafunzo</string>
     <string name="tutorial_step_merge_instruction">Buruta kigae kimoja kwenye kigae kinacholingana ili kuviunganisha.</string>
     <string name="tutorial_step_frame_instruction">Unganisha vigae hivi ili kufungua seli mpya za fremu.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Vigae hivi vilivyofungwa ni hatari. Gusa ujifunze jinsi ya kuviondoa.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Tumia ngao kuondoa hatari.</string>
-    <string name="tutorial_step_shield_subhint">Gusa kadi ya ngao tazama video upate ngao 3 zaidi.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Hizi ni vigae hatari — vitakuumiza vikibaki kwenye ubao.
+Kuondoa, bonyeza na ushikilie NGAO kisha uburute juu ya kigae hatari.</string>
     <string name="tutorial_step_leaderboard_instruction">Alama zako za juu zinatumwa kiotomatiki kwenye ubao wa viongozi wa kimataifa. Fungua kutoka menyu kuona cheo chako.</string>
     <string name="tutorial_hint_drag_to_merge">Jaribu kuburuta vigae pamoja…</string>
     <string name="tutorial_success_merge">Mchanganyiko mzuri!</string>
     <string name="tutorial_success_frame">Fremu imefunguliwa!</string>
     <string name="tutorial_success_shield">Hatari imeondolewa!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Gusa Ubao wa viongozi kuona cheo cha kimataifa.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Bonyeza kitufe cha UBAO WA WASHINDI, kisha bonyeza safu yako kuweka jina.</string>
     <string name="tutorial_step_username_instruction">Gusa safu yako kuchagua jina.</string>
     <string name="username_dialog_title_first">Chagua jina</string>
     <string name="username_dialog_title_change">Badilisha jina</string>

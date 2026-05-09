@@ -89,31 +89,30 @@
          convention differs. -->
     <string name="combo_value_format">×%1$d</string>
 
-    <!-- Interactive 5-step tutorial. Auto-runs on first launch and is
-         re-openable from the menu. Each instruction sits on a card at
-         the bottom of the screen above a dimmed background, with a
-         Got it CTA and a Skip Tutorial text button. The Merge and
-         Frame steps auto-advance when the user performs the scripted
-         action; the combined Hazard step auto-advances when the
-         player consumes the demo shield to clear a hazard; the
-         Leaderboard step advances on the Leaderboard-button tap; the
-         Username step advances on a successful name save. The
-         combined Hazard step has two internal sub-phases (the earlier
-         flow had two separate Hazard and Shield steps). -->
+    <!-- Interactive 4-step tutorial. Auto-runs on first launch and is
+         re-openable from the menu. Each instruction sits on an inline
+         card between the action buttons and the ad banner, with an
+         optional Got it CTA and a Skip Tutorial text button. Merge
+         and Frame steps auto-advance when the user performs the
+         scripted action; the Hazard step auto-advances when the
+         player drags the demo shield onto a hazard; the merged
+         Leaderboard+Username step (counter "4 / 4" through both
+         halves) advances first on the Leaderboard-button tap, then
+         completes on a successful name save. v0.1.13 dropped the
+         former Hazard sub-phase mechanic — the two sequential copy
+         beats confused testers in Closed Testing. -->
     <string name="btn_tutorial">How to play</string>
     <string name="tutorial_step_counter">%1$d / %2$d</string>
     <string name="tutorial_cta_got_it">Got it</string>
     <string name="tutorial_cta_skip">Skip Tutorial</string>
     <string name="tutorial_step_merge_instruction">Drag one tile onto the matching tile to merge them.</string>
     <string name="tutorial_step_frame_instruction">Merge these tiles to unlock new frame cells.</string>
-    <!-- Combined Hazard step. Sub-phase 0 introduces the locked
-         hazard tiles; sub-phase 1 prompts the player to use the
-         shield to clear one. Replaces the former
-         tutorial_step_hazard_instruction +
-         tutorial_step_shield_instruction pair. -->
-    <string name="tutorial_step_hazards_and_shield_initial">These locked tiles are dangerous. Tap to learn how to clear them.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Use your shield to clear a hazard.</string>
-    <string name="tutorial_step_shield_subhint">Tap the shield card to watch a video and earn 3 more shields.</string>
+    <!-- v0.1.13: single combined Hazard instruction. Replaces the
+         former two-message subPhase mechanic (intro then "use your
+         shield") that left the step counter stuck at 3/5 across two
+         distinct copy beats. The companion *_action and *_subhint
+         keys were removed in the same change. -->
+    <string name="tutorial_step_hazards_and_shield_initial">These are hazardous tiles — they damage you if left on the board.\nTo clear one, press and hold SHIELD, then drag it onto a hazard.</string>
     <string name="tutorial_step_leaderboard_instruction">Your high scores are submitted to the global leaderboard automatically. Open it from the menu to see how you rank.</string>
     <string name="tutorial_hint_drag_to_merge">Try dragging the tiles together…</string>
 
@@ -127,12 +126,16 @@
     <string name="tutorial_success_frame">Frame opened!</string>
     <string name="tutorial_success_shield">Hazard cleared!</string>
 
-    <!-- v0.2.0: Username system. Step 6 of the tutorial spotlights the
-         player's own row in the global leaderboard and prompts them to
-         pick a name, replacing the auto-assigned "#NNNNNN" identifier.
-         Players can later tap their own row to change their name; a
-         30-day cooldown applies between changes. -->
-    <string name="tutorial_step_leaderboard_instruction_v2">Tap the Leaderboard button to see global rankings.</string>
+    <!-- v0.1.13: Step 4 (merged Leaderboard + Username). The bottom-card
+         message guides the player through both halves of the step in a
+         single sentence — tap the LEADERBOARD button, then tap their
+         row to set a name. Once the leaderboard dialog is open, the
+         bottom card hides (suppressCard) and the leaderboard renders
+         the inline _username_instruction copy at its top so the
+         spotlight on the player's row stays unambiguous. Players can
+         later tap their own row to change their name; a 30-day
+         cooldown applies between changes. -->
+    <string name="tutorial_step_leaderboard_instruction_v2">Tap the LEADERBOARD button, then tap your own row to set your name.</string>
     <string name="tutorial_step_username_instruction">Tap your row to pick a name.</string>
     <string name="username_dialog_title_first">Pick your name</string>
     <string name="username_dialog_title_change">Change your name</string>

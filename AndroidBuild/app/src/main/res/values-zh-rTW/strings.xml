@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">跳過教學</string>
     <string name="tutorial_step_merge_instruction">把一個方塊拖到對應的方塊上以合併。</string>
     <string name="tutorial_step_frame_instruction">合併這些方塊以解鎖新的框架格。</string>
-    <string name="tutorial_step_hazards_and_shield_initial">這些鎖定的方塊很危險。點擊了解如何清除。</string>
-    <string name="tutorial_step_hazards_and_shield_action">用護盾清除一個危險。</string>
-    <string name="tutorial_step_shield_subhint">點擊護盾卡觀看影片以獲得另外3個護盾。</string>
+    <string name="tutorial_step_hazards_and_shield_initial">這些是危險方塊 — 留在棋盤上會造成傷害。
+要清除請長按盾牌並拖曳到危險方塊上。</string>
     <string name="tutorial_step_leaderboard_instruction">你的高分會自動提交到全球排行榜。從選單開啟以查看你的排名。</string>
     <string name="tutorial_hint_drag_to_merge">嘗試將方塊拖到一起…</string>
     <string name="tutorial_success_merge">合併成功!</string>
     <string name="tutorial_success_frame">框架已開啟!</string>
     <string name="tutorial_success_shield">危險已清除!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">點擊排行榜按鈕查看全球排名。</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">點擊排行榜按鈕,然後點擊你自己的一行來設定名字。</string>
     <string name="tutorial_step_username_instruction">點擊你的一列以選擇名稱。</string>
     <string name="username_dialog_title_first">選擇名稱</string>
     <string name="username_dialog_title_change">變更名稱</string>

@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Eğitimi Atla</string>
     <string name="tutorial_step_merge_instruction">Bir taşı eşleşen başka bir taşın üstüne sürükleyerek birleştir.</string>
     <string name="tutorial_step_frame_instruction">Bu taşları birleştirerek yeni hücreleri aç.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Bu kilitli taşlar tehlikeli. Temizlemeyi öğrenmek için dokun.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Kalkanı kullanarak bir tehlikeli taşı temizle.</string>
-    <string name="tutorial_step_shield_subhint">Kalkan kartına dokunarak bir video izle ve 3 kalkan daha kazan.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Bunlar tehlikeli taşlar — tahtada kalırlarsa size zarar verirler.
+Birini temizlemek için KALKAN\'a basılı tutun ve tehlikeli taşın üzerine sürükleyin.</string>
     <string name="tutorial_step_leaderboard_instruction">En yüksek skorların otomatik olarak küresel skor tablosuna gönderilir. Menüden açarak sıralamadaki yerini gör.</string>
     <string name="tutorial_hint_drag_to_merge">İki taşı üst üste sürüklemeyi dene…</string>
     <string name="tutorial_success_merge">Harika birleşim!</string>
     <string name="tutorial_success_frame">Hücre açıldı!</string>
     <string name="tutorial_success_shield">Tehlike temizlendi!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Küresel sıralamayı görmek için Skor Tablosu düğmesine dokun.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">SKOR TABLOSU düğmesine dokun, sonra kendi satırına dokunarak isim seç.</string>
     <string name="tutorial_step_username_instruction">Kendine bir isim seçmek için kendi satırına dokun.</string>
     <string name="username_dialog_title_first">Kendine bir isim seç</string>
     <string name="username_dialog_title_change">İsmini değiştir</string>

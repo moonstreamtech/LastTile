@@ -53,15 +53,14 @@
     <string name="tutorial_cta_skip">דלג</string>
     <string name="tutorial_step_merge_instruction">גרור אריח על אריח תואם כדי למזג אותם.</string>
     <string name="tutorial_step_frame_instruction">מזג אריחים אלה כדי לפתוח תאי מסגרת חדשים.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">האריחים הנעולים האלה מסוכנים. הקש כדי ללמוד איך לסלק אותם.</string>
-    <string name="tutorial_step_hazards_and_shield_action">השתמש במגן לסילוק סכנה.</string>
-    <string name="tutorial_step_shield_subhint">הקש על כרטיס המגן לצפייה בסרטון וקבל 3 מגנים נוספים.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">אלו אריחים מסוכנים — הם פוגעים בך אם נשארים על הלוח.
+כדי להסיר, לחץ והחזק על המגן וגרור אותו על אריח מסוכן.</string>
     <string name="tutorial_step_leaderboard_instruction">התוצאות הגבוהות שלך נשלחות אוטומטית ללוח השיא הגלובלי. פתח אותו מהתפריט כדי לראות את דירוגך.</string>
     <string name="tutorial_hint_drag_to_merge">נסה לגרור את האריחים יחד…</string>
     <string name="tutorial_success_merge">מיזוג מצוין!</string>
     <string name="tutorial_success_frame">המסגרת נפתחה!</string>
     <string name="tutorial_success_shield">הסכנה סולקה!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">הקש על לוח שיא לראות דירוג גלובלי.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">הקש על כפתור טבלת המובילים, ואז הקש על השורה שלך כדי להגדיר שם.</string>
     <string name="tutorial_step_username_instruction">הקש על השורה שלך לבחירת שם.</string>
     <string name="username_dialog_title_first">בחר שם</string>
     <string name="username_dialog_title_change">שנה שם</string>

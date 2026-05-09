@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">رد کردن</string>
     <string name="tutorial_step_merge_instruction">یک کاشی را روی کاشی هم‌سان بکش تا ادغام شوند.</string>
     <string name="tutorial_step_frame_instruction">این کاشی‌ها را ادغام کن تا خانه‌های جدید قاب باز شود.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">این کاشی‌های قفل‌شده خطرناک‌اند. ضربه بزن تا یاد بگیری چطور پاکشان کنی.</string>
-    <string name="tutorial_step_hazards_and_shield_action">از سپر برای پاک‌سازی خطر استفاده کن.</string>
-    <string name="tutorial_step_shield_subhint">روی کارت سپر بزن، ویدیو ببین و ۳ سپر دیگر بگیر.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">این‌ها کاشی‌های خطرناک هستند — اگر روی صفحه بمانند به شما آسیب می‌رسانند.
+برای حذف، سپر را نگه دارید و روی یک کاشی خطرناک بکشید.</string>
     <string name="tutorial_step_leaderboard_instruction">بهترین امتیازاتت به‌طور خودکار به جدول جهانی فرستاده می‌شوند. از منو بازش کن تا رتبه‌ات را ببینی.</string>
     <string name="tutorial_hint_drag_to_merge">کاشی‌ها را به سمت هم بکش…</string>
     <string name="tutorial_success_merge">ادغام عالی!</string>
     <string name="tutorial_success_frame">قاب باز شد!</string>
     <string name="tutorial_success_shield">خطر پاک شد!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">روی جدول امتیازات بزن تا رتبه جهانی را ببینی.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">روی دکمه جدول امتیازات بزنید، سپس روی ردیف خود بزنید تا نام خود را تنظیم کنید.</string>
     <string name="tutorial_step_username_instruction">روی ردیف خود ضربه بزن تا نام انتخاب کنی.</string>
     <string name="username_dialog_title_first">نام انتخاب کن</string>
     <string name="username_dialog_title_change">تغییر نام</string>

@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ట్యుటోరియల్ దాటవేయి</string>
     <string name="tutorial_step_merge_instruction">ఒక టైల్‌ను సరిపోయే టైల్‌పైకి లాగి విలీనం చేయండి.</string>
     <string name="tutorial_step_frame_instruction">క్రొత్త ఫ్రేమ్ సెల్‌లను తెరవడానికి ఈ టైల్‌లను విలీనం చేయండి.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ఈ లాక్ చేయబడిన టైల్‌లు ప్రమాదకరం. తొలగించే విధానం నేర్చుకోవడానికి ట్యాప్ చేయండి.</string>
-    <string name="tutorial_step_hazards_and_shield_action">ప్రమాదాన్ని తొలగించడానికి కవచాన్ని ఉపయోగించండి.</string>
-    <string name="tutorial_step_shield_subhint">కవచం కార్డుపై ట్యాప్ చేసి వీడియో చూడండి, మరో 3 కవచాలు పొందండి.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ఇవి ప్రమాదకర టైల్‌లు — బోర్డుపై ఉంటే నష్టం కలిగిస్తాయి.
+తొలగించడానికి, షీల్డ్‌ను నొక్కి పట్టుకుని ప్రమాదకర టైల్‌పైకి లాగండి.</string>
     <string name="tutorial_step_leaderboard_instruction">మీ అత్యుత్తమ స్కోర్‌లు స్వయంచాలకంగా గ్లోబల్ లీడర్‌బోర్డ్‌కు పంపబడతాయి. మీ ర్యాంక్ చూడడానికి మెను నుండి తెరవండి.</string>
     <string name="tutorial_hint_drag_to_merge">టైల్స్‌ను కలిపి లాగడానికి ప్రయత్నించండి…</string>
     <string name="tutorial_success_merge">మంచి విలీనం!</string>
     <string name="tutorial_success_frame">ఫ్రేమ్ తెరిచింది!</string>
     <string name="tutorial_success_shield">ప్రమాదం తొలగించబడింది!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">గ్లోబల్ ర్యాంకింగ్‌లు చూడటానికి లీడర్‌బోర్డ్ బటన్‌ను ట్యాప్ చేయండి.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">లీడర్‌బోర్డ్ బటన్‌ను నొక్కండి, ఆపై మీ పేరును సెట్ చేయడానికి మీ వరుసను నొక్కండి.</string>
     <string name="tutorial_step_username_instruction">పేరును ఎంచుకోవడానికి మీ వరుసను ట్యాప్ చేయండి.</string>
     <string name="username_dialog_title_first">పేరు ఎంచుకోండి</string>
     <string name="username_dialog_title_change">పేరు మార్చండి</string>

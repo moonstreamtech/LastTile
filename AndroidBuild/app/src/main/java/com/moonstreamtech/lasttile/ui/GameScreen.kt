@@ -62,9 +62,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withTimeoutOrNull
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -233,28 +230,6 @@ fun GameScreen() {
         }
         if (triggered) tutorial.markStepCompleted()
     }
-    // v0.1.11: sub-phase advance for the combined Hazard step.
-    // Sub-phase 0 spotlights the hazard tiles with the "these are
-    // dangerous" copy; after ~3s OR as soon as the player taps a tile
-    // (state.selected becomes non-null), the spotlight shifts to the
-    // KALKAN card and the copy switches to "use your shield to clear
-    // one". Internal to the step — no step counter change.
-    LaunchedEffect(tutorial.state.currentStep, tutorial.state.subPhase) {
-        if (!tutorial.state.active) return@LaunchedEffect
-        if (tutorial.state.currentStep != TutorialStep.Hazard) return@LaunchedEffect
-        if (tutorial.state.subPhase != 0) return@LaunchedEffect
-        withTimeoutOrNull(3000L) {
-            snapshotFlow { state.selected != null }.first { it }
-        }
-        // Re-check after the suspend in case the user already cleared a
-        // hazard (which advances the whole step) before either signal
-        // fired.
-        if (tutorial.state.currentStep == TutorialStep.Hazard &&
-            tutorial.state.subPhase == 0
-        ) {
-            tutorial.advanceHazardSubPhase()
-        }
-    }
     LaunchedEffect(tutorial.state.stepCompleted, tutorial.state.currentStep) {
         if (!tutorial.state.active) return@LaunchedEffect
         if (!tutorial.state.stepCompleted) return@LaunchedEffect
@@ -348,14 +323,13 @@ fun GameScreen() {
     val tutorialSpotlightActive = tutorial.state.active &&
         !tutorial.state.stepCompleted &&
         tutorial.state.highlightedCells.isNotEmpty()
-    // v0.1.11: KALKAN card highlights during sub-phase 1 of the
-    // combined Hazard step (after the "use your shield" prompt
-    // appears). Sub-phase 0 keeps the highlight off so it doesn't
-    // compete with the hazard-tile spotlight on the board.
+    // v0.1.13: KALKAN card pulses for the entire Hazard step. The
+    // single combined instruction names the SHIELD up front, so the
+    // card highlight should be visible from the moment the step opens
+    // (not gated on a sub-phase the way it was in v0.1.11).
     val tutorialShieldCardHighlighted = tutorial.state.active &&
         !tutorial.state.stepCompleted &&
-        tutorial.state.currentStep == TutorialStep.Hazard &&
-        tutorial.state.subPhase == 1
+        tutorial.state.currentStep == TutorialStep.Hazard
 
     fun handleShieldDragEnd() {
         val pos = shieldDragWindowPos
@@ -697,6 +671,26 @@ fun GameScreen() {
             }
             }
 
+            // v0.1.13: tutorial instruction card sits inline between
+            // the action button row and the ad banner. The previous
+            // implementation drew it as a fullscreen Box at zIndex 50
+            // and tall card content (Username step copy) covered the
+            // LEADERBOARD button in Closed Testing. Inline placement
+            // means the action buttons are always above the card and
+            // remain tappable. suppressCard hides the card during the
+            // Username step while the leaderboard dialog renders its
+            // own inline instruction.
+            if (tutorial.state.active) {
+                val suppressCard = showLeaderboard &&
+                    tutorial.state.currentStep == TutorialStep.Username
+                TutorialOverlay(
+                    state = tutorial.state,
+                    onGotIt = { tutorial.next() },
+                    onSkip = { tutorial.skip() },
+                    suppressCard = suppressCard
+                )
+            }
+
             BottomAdBanner()
         }
 
@@ -871,33 +865,11 @@ fun GameScreen() {
             }
         }
 
-        // Tutorial overlay. Draws last in the root Box so it sits above
-        // the board, the stat row, and the dialogs. The dim layer is
-        // intentionally applied at low alpha (0.55) covering the whole
-        // screen rather than cut around individual UI elements — the
-        // simpler approach the spec offers when per-element cut-outs
-        // would balloon the implementation. The instruction card sits
-        // at the bottom and shows: step counter, instruction text, the
-        // shield sub-hint when relevant, a Got it CTA, and a Skip text
-        // button. A dialog open during the tutorial calls skip() at
-        // its open site so the overlay doesn't collide with the dialog.
-        //
-        // v0.2.x fix: during the Username step the leaderboard dialog is open and
-        // already shows the inline orange instruction at its top, so
-        // the bottom step card would duplicate that copy. Hide the
-        // card in that exact case; the spotlight on the player's row
-        // is what guides the user, and the inline text in the dialog
-        // is enough.
-        if (tutorial.state.active) {
-            val suppressCard = showLeaderboard &&
-                tutorial.state.currentStep == TutorialStep.Username
-            TutorialOverlay(
-                state = tutorial.state,
-                onGotIt = { tutorial.next() },
-                onSkip = { tutorial.skip() },
-                suppressCard = suppressCard
-            )
-        }
+        // v0.1.13: tutorial card moved into the inline gameplay
+        // column above (between action buttons and BottomAdBanner) so
+        // it can no longer cover the LEADERBOARD action button. This
+        // root-Box position previously hosted the TutorialOverlay as a
+        // zIndex(50f) fullscreen overlay; that block is gone.
     }
 }
 
@@ -2299,73 +2271,63 @@ private fun TutorialOverlay(
     suppressCard: Boolean = false
 ) {
     if (suppressCard) return
-    // v0.1.8: dim layer removed — full-opacity board + scoreboard read
-    // better against the dark theme than the muddy 0.55-alpha black scrim
-    // we shipped in v0.1.7. The instruction card carries the tutorial UI
-    // alone, anchored at the bottom with safe-area padding so it never
-    // collides with the system nav bar. The Column's fillMaxSize +
-    // verticalArrangement = Bottom keeps the card pinned without consuming
-    // the underlying click surface — pointerInput on the card itself
-    // absorbs taps within its bounds.
+    // v0.1.13: rendered INLINE inside the GameScreen column (between
+    // the action button row and the ad banner) instead of as a
+    // fullscreen Box overlay. The previous overlay sat at zIndex 50
+    // over the whole screen; with wrapContentHeight + bottom alignment
+    // it could grow tall enough to occlude the LEADERBOARD button and
+    // the testers' Closed Testing report flagged exactly that on the
+    // Username step. Inline placement guarantees the action buttons
+    // are always above the card and tappable. Spotlights on the board
+    // remain handled inside BoardView; this composable now owns only
+    // the instruction card.
     Box(
         modifier = Modifier
-            .fillMaxSize()
-            .zIndex(50f)
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        Column(
+        Box(
             modifier = Modifier
-                .fillMaxSize()
-                .padding(16.dp),
-            verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally
+                .fillMaxWidth()
+                .clip(RoundedCornerShape(18.dp))
+                .background(Brush.verticalGradient(listOf(CardAccent, CardBg)))
+                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(18.dp))
-                    .background(Brush.verticalGradient(listOf(CardAccent, CardBg)))
-                    .padding(18.dp)
-                    // Absorb taps so they don't fall through to the
-                    // dimmed game surface underneath the card.
-                    .pointerInput(Unit) {}
-            ) {
-                // Animate the inner content (counter, text, buttons)
-                // between steps and into the success beat. The card
-                // surface itself stays fixed — only the content fades
-                // and slides. Transitions into the success beat use a
-                // scaleIn pop instead of slide so the checkmark feels
-                // like a small celebration; outgoing content always
-                // slides up + fades.
-                AnimatedContent(
-                    targetState = state.currentStep to state.stepCompleted,
-                    transitionSpec = {
-                        val targetIsSuccess = targetState.second
-                        val enter = if (targetIsSuccess) {
-                            fadeIn(tween(250)) +
-                                scaleIn(initialScale = 0.7f, animationSpec = tween(250))
-                        } else {
-                            fadeIn(tween(250)) +
-                                slideInVertically(tween(250)) { it / 4 }
-                        }
-                        val exit = fadeOut(tween(200)) +
-                            slideOutVertically(tween(200)) { -it / 4 }
-                        enter togetherWith exit
-                    },
-                    label = "tutorial-content"
-                ) { (step, completed) ->
-                    if (completed) {
-                        TutorialSuccessContent(step = step)
+            // Animate the inner content (counter, text, buttons)
+            // between steps and into the success beat. The card
+            // surface itself stays fixed — only the content fades
+            // and slides. Transitions into the success beat use a
+            // scaleIn pop instead of slide so the checkmark feels
+            // like a small celebration; outgoing content always
+            // slides up + fades.
+            AnimatedContent(
+                targetState = state.currentStep to state.stepCompleted,
+                transitionSpec = {
+                    val targetIsSuccess = targetState.second
+                    val enter = if (targetIsSuccess) {
+                        fadeIn(tween(250)) +
+                            scaleIn(initialScale = 0.7f, animationSpec = tween(250))
                     } else {
-                        TutorialStepContent(
-                            step = step,
-                            subPhase = state.subPhase,
-                            instructionTextRes = state.instructionTextRes,
-                            ctaTextRes = state.ctaTextRes,
-                            mandatory = state.mandatory,
-                            onGotIt = onGotIt,
-                            onSkip = onSkip
-                        )
+                        fadeIn(tween(250)) +
+                            slideInVertically(tween(250)) { it / 4 }
                     }
+                    val exit = fadeOut(tween(200)) +
+                        slideOutVertically(tween(200)) { -it / 4 }
+                    enter togetherWith exit
+                },
+                label = "tutorial-content"
+            ) { (step, completed) ->
+                if (completed) {
+                    TutorialSuccessContent(step = step)
+                } else {
+                    TutorialStepContent(
+                        step = step,
+                        instructionTextRes = state.instructionTextRes,
+                        ctaTextRes = state.ctaTextRes,
+                        mandatory = state.mandatory,
+                        onGotIt = onGotIt,
+                        onSkip = onSkip
+                    )
                 }
             }
         }
@@ -2375,7 +2337,6 @@ private fun TutorialOverlay(
 @Composable
 private fun TutorialStepContent(
     step: TutorialStep,
-    subPhase: Int,
     instructionTextRes: Int,
     ctaTextRes: Int,
     mandatory: Boolean,
@@ -2402,7 +2363,7 @@ private fun TutorialStepContent(
             fontWeight = FontWeight.SemiBold,
             textAlign = TextAlign.Center
         )
-        Spacer(Modifier.height(10.dp))
+        Spacer(Modifier.height(8.dp))
         if (instructionTextRes != 0) {
             Text(
                 text = stringResource(instructionTextRes),
@@ -2411,49 +2372,41 @@ private fun TutorialStepContent(
                 textAlign = TextAlign.Center
             )
         }
-        // v0.1.11: the "tap shield card to earn 3 more" sub-hint is
-        // gated to sub-phase 1 of the combined Hazard step — same
-        // moment as the legacy Shield step, when the user has just
-        // been prompted to drag a shield onto a hazard. During
-        // sub-phase 0 we're still introducing the hazards themselves
-        // and the shield mechanic hasn't been mentioned yet.
-        if (step == TutorialStep.Hazard && subPhase == 1) {
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = stringResource(R.string.tutorial_step_shield_subhint),
-                color = TextSecondary,
-                fontSize = 11.sp,
-                textAlign = TextAlign.Center
-            )
-        }
-        Spacer(Modifier.height(14.dp))
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            // Skip is hidden during the mandatory first-launch flow —
-            // the user has to complete the Username step to dismiss the overlay.
-            if (!mandatory) {
-                TextButton(onClick = onSkip) {
-                    Text(
-                        stringResource(R.string.tutorial_cta_skip),
-                        color = TextSecondary,
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
+        // v0.1.13: the button row is now conditional. Hazard, Leaderboard,
+        // and Username steps have no Got it CTA (they auto-advance on the
+        // user's actual action), and Skip is hidden during the mandatory
+        // first-launch flow — in that combination the row is empty and
+        // the trailing spacer would just pad the card without purpose,
+        // pushing it taller and risking overlap with the action buttons.
+        val showButtons = !mandatory || ctaTextRes != 0
+        if (showButtons) {
+            Spacer(Modifier.height(12.dp))
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                if (!mandatory) {
+                    TextButton(onClick = onSkip) {
+                        Text(
+                            stringResource(R.string.tutorial_cta_skip),
+                            color = TextSecondary,
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                    }
+                    if (ctaTextRes != 0) Spacer(Modifier.size(12.dp))
                 }
-                Spacer(Modifier.size(12.dp))
-            }
-            if (ctaTextRes != 0) {
-                Button(
-                    onClick = onGotIt,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = AccentAmber,
-                        contentColor = Color(0xFF2B1810)
-                    )
-                ) {
-                    Text(
-                        stringResource(ctaTextRes),
-                        fontWeight = FontWeight.Bold,
-                        letterSpacing = 1.sp
-                    )
+                if (ctaTextRes != 0) {
+                    Button(
+                        onClick = onGotIt,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = AccentAmber,
+                            contentColor = Color(0xFF2B1810)
+                        )
+                    ) {
+                        Text(
+                            stringResource(ctaTextRes),
+                            fontWeight = FontWeight.Bold,
+                            letterSpacing = 1.sp
+                        )
+                    }
                 }
             }
         }

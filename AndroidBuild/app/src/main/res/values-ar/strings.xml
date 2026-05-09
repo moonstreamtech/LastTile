@@ -55,15 +55,14 @@
     <string name="tutorial_cta_skip">تخطي الشرح</string>
     <string name="tutorial_step_merge_instruction">اسحب قطعة فوق قطعة مماثلة لدمجهما.</string>
     <string name="tutorial_step_frame_instruction">ادمج هذه القطع لفتح خانات جديدة في الإطار.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">هذه القطع المقفلة خطيرة. انقر لتعلّم كيفية إزالتها.</string>
-    <string name="tutorial_step_hazards_and_shield_action">استخدم درعك لإزالة الخطر.</string>
-    <string name="tutorial_step_shield_subhint">انقر على بطاقة الدرع لمشاهدة فيديو والحصول على 3 دروع إضافية.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">هذه بلاطات خطرة — ستسبب لك ضررًا إذا بقيت على اللوحة.
+لإزالتها، اضغط مع الاستمرار على الدرع واسحبه إلى البلاطة الخطرة.</string>
     <string name="tutorial_step_leaderboard_instruction">تُرسل أعلى نتائجك تلقائيًا إلى لوحة المتصدرين العالمية. افتحها من القائمة لمعرفة ترتيبك.</string>
     <string name="tutorial_hint_drag_to_merge">جرّب سحب القطع معًا…</string>
     <string name="tutorial_success_merge">دمج رائع!</string>
     <string name="tutorial_success_frame">تم فتح الإطار!</string>
     <string name="tutorial_success_shield">تمت إزالة الخطر!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">انقر على لوحة المتصدرين لرؤية الترتيب العالمي.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">انقر على زر لوحة المتصدرين، ثم انقر على صفك الخاص لتعيين اسمك.</string>
     <string name="tutorial_step_username_instruction">انقر على صفّك لاختيار اسم.</string>
     <string name="username_dialog_title_first">اختر اسمًا</string>
     <string name="username_dialog_title_change">تغيير الاسم</string>

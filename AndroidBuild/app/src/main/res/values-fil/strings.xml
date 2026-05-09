@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Laktawan ang tutorial</string>
     <string name="tutorial_step_merge_instruction">I-drag ang isang tile sa katugma para pagsamahin.</string>
     <string name="tutorial_step_frame_instruction">Pagsamahin ang mga tile na ito para magbukas ng bagong frame cell.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Mapanganib ang mga naka-lock na tile na ito. I-tap para matutunan kung paano linisin.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Gamitin ang kalasag para linisin ang panganib.</string>
-    <string name="tutorial_step_shield_subhint">I-tap ang shield card para manood ng video at makakuha ng 3 pang kalasag.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ito ay mapanganib na tile — sumasakit kapag nanatili sa board.
+Upang alisin, pindutin at hawakan ang KALASAG, pagkatapos ay i-drag sa mapanganib na tile.</string>
     <string name="tutorial_step_leaderboard_instruction">Awtomatikong ipinapadala ang iyong pinakamataas na iskor sa global na listahan. Buksan ito sa menu para makita ang ranggo mo.</string>
     <string name="tutorial_hint_drag_to_merge">Subukang i-drag nang magkasama ang mga tile…</string>
     <string name="tutorial_success_merge">Galing ng pagsasama!</string>
     <string name="tutorial_success_frame">Nabuksan ang frame!</string>
     <string name="tutorial_success_shield">Nalinis ang panganib!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">I-tap ang Listahan para makita ang global na ranggo.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">I-tap ang LEADERBOARD button, pagkatapos i-tap ang sarili mong row para i-set ang pangalan mo.</string>
     <string name="tutorial_step_username_instruction">I-tap ang iyong row para pumili ng pangalan.</string>
     <string name="username_dialog_title_first">Pumili ng pangalan</string>
     <string name="username_dialog_title_change">Palitan ang pangalan</string>

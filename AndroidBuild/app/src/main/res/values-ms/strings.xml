@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Langkau tutorial</string>
     <string name="tutorial_step_merge_instruction">Seret satu jubin ke jubin sepadan untuk gabungkan.</string>
     <string name="tutorial_step_frame_instruction">Gabungkan jubin-jubin ini untuk buka sel bingkai baru.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Jubin terkunci ini berbahaya. Ketik untuk belajar membersihkan.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Guna perisai untuk bersihkan bahaya.</string>
-    <string name="tutorial_step_shield_subhint">Ketik kad perisai untuk tonton video dan dapat 3 perisai lagi.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ini ialah jubin berbahaya — akan mencederakan jika kekal di papan.
+Untuk membuangnya, tekan dan tahan PERISAI, kemudian seret ke jubin berbahaya.</string>
     <string name="tutorial_step_leaderboard_instruction">Skor tertinggi anda dihantar secara automatik ke papan kedudukan global. Buka dari menu untuk lihat kedudukan anda.</string>
     <string name="tutorial_hint_drag_to_merge">Cuba seret jubin bersama-sama…</string>
     <string name="tutorial_success_merge">Gabungan hebat!</string>
     <string name="tutorial_success_frame">Bingkai dibuka!</string>
     <string name="tutorial_success_shield">Bahaya dibersihkan!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Ketik Papan kedudukan untuk lihat kedudukan global.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Ketik butang PAPAN PENDAHULU, kemudian ketik baris anda untuk menetapkan nama.</string>
     <string name="tutorial_step_username_instruction">Ketik baris anda untuk pilih nama.</string>
     <string name="username_dialog_title_first">Pilih nama</string>
     <string name="username_dialog_title_change">Tukar nama</string>

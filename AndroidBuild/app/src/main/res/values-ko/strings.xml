@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">튜토리얼 건너뛰기</string>
     <string name="tutorial_step_merge_instruction">같은 타일 위로 드래그해 합치세요.</string>
     <string name="tutorial_step_frame_instruction">이 타일들을 합쳐 새로운 칸을 여세요.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">잠긴 타일은 위험합니다. 제거 방법을 배우려면 탭하세요.</string>
-    <string name="tutorial_step_hazards_and_shield_action">방어막으로 위험을 제거하세요.</string>
-    <string name="tutorial_step_shield_subhint">방어막 카드를 탭해 동영상을 보고 방어막 3개를 더 받으세요.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">이것들은 위험한 타일입니다 — 보드에 남아 있으면 피해를 입습니다.
+제거하려면 방패를 길게 누른 채 위험 타일로 드래그하세요.</string>
     <string name="tutorial_step_leaderboard_instruction">최고 점수는 자동으로 글로벌 리더보드에 제출됩니다. 메뉴에서 열어 순위를 확인하세요.</string>
     <string name="tutorial_hint_drag_to_merge">타일들을 함께 드래그해 보세요…</string>
     <string name="tutorial_success_merge">멋지게 합쳤어요!</string>
     <string name="tutorial_success_frame">프레임 열림!</string>
     <string name="tutorial_success_shield">위험 제거됨!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">리더보드 버튼을 눌러 글로벌 순위를 확인하세요.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">리더보드 버튼을 누른 다음 자신의 줄을 눌러 이름을 설정하세요.</string>
     <string name="tutorial_step_username_instruction">내 행을 탭해 이름을 정하세요.</string>
     <string name="username_dialog_title_first">이름 선택</string>
     <string name="username_dialog_title_change">이름 변경</string>

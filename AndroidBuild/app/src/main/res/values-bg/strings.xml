@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Пропусни</string>
     <string name="tutorial_step_merge_instruction">Плъзни плочка върху съответстваща, за да ги слееш.</string>
     <string name="tutorial_step_frame_instruction">Слей тези плочки, за да отключиш нови клетки.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Тези заключени плочки са опасни. Докосни, за да научиш как да ги изчистиш.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Използвай щита, за да изчистиш опасност.</string>
-    <string name="tutorial_step_shield_subhint">Докосни картата щит, за да гледаш видео и получиш още 3 щита.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Това са опасни плочки — нанасят щети, ако останат на дъската.
+За премахване задръж ЩИТА и го плъзни върху опасна плочка.</string>
     <string name="tutorial_step_leaderboard_instruction">Най-високите ти резултати се изпращат автоматично в световната класация. Отвори я от менюто, за да видиш мястото си.</string>
     <string name="tutorial_hint_drag_to_merge">Опитай да плъзнеш плочките заедно…</string>
     <string name="tutorial_success_merge">Чудесно сливане!</string>
     <string name="tutorial_success_frame">Рамката е отворена!</string>
     <string name="tutorial_success_shield">Опасността е премахната!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Докосни Класация, за да видиш световното класиране.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Натисни бутона КЛАСАЦИЯ, след това натисни своя ред, за да зададеш име.</string>
     <string name="tutorial_step_username_instruction">Докосни своя ред, за да избереш име.</string>
     <string name="username_dialog_title_first">Избери име</string>
     <string name="username_dialog_title_change">Смени името</string>

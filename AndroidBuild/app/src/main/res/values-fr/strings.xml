@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Passer le tuto</string>
     <string name="tutorial_step_merge_instruction">Glisse une tuile sur la tuile correspondante pour les fusionner.</string>
     <string name="tutorial_step_frame_instruction">Fusionne ces tuiles pour ouvrir de nouvelles cases.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Ces tuiles verrouillées sont dangereuses. Touche pour apprendre à les nettoyer.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Utilise ton bouclier pour nettoyer un piège.</string>
-    <string name="tutorial_step_shield_subhint">Touche la carte bouclier pour regarder une vidéo et gagner 3 boucliers de plus.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ces tuiles sont dangereuses — elles vous infligent des dégâts si elles restent sur le plateau.
+Pour en éliminer une, maintenez le BOUCLIER appuyé et glissez-le sur une tuile dangereuse.</string>
     <string name="tutorial_step_leaderboard_instruction">Tes meilleurs scores sont envoyés automatiquement au classement mondial. Ouvre-le depuis le menu pour voir ton rang.</string>
     <string name="tutorial_hint_drag_to_merge">Essaie de glisser les tuiles ensemble…</string>
     <string name="tutorial_success_merge">Belle fusion !</string>
     <string name="tutorial_success_frame">Cadre ouvert !</string>
     <string name="tutorial_success_shield">Piège nettoyé !</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Touche Classement pour voir le top mondial.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Appuyez sur CLASSEMENT, puis appuyez sur votre ligne pour entrer votre nom.</string>
     <string name="tutorial_step_username_instruction">Touche ta ligne pour choisir un nom.</string>
     <string name="username_dialog_title_first">Choisis ton nom</string>
     <string name="username_dialog_title_change">Changer ton nom</string>

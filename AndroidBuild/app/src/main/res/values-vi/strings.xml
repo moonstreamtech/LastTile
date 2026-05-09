@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Bỏ qua hướng dẫn</string>
     <string name="tutorial_step_merge_instruction">Kéo một ô lên ô khớp để ghép chúng.</string>
     <string name="tutorial_step_frame_instruction">Ghép các ô này để mở các ô khung mới.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Các ô khoá này nguy hiểm. Chạm để học cách xoá chúng.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Dùng khiên để xoá nguy hiểm.</string>
-    <string name="tutorial_step_shield_subhint">Chạm thẻ khiên để xem video và nhận thêm 3 khiên.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Đây là các ô nguy hiểm — sẽ gây sát thương nếu để lại trên bảng.
+Để loại bỏ, nhấn giữ KHIÊN và kéo lên ô nguy hiểm.</string>
     <string name="tutorial_step_leaderboard_instruction">Điểm số cao của bạn tự động gửi lên bảng xếp hạng toàn cầu. Mở từ menu để xem thứ hạng.</string>
     <string name="tutorial_hint_drag_to_merge">Thử kéo các ô lại với nhau…</string>
     <string name="tutorial_success_merge">Ghép tuyệt!</string>
     <string name="tutorial_success_frame">Khung đã mở!</string>
     <string name="tutorial_success_shield">Đã xoá nguy hiểm!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Chạm Bảng xếp hạng để xem xếp hạng toàn cầu.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Nhấn nút BẢNG XẾP HẠNG, sau đó nhấn vào hàng của bạn để đặt tên.</string>
     <string name="tutorial_step_username_instruction">Chạm hàng của bạn để chọn tên.</string>
     <string name="username_dialog_title_first">Chọn tên</string>
     <string name="username_dialog_title_change">Đổi tên</string>

@@ -52,15 +52,14 @@
     <string name="tutorial_cta_skip">Preskočiť</string>
     <string name="tutorial_step_merge_instruction">Potiahni dlaždicu na zhodnú dlaždicu, aby sa spojili.</string>
     <string name="tutorial_step_frame_instruction">Spoj tieto dlaždice a odomkni nové polia rámu.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Tieto uzamknuté dlaždice sú nebezpečné. Klepni a nauč sa ich odstrániť.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Použi štít na odstránenie nebezpečenstva.</string>
-    <string name="tutorial_step_shield_subhint">Klepni na kartu štítu, pozri video a získaj 3 ďalšie štíty.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Toto sú nebezpečné dlaždice — zranujú ťa, ak zostanú na hracej ploche.
+Na odstránenie podrž ŠTÍT a presuň ho na nebezpečnú dlaždicu.</string>
     <string name="tutorial_step_leaderboard_instruction">Tvoje najvyššie skóre sa automaticky odosielajú do globálneho rebríčka. Otvor ho z ponuky a uvidíš svoje miesto.</string>
     <string name="tutorial_hint_drag_to_merge">Skús potiahnuť dlaždice k sebe…</string>
     <string name="tutorial_success_merge">Pekné spojenie!</string>
     <string name="tutorial_success_frame">Rámček otvorený!</string>
     <string name="tutorial_success_shield">Nebezpečenstvo odstránené!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Klepni na Rebríček pre globálne poradie.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Ťukni na tlačidlo REBRÍČEK, potom ťukni na svoj riadok pre nastavenie mena.</string>
     <string name="tutorial_step_username_instruction">Klepni na svoj riadok a vyber meno.</string>
     <string name="username_dialog_title_first">Vyber si meno</string>
     <string name="username_dialog_title_change">Zmeniť meno</string>

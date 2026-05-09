@@ -6,24 +6,31 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 
 /**
- * Five interactive tutorial steps plus a terminal Done state. The
- * `index` is the 1-based step counter the UI shows ("1 / 5"). Done has
+ * Four interactive tutorial steps plus a terminal Done state. The
+ * `index` is the 1-based step counter the UI shows ("1 / 4"). Done has
  * index 0 because the counter is hidden once the tutorial finishes.
  *
- * v0.1.11: the former separate Hazard (intro) and Shield (use)
- * steps were collapsed into a single combined Hazard step that owns
- * both moments via an internal sub-phase. See [TutorialState.subPhase].
+ * v0.1.13: dropped the Hazard step's internal sub-phase (the sequential
+ * "tap to learn" + "use shield" copy confused users who saw the counter
+ * stay at 3/5 across two screens); the step now ships a single combined
+ * instruction and waits for the actual shield-on-hazard drag. Username
+ * shares index 4 with Leaderboard so the counter reads "4 / 4" through
+ * both halves of the merged final step (tap LEADERBOARD → tap own row).
  */
 sealed class TutorialStep(val index: Int) {
     object Merge : TutorialStep(1)
     object Frame : TutorialStep(2)
     object Hazard : TutorialStep(3)
     object Leaderboard : TutorialStep(4)
-    object Username : TutorialStep(5)
+    // v0.1.13: shares index 4 with Leaderboard. The state machine still
+    // treats them as separate so action handlers (open dialog vs. save
+    // name) stay distinct, but the user-facing counter shows "4 / 4"
+    // through both halves of the merged final step.
+    object Username : TutorialStep(4)
     object Done : TutorialStep(0)
 
     companion object {
-        const val TOTAL_INTERACTIVE_STEPS = 5
+        const val TOTAL_INTERACTIVE_STEPS = 4
     }
 }
 
@@ -42,22 +49,15 @@ data class TutorialState(
     // for the current step. Coordinates mirror the tiles
     // [com.moonstreamtech.lasttile.GameState.setupForTutorial] places —
     // when one moves, the other has to move with it. Steps that have no
-    // board target (Leaderboard, Username, and Hazard sub-phase 1)
-    // leave this empty. The shield card highlight is NOT in this set;
-    // it is a UI element outside the board grid and is gated separately
-    // on currentStep == Hazard && subPhase == 1.
+    // board target (Leaderboard, Username) leave this empty. The shield
+    // card highlight is NOT in this set; it is a UI element outside the
+    // board grid and is gated separately on currentStep == Hazard.
     val highlightedCells: Set<Pair<Int, Int>> = emptySet(),
     // First-launch tutorials cannot be skipped or dismissed — Skip is
     // hidden, hardware back is blocked, and the Username step only
     // completes after the player commits a username. Re-triggers from
     // the "?" button run with this off.
-    val mandatory: Boolean = false,
-    // v0.1.11: only the combined Hazard step uses this. 0 = "these
-    // locked tiles are dangerous" (spotlight on hazards); 1 = "use
-    // your shield to clear one" (spotlight on the KALKAN card). The
-    // sub-phase is internal to the step — the step counter does not
-    // change when it advances.
-    val subPhase: Int = 0
+    val mandatory: Boolean = false
 )
 
 /**
@@ -134,26 +134,6 @@ class TutorialController(private val prefs: SharedPreferences) {
         state = state.copy(stepCompleted = true)
     }
 
-    /**
-     * Advances the combined Hazard step from sub-phase 0 (introducing
-     * the locked hazard tiles) to sub-phase 1 (prompting the player to
-     * use the shield). GameScreen calls this after a short delay or on
-     * the player's first board interaction. No-op outside the Hazard
-     * step or when sub-phase 1 is already active.
-     */
-    fun advanceHazardSubPhase() {
-        if (!state.active) return
-        if (state.currentStep != TutorialStep.Hazard) return
-        if (state.subPhase != 0) return
-        state = state.copy(
-            subPhase = 1,
-            instructionTextRes = R.string.tutorial_step_hazards_and_shield_action,
-            // Spotlight shifts off the board (onto the KALKAN card,
-            // gated separately by GameScreen on subPhase == 1).
-            highlightedCells = emptySet()
-        )
-    }
-
     private fun finish() {
         state = IDLE_STATE
         prefs.edit().putBoolean(KEY_COMPLETED_ONCE, true).apply()
@@ -163,8 +143,9 @@ class TutorialController(private val prefs: SharedPreferences) {
         val instructionRes = when (step) {
             TutorialStep.Merge -> R.string.tutorial_step_merge_instruction
             TutorialStep.Frame -> R.string.tutorial_step_frame_instruction
-            // Sub-phase 0 of the combined Hazard step. Sub-phase 1's
-            // string swap happens in [advanceHazardSubPhase].
+            // v0.1.13: single combined message — "these are hazardous,
+            // press SHIELD and drag onto a hazard to clear". Replaces
+            // the former two-phase intro→action subPhase mechanic.
             TutorialStep.Hazard -> R.string.tutorial_step_hazards_and_shield_initial
             TutorialStep.Leaderboard -> R.string.tutorial_step_leaderboard_instruction_v2
             TutorialStep.Username -> R.string.tutorial_step_username_instruction
@@ -193,10 +174,7 @@ class TutorialController(private val prefs: SharedPreferences) {
             instructionTextRes = instructionRes,
             ctaTextRes = ctaRes,
             highlightedCells = cells,
-            mandatory = mandatory,
-            // Hazard always starts at sub-phase 0; other steps don't
-            // use the field but default to 0 for tidiness.
-            subPhase = 0
+            mandatory = mandatory
         )
     }
 

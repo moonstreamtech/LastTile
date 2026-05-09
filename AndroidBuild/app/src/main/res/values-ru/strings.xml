@@ -53,15 +53,14 @@
     <string name="tutorial_cta_skip">Пропустить</string>
     <string name="tutorial_step_merge_instruction">Перетащи плитку на такую же, чтобы объединить.</string>
     <string name="tutorial_step_frame_instruction">Объединяй плитки, чтобы открыть новые ячейки рамки.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Эти заблокированные плитки опасны. Тапни, чтобы узнать, как их убирать.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Используй щит, чтобы убрать опасность.</string>
-    <string name="tutorial_step_shield_subhint">Тапни по карточке щита, чтобы посмотреть видео и получить ещё 3 щита.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Это опасные плитки — они нанесут урон, если останутся на доске.
+Чтобы убрать, удерживайте ЩИТ и перетащите его на опасную плитку.</string>
     <string name="tutorial_step_leaderboard_instruction">Твои рекорды автоматически отправляются в глобальную таблицу лидеров. Открой её из меню, чтобы увидеть своё место.</string>
     <string name="tutorial_hint_drag_to_merge">Попробуй перетащить плитки вместе…</string>
     <string name="tutorial_success_merge">Отлично!</string>
     <string name="tutorial_success_frame">Рамка открыта!</string>
     <string name="tutorial_success_shield">Опасность убрана!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Нажми «Таблица лидеров», чтобы увидеть мировой рейтинг.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Нажмите кнопку ТАБЛИЦА ЛИДЕРОВ, затем нажмите на свою строку, чтобы задать имя.</string>
     <string name="tutorial_step_username_instruction">Тапни по своей строке, чтобы выбрать имя.</string>
     <string name="username_dialog_title_first">Выбери имя</string>
     <string name="username_dialog_title_change">Изменить имя</string>

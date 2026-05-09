@@ -52,15 +52,14 @@
     <string name="tutorial_cta_skip">Preskoči</string>
     <string name="tutorial_step_merge_instruction">Povuci pločicu na odgovarajuću da ih spojiš.</string>
     <string name="tutorial_step_frame_instruction">Spoji ove pločice da otključaš nova polja okvira.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Ove zaključane pločice su opasne. Dodirni da naučiš kako da ih ukloniš.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Koristi štit da ukloniš opasnost.</string>
-    <string name="tutorial_step_shield_subhint">Dodirni karticu štita za video i još 3 štita.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Ovo su opasne pločice — naneće ti štetu ako ostanu na tabli.
+Za uklanjanje držite ŠTIT i prevucite ga na opasnu pločicu.</string>
     <string name="tutorial_step_leaderboard_instruction">Tvoji najbolji rezultati automatski se šalju u globalnu lestvicu. Otvori je iz menija da vidiš svoje mesto.</string>
     <string name="tutorial_hint_drag_to_merge">Pokušaj da povučeš pločice zajedno…</string>
     <string name="tutorial_success_merge">Sjajno spajanje!</string>
     <string name="tutorial_success_frame">Okvir otvoren!</string>
     <string name="tutorial_success_shield">Opasnost uklonjena!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Dodirni Lestvica za globalni poredak.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Dodirni dugme TABELA, zatim dodirni svoj red da postaviš ime.</string>
     <string name="tutorial_step_username_instruction">Dodirni svoj red da izabereš ime.</string>
     <string name="username_dialog_title_first">Izaberi ime</string>
     <string name="username_dialog_title_change">Promeni ime</string>

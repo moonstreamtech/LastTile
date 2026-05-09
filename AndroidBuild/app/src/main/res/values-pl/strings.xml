@@ -53,15 +53,14 @@
     <string name="tutorial_cta_skip">Pomiń samouczek</string>
     <string name="tutorial_step_merge_instruction">Przeciągnij kafelek na pasujący kafelek, aby je połączyć.</string>
     <string name="tutorial_step_frame_instruction">Połącz te kafelki, aby odblokować nowe pola ramki.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Te zablokowane kafelki są groźne. Stuknij, aby nauczyć się je usuwać.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Użyj tarczy, aby usunąć zagrożenie.</string>
-    <string name="tutorial_step_shield_subhint">Stuknij kartę tarczy, aby obejrzeć film i zdobyć 3 dodatkowe tarcze.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">To niebezpieczne pola — ranią cię, jeśli zostaną na planszy.
+Aby je usunąć, przytrzymaj TARCZĘ i przeciągnij ją na niebezpieczne pole.</string>
     <string name="tutorial_step_leaderboard_instruction">Twoje najlepsze wyniki są automatycznie wysyłane do globalnego rankingu. Otwórz go z menu, aby zobaczyć swoją pozycję.</string>
     <string name="tutorial_hint_drag_to_merge">Spróbuj przeciągnąć kafelki razem…</string>
     <string name="tutorial_success_merge">Świetne łączenie!</string>
     <string name="tutorial_success_frame">Ramka otwarta!</string>
     <string name="tutorial_success_shield">Zagrożenie usunięte!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Stuknij Ranking, aby zobaczyć ranking globalny.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Dotknij przycisku TABELI WYNIKÓW, a następnie dotknij swojego wiersza, aby ustawić imię.</string>
     <string name="tutorial_step_username_instruction">Stuknij swój wiersz, aby wybrać nazwę.</string>
     <string name="username_dialog_title_first">Wybierz nazwę</string>
     <string name="username_dialog_title_change">Zmień nazwę</string>

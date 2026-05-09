@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">টিউটোরিয়াল এড়িয়ে যান</string>
     <string name="tutorial_step_merge_instruction">একটি টাইলকে মিল আছে এমন টাইলের ওপর টেনে আনুন।</string>
     <string name="tutorial_step_frame_instruction">নতুন ফ্রেম সেল খুলতে এই টাইলগুলো মেলান।</string>
-    <string name="tutorial_step_hazards_and_shield_initial">এই লক করা টাইলগুলো বিপজ্জনক। মুছে ফেলার উপায় শিখতে ট্যাপ করুন।</string>
-    <string name="tutorial_step_hazards_and_shield_action">বিপদ মুছতে শিল্ড ব্যবহার করুন।</string>
-    <string name="tutorial_step_shield_subhint">শিল্ড কার্ডে ট্যাপ করে ভিডিও দেখুন এবং আরও ৩টি শিল্ড পান।</string>
+    <string name="tutorial_step_hazards_and_shield_initial">এগুলি বিপজ্জনক টাইল — বোর্ডে থাকলে ক্ষতি করে।
+সরাতে, শিল্ড চেপে ধরে বিপজ্জনক টাইলের উপর টেনে আনুন।</string>
     <string name="tutorial_step_leaderboard_instruction">আপনার সর্বোচ্চ স্কোর স্বয়ংক্রিয়ভাবে গ্লোবাল লিডারবোর্ডে পাঠানো হয়। মেনু থেকে খুলে আপনার র‍্যাঙ্ক দেখুন।</string>
     <string name="tutorial_hint_drag_to_merge">টাইলগুলো একসাথে টেনে আনার চেষ্টা করুন…</string>
     <string name="tutorial_success_merge">চমৎকার মিল!</string>
     <string name="tutorial_success_frame">ফ্রেম খোলা!</string>
     <string name="tutorial_success_shield">বিপদ মুছে গেছে!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">গ্লোবাল র‍্যাঙ্কিং দেখতে লিডারবোর্ড বোতামে ট্যাপ করুন।</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">লিডারবোর্ড বোতামে ট্যাপ করুন, তারপর আপনার নাম সেট করতে নিজের সারিতে ট্যাপ করুন।</string>
     <string name="tutorial_step_username_instruction">নাম বাছতে নিজের সারিতে ট্যাপ করুন।</string>
     <string name="username_dialog_title_first">নাম বাছুন</string>
     <string name="username_dialog_title_change">নাম পরিবর্তন</string>

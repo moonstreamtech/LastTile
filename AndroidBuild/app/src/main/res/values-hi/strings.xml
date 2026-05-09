@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">ट्यूटोरियल छोड़ें</string>
     <string name="tutorial_step_merge_instruction">एक टाइल को मिलती-जुलती टाइल पर खींचकर उन्हें मिलाएं।</string>
     <string name="tutorial_step_frame_instruction">नई फ़्रेम सेल खोलने के लिए इन टाइलों को मिलाएं।</string>
-    <string name="tutorial_step_hazards_and_shield_initial">ये बंद टाइलें ख़तरनाक हैं। हटाने का तरीक़ा सीखने के लिए टैप करें।</string>
-    <string name="tutorial_step_hazards_and_shield_action">ख़तरा हटाने के लिए शील्ड का इस्तेमाल करें।</string>
-    <string name="tutorial_step_shield_subhint">शील्ड कार्ड पर टैप करके वीडियो देखें और 3 और शील्ड पाएं।</string>
+    <string name="tutorial_step_hazards_and_shield_initial">ये खतरनाक टाइलें हैं — बोर्ड पर रहने पर ये नुकसान करती हैं।
+हटाने के लिए, ढाल को दबाकर खतरनाक टाइल पर खींचें।</string>
     <string name="tutorial_step_leaderboard_instruction">आपके उच्चतम स्कोर स्वचालित रूप से वैश्विक लीडरबोर्ड पर भेजे जाते हैं। अपनी रैंक देखने के लिए मेनू से इसे खोलें।</string>
     <string name="tutorial_hint_drag_to_merge">टाइलों को एक साथ खींचने का प्रयास करें…</string>
     <string name="tutorial_success_merge">बढ़िया विलय!</string>
     <string name="tutorial_success_frame">फ़्रेम खुल गया!</string>
     <string name="tutorial_success_shield">ख़तरा हटाया!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">ग्लोबल रैंकिंग देखने के लिए लीडरबोर्ड बटन पर टैप करें।</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">लीडरबोर्ड बटन पर टैप करें, फिर अपना नाम सेट करने के लिए अपनी पंक्ति पर टैप करें।</string>
     <string name="tutorial_step_username_instruction">नाम चुनने के लिए अपनी पंक्ति पर टैप करें।</string>
     <string name="username_dialog_title_first">अपना नाम चुनें</string>
     <string name="username_dialog_title_change">नाम बदलें</string>

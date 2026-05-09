@@ -52,15 +52,14 @@
     <string name="tutorial_cta_skip">Sari peste tutorial</string>
     <string name="tutorial_step_merge_instruction">Trage o piesă peste piesa potrivită pentru a le îmbina.</string>
     <string name="tutorial_step_frame_instruction">Îmbină aceste piese pentru a deschide noi celule.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Aceste piese blocate sunt periculoase. Atinge pentru a învăța cum să le cureți.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Folosește scutul pentru a curăța un pericol.</string>
-    <string name="tutorial_step_shield_subhint">Atinge cardul de scut, urmărește un video și primește încă 3 scuturi.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Acestea sunt plăci periculoase — îți fac daune dacă rămân pe tablă.
+Pentru a elimina, ține apăsat SCUTUL și trage-l peste o placă periculoasă.</string>
     <string name="tutorial_step_leaderboard_instruction">Cele mai mari scoruri ale tale sunt trimise automat în clasamentul global. Deschide-l din meniu pentru a-ți vedea locul.</string>
     <string name="tutorial_hint_drag_to_merge">Încearcă să tragi piesele împreună…</string>
     <string name="tutorial_success_merge">Îmbinare bună!</string>
     <string name="tutorial_success_frame">Cadru deschis!</string>
     <string name="tutorial_success_shield">Pericol eliminat!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Atinge butonul Clasament pentru a vedea clasamentul global.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Apasă butonul CLASAMENT, apoi apasă pe rândul tău pentru a-ți seta numele.</string>
     <string name="tutorial_step_username_instruction">Atinge rândul tău pentru a alege un nume.</string>
     <string name="username_dialog_title_first">Alege un nume</string>
     <string name="username_dialog_title_change">Schimbă numele</string>

@@ -51,15 +51,14 @@
     <string name="tutorial_cta_skip">Omitir tutorial</string>
     <string name="tutorial_step_merge_instruction">Arrastra una pieza sobre la pieza igual para fusionarlas.</string>
     <string name="tutorial_step_frame_instruction">Fusiona estas piezas para abrir nuevas casillas del marco.</string>
-    <string name="tutorial_step_hazards_and_shield_initial">Estas piezas bloqueadas son peligrosas. Toca para aprender a limpiarlas.</string>
-    <string name="tutorial_step_hazards_and_shield_action">Usa tu escudo para limpiar un peligro.</string>
-    <string name="tutorial_step_shield_subhint">Toca la tarjeta de escudo para ver un video y ganar 3 escudos más.</string>
+    <string name="tutorial_step_hazards_and_shield_initial">Estas son fichas peligrosas — te dañan si permanecen en el tablero.
+Para eliminar una, mantén presionado el ESCUDO y arrástralo sobre una ficha peligrosa.</string>
     <string name="tutorial_step_leaderboard_instruction">Tus mejores puntajes se envían automáticamente al ranking global. Ábrelo desde el menú para ver tu posición.</string>
     <string name="tutorial_hint_drag_to_merge">Intenta arrastrar las piezas juntas…</string>
     <string name="tutorial_success_merge">¡Buena fusión!</string>
     <string name="tutorial_success_frame">¡Marco abierto!</string>
     <string name="tutorial_success_shield">¡Peligro eliminado!</string>
-    <string name="tutorial_step_leaderboard_instruction_v2">Toca el botón Tabla de líderes para ver el ranking global.</string>
+    <string name="tutorial_step_leaderboard_instruction_v2">Toca el botón de CLASIFICACIÓN, luego toca tu propia fila para establecer tu nombre.</string>
     <string name="tutorial_step_username_instruction">Toca tu fila para elegir un nombre.</string>
     <string name="username_dialog_title_first">Elige un nombre</string>
     <string name="username_dialog_title_change">Cambiar nombre</string>
