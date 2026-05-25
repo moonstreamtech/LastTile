@@ -1216,6 +1216,26 @@ private fun BottomAdBanner(modifier: Modifier = Modifier) {
 
 private enum class LeaderboardTab { GLOBAL, LOCAL }
 
+// v0.1.15: 3-state pin position for the player's own row inside
+// LeaderboardListWithPinning. The row is rendered exactly once
+// per dialog frame, and its slot moves smoothly between three
+// locations as the user scrolls the list:
+//
+//   Above  — self-row has been scrolled past upward; pin it as a
+//            "header" above the LazyColumn so it stays visible
+//   InList — self-row index is within the currently visible items;
+//            no pin needed (the LazyColumn already renders it
+//            highlighted at its natural rank)
+//   Below  — self-row hasn't been scrolled to yet OR the player is
+//            not even in topEntries (rank > 100 or no submitted
+//            run); pin it as a "footer" below the LazyColumn
+//
+// The pinned row uses the same FirestoreLeaderboardRow composable
+// as the in-list row and inherits the same amber border + tap
+// handler, so the three positions are visually identical — only
+// the slot moves.
+private enum class SelfRowPin { Above, InList, Below }
+
 @Composable
 private fun LeaderboardDialog(
     entries: List<LeaderboardEntry>,
@@ -1482,38 +1502,59 @@ private fun LeaderboardListWithPinning(
 ) {
     val listState = androidx.compose.foundation.lazy.rememberLazyListState()
 
-    val playerIndexInTop = remember(success) {
+    // Index of the player's own row inside topEntries, or -1 when
+    // the player is outside the top list entirely (rank > 100, or
+    // bestScore == 0 on a fresh install). Recomputed only when
+    // the LoadResult identity changes — scrolling never triggers it.
+    val selfIndex = remember(success) {
         success.topEntries.indexOfFirst { it.isCurrentPlayer }
     }
 
-    // Derive pin state from scroll position without triggering
-    // recomposition on every scroll pixel — only when the boundary
-    // condition changes.
-    val playerAboveViewport by remember {
+    // v0.1.15: 3-state scroll-aware pin. derivedStateOf reads from
+    // LazyListState.layoutInfo, so the value is recomputed only
+    // when the visible-items window crosses the player's index —
+    // not on every scroll pixel. Cheap and flicker-free.
+    val selfRowPin by remember(success, selfIndex) {
         androidx.compose.runtime.derivedStateOf {
-            playerIndexInTop >= 0 &&
-                listState.firstVisibleItemIndex > playerIndexInTop
+            when {
+                // Auth missing / no submitted score → no pin slot at
+                // all. The InList sentinel is just a way to skip
+                // both render branches below.
+                success.playerEntry == null -> SelfRowPin.InList
+                // Player not in topEntries (rank > 100, fresh install
+                // bestScore == 0, etc.) → permanent footer so the
+                // user can always find and tap their own row.
+                selfIndex < 0 -> SelfRowPin.Below
+                else -> {
+                    // Use visibleItemsInfo when available; on the very
+                    // first composition (before layout settles) the
+                    // list is empty, so fall back to firstVisibleItemIndex
+                    // which LazyListState exposes synchronously. This
+                    // avoids a one-frame flash where the pin briefly
+                    // disappears while the LazyColumn measures itself.
+                    val visible = listState.layoutInfo.visibleItemsInfo
+                    val first = visible.firstOrNull()?.index
+                        ?: listState.firstVisibleItemIndex
+                    val last = visible.lastOrNull()?.index
+                        ?: listState.firstVisibleItemIndex
+                    when {
+                        selfIndex < first -> SelfRowPin.Above
+                        selfIndex > last -> SelfRowPin.Below
+                        else -> SelfRowPin.InList
+                    }
+                }
+            }
         }
     }
 
-    // v0.2.0: the bottom pinned player row gives the Username
-    // tutorial step a guaranteed tap target on a fresh install (when
-    // the player is not yet in the top 100 because their score is
-    // still 0). v0.1.15: gated on !playerInTop so the row is NOT
-    // duplicated when the player is already visible inside the
-    // scrollable top list — the in-list row is itself clickable and
-    // wears the same spotlight border when spotlightOwnRow is true,
-    // so the tutorial path keeps working without a duplicate. The
-    // top pin (showTopPin below) still appears when the player has
-    // scrolled past their own row and that row is in the top 100,
-    // so the pinned row at the top doubles as a "jump back to me"
-    // affordance — that is NOT a duplicate, it is the same row
-    // re-anchored after it scrolled out of view.
-    val showTopPin = success.playerInTop && playerAboveViewport
-
     Column(modifier = Modifier.fillMaxWidth()) {
-        // Pinned to top edge when player has scrolled their row above viewport.
-        if (showTopPin && success.playerEntry != null) {
+        // ── TOP PIN ─────────────────────────────────────────────
+        // Self-row has been scrolled above the viewport. Anchor it
+        // here so the user always sees their rank without losing
+        // the scroll position they reached. The divider below the
+        // pinned row is matched by the same one above the bottom
+        // pin so the two anchor positions look symmetric.
+        if (selfRowPin == SelfRowPin.Above && success.playerEntry != null) {
             FirestoreLeaderboardRow(
                 entry = success.playerEntry,
                 isPinned = true,
@@ -1521,11 +1562,23 @@ private fun LeaderboardListWithPinning(
                 pulseAlpha = pulseAlpha,
                 onOwnRowTap = onOwnRowTap
             )
-            Spacer(Modifier.height(4.dp))
+            Spacer(Modifier.height(8.dp))
+            androidx.compose.foundation.layout.Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(TextSecondary.copy(alpha = 0.25f))
+            )
+            Spacer(Modifier.height(8.dp))
         }
 
-        // Scrollable main list. Capped at 320 dp so the dialog doesn't
-        // overflow on small phones — LazyColumn scrolls internally.
+        // ── MAIN LIST ───────────────────────────────────────────
+        // Scrollable LazyColumn, capped at 320 dp so the dialog
+        // doesn't overflow on small phones. The list ALWAYS holds
+        // every topEntries row — including the player's own — so
+        // the in-list row remains the source of truth and the
+        // pinned slot is just a convenience anchor. No item is
+        // ever hidden in favour of a pin.
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -1548,18 +1601,13 @@ private fun LeaderboardListWithPinning(
             }
         }
 
-        // Bottom sticky self-row. v0.1.15: rendered ONLY when the
-        // player is not already in the visible top list — testers
-        // were reporting "my row shows twice" because the previous
-        // implementation rendered this block unconditionally and
-        // celebrated the duplicate with a divider. The in-list row
-        // already carries the same spotlight + tap handler, so users
-        // who are visible in the top N no longer need a second copy.
-        // The block (divider + spacer + sticky row) remains for
-        // users outside the top N (e.g. new players with bestScore
-        // == 0, or anyone past rank 100) so they can still see and
-        // tap their own row from the dialog.
-        if (success.playerEntry != null && !success.playerInTop) {
+        // ── BOTTOM PIN ──────────────────────────────────────────
+        // Self-row is either below the current viewport (player
+        // hasn't scrolled to it yet) or absent from the top list
+        // entirely (rank > 100, fresh install). Anchor it here so
+        // the user can always see and tap their own row without
+        // having to scroll to find it first.
+        if (selfRowPin == SelfRowPin.Below && success.playerEntry != null) {
             Spacer(Modifier.height(8.dp))
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier
