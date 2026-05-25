@@ -1496,13 +1496,19 @@ private fun LeaderboardListWithPinning(
         }
     }
 
-    // v0.2.0: the bottom pinned player row is ALWAYS shown when
-    // playerEntry is non-null. That ensures the Username tutorial step has a
-    // tap target on a fresh install (when the player is not in the
-    // top 100 because their score is still 0). The top pin still
-    // appears only when the player has scrolled past their own row
-    // and that row is in the top 100, so the pinned row at the top
-    // doubles as a "jump back to me" affordance.
+    // v0.2.0: the bottom pinned player row gives the Username
+    // tutorial step a guaranteed tap target on a fresh install (when
+    // the player is not yet in the top 100 because their score is
+    // still 0). v0.1.15: gated on !playerInTop so the row is NOT
+    // duplicated when the player is already visible inside the
+    // scrollable top list — the in-list row is itself clickable and
+    // wears the same spotlight border when spotlightOwnRow is true,
+    // so the tutorial path keeps working without a duplicate. The
+    // top pin (showTopPin below) still appears when the player has
+    // scrolled past their own row and that row is in the top 100,
+    // so the pinned row at the top doubles as a "jump back to me"
+    // affordance — that is NOT a duplicate, it is the same row
+    // re-anchored after it scrolled out of view.
     val showTopPin = success.playerInTop && playerAboveViewport
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -1542,12 +1548,18 @@ private fun LeaderboardListWithPinning(
             }
         }
 
-        // Always show the player's own row pinned at the bottom. When
-        // the player is in the top 100 they will appear twice — once
-        // in the scrollable list and once pinned — and a thin
-        // separator above the pin makes the duplication read as
-        // intentional.
-        if (success.playerEntry != null) {
+        // Bottom sticky self-row. v0.1.15: rendered ONLY when the
+        // player is not already in the visible top list — testers
+        // were reporting "my row shows twice" because the previous
+        // implementation rendered this block unconditionally and
+        // celebrated the duplicate with a divider. The in-list row
+        // already carries the same spotlight + tap handler, so users
+        // who are visible in the top N no longer need a second copy.
+        // The block (divider + spacer + sticky row) remains for
+        // users outside the top N (e.g. new players with bestScore
+        // == 0, or anyone past rank 100) so they can still see and
+        // tap their own row from the dialog.
+        if (success.playerEntry != null && !success.playerInTop) {
             Spacer(Modifier.height(8.dp))
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier
