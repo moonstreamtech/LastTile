@@ -30,15 +30,17 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
@@ -112,6 +114,7 @@ import com.moonstreamtech.lasttile.FirebaseLeaderboard
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import kotlin.math.min
 import kotlin.math.roundToInt
 import kotlinx.coroutines.launch
 
@@ -132,6 +135,30 @@ private val AccentGreen = Color(0xFF81C784)
 // shield-use sub-phase. Picked to match the existing Restart button
 // accent in the screenshots.
 private val TutorialSpotlight = Color(0xFFF4C062)
+
+// v0.1.15: Virtual canvas (scale-to-fit / contain). The reference
+// device is a 1080x2400 (20:9) phone at xxhdpi (density 2.625),
+// which gives 411dp x 914dp of window. Subtracting the typical
+// status bar (~24dp) and the ad-banner row (~50dp banner + ~48dp
+// gesture nav) leaves ~792dp for the gameplay layer. The layer is
+// drawn into a fixed-size Box of (DESIGN_WIDTH x DESIGN_HEIGHT) and
+// projected to the actual safe-area with a single graphicsLayer
+// scale = min(widthRatio, heightRatio). On the reference device
+// the scale is ~1.0; tablets and tall foldables scale up, while
+// small phones and devices with extra-tall system bars scale down,
+// always preserving the reference composition (aspect-fit / contain
+// — no overflow, letterbox space distributed at top+bottom or
+// left+right depending on which axis bottoms out first).
+private val DESIGN_WIDTH = 411.dp
+private val DESIGN_HEIGHT = 792.dp
+
+// Fixed cell slot inside the design canvas. 7 columns at 52dp slot
+// (plus 8dp board padding on each side) gives 7*52 + 16 = 380dp,
+// which fits inside the 411dp design width with 12dp horizontal
+// outer padding on each side (411 - 24 = 387dp available). The
+// previous adaptive 28..56dp cellSize logic is no longer needed —
+// the virtual canvas already scales the whole layer to any screen.
+private val BOARD_CELL_SLOT = 52.dp
 
 @Composable
 fun GameScreen() {
@@ -374,40 +401,81 @@ fun GameScreen() {
         // on the Username step, not via back press.
     }
 
+    // v0.1.15: Virtual-canvas root. The outer Box owns the background
+    // gradient + the floating shield drag overlay + the modal dialogs.
+    // Its child Column splits the screen into a scaled "game layer"
+    // (everything above the ad banner) and the real-pixel ad banner.
+    // The game layer is drawn at fixed (DESIGN_WIDTH x DESIGN_HEIGHT)
+    // and shrunk/grown by a single graphicsLayer scale, so the
+    // composition is identical on every device. Touch coordinates are
+    // tracked in window space and reported back to the BoardView in
+    // *visual* (post-scale) pixels via the canvasScale parameter, so
+    // the shield-drag hit-test stays correct on any device.
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Brush.verticalGradient(listOf(BgTop, BgBottom)))
-            // Activity is edge-to-edge (see MainActivity); pad the entire
-            // game UI inside the safe-drawing region so the status bar,
-            // gesture pill and any display cutout never overlap touchable
-            // content. safeDrawing is a superset of systemBars (covers
-            // displayCutout + IME too) and is the most defensive choice
-            // for a single-screen game where every dp is touchable.
-            // consumeWindowInsets prevents any nested layout from double-
-            // padding when it queries WindowInsets again.
-            .windowInsetsPadding(WindowInsets.safeDrawing)
-            .consumeWindowInsets(WindowInsets.safeDrawing)
+            .onGloballyPositioned { coords ->
+                rootContentOriginInWindow = coords.boundsInWindow().topLeft
+            }
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .onGloballyPositioned { coords ->
-                    rootContentOriginInWindow = coords.boundsInWindow().topLeft
-                }
-        ) {
-            // The gameplay column flexes to fill the height left over
-            // after the bottom ad banner. The board sits inside a
-            // weight(1f) container so on tall flagships and small
-            // phones alike the board, status line, and minimap remain
-            // simultaneously visible without a scroll. The previous
-            // verticalScroll wrapper hid this overflow on ~6.7"
-            // 20:9 phones — players never realised content was
-            // scrolled past and reported the minimap as missing.
-            Column(
+        Column(modifier = Modifier.fillMaxSize()) {
+            // Scale-to-fit container. Status bar + display cutout are
+            // padded out here (safeDrawing.only(Top + Horizontal)),
+            // not from the outer Box, because the ad banner below
+            // owns its own navigationBars padding and an outer
+            // safeDrawing pad would double-count the bottom inset.
+            BoxWithConstraints(
                 modifier = Modifier
                     .fillMaxWidth()
                     .weight(1f)
+                    .windowInsetsPadding(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                        )
+                    )
+                    .consumeWindowInsets(
+                        WindowInsets.safeDrawing.only(
+                            WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                        )
+                    )
+            ) {
+                val availableWidthPx = constraints.maxWidth.toFloat()
+                val availableHeightPx = constraints.maxHeight.toFloat()
+                val designWidthPx = with(density) { DESIGN_WIDTH.toPx() }
+                val designHeightPx = with(density) { DESIGN_HEIGHT.toPx() }
+                // CONTAIN: pick the axis that bottoms out first so the
+                // canvas always fits inside the available area. The
+                // remaining axis gets letterboxed by Alignment.Center.
+                val canvasScale = if (designWidthPx > 0f && designHeightPx > 0f) {
+                    min(
+                        availableWidthPx / designWidthPx,
+                        availableHeightPx / designHeightPx
+                    ).coerceAtLeast(0f)
+                } else 1f
+
+                Box(
+                    modifier = Modifier
+                        .align(Alignment.Center)
+                        .size(DESIGN_WIDTH, DESIGN_HEIGHT)
+                        .graphicsLayer {
+                            scaleX = canvasScale
+                            scaleY = canvasScale
+                            // transformOrigin defaults to (0.5, 0.5)
+                            // so the canvas scales from its centre,
+                            // which keeps the letterbox space split
+                            // evenly between the top+bottom (or
+                            // left+right) edges.
+                        }
+                ) {
+            // Game-layer column. Everything inside this Column is
+            // drawn in design-space dp; the parent graphicsLayer is
+            // the only place that knows about the device's real
+            // resolution. The previous fraction/weight-based
+            // responsive sizing has been replaced by fixed dp values.
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
                     .padding(horizontal = 12.dp, vertical = 12.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -544,6 +612,7 @@ fun GameScreen() {
                         }
                     },
                     onDragFinish = { handleShieldDragEnd() },
+                    canvasScale = canvasScale,
                     highlighted = tutorialShieldCardHighlighted,
                     pulseAlpha = tutorialPulseAlpha,
                     modifier = Modifier.weight(1f)
@@ -552,21 +621,22 @@ fun GameScreen() {
 
             Spacer(Modifier.height(16.dp))
 
-            // Board container — weight(1f) here distributes the
-            // remaining vertical space to the board+minimap region,
-            // which itself sizes the cells from the granted width
-            // (BoxWithConstraints inside BoardView). The cap
-            // (widthIn max 540.dp) keeps the board sensible on tablets.
+            // Board container — fixed dp inside the virtual canvas.
+            // The previous adaptive widthIn(max=540.dp) cap +
+            // weight(1f, fill = true) flexbox were needed when each
+            // device chose its own cell size; the virtual canvas now
+            // owns all scaling so the board has a deterministic
+            // design-space footprint. The board itself is fixed by
+            // BOARD_CELL_SLOT (52.dp) inside BoardView, and the
+            // surrounding Box gives it horizontal centering only.
             Box(
-                modifier = Modifier
-                    .weight(1f, fill = true)
-                    .fillMaxWidth()
-                    .widthIn(max = 540.dp),
+                modifier = Modifier.fillMaxWidth(),
                 contentAlignment = Alignment.TopCenter
             ) {
                 BoardView(
                     state = state,
                     onLayoutChange = { boardLayout = it },
+                    canvasScale = canvasScale,
                     highlightedCells = tutorial.state.highlightedCells,
                     spotlightActive = tutorialSpotlightActive,
                     pulseAlpha = tutorialPulseAlpha
@@ -576,6 +646,15 @@ fun GameScreen() {
             Spacer(Modifier.height(8.dp))
 
             StatusLine(state)
+
+            // Flex spacer absorbs whatever vertical slack is left
+            // inside the fixed design canvas — pushes the action
+            // buttons (and the optional inline tutorial card below
+            // them) toward the bottom edge regardless of whether the
+            // optional minimap is currently visible. Using weight(1f)
+            // here is safe because the parent Column itself has a
+            // fixed height inside the virtual canvas.
+            Spacer(Modifier.weight(1f))
 
             // Action buttons. Each Button uses Modifier.weight(1f)
             // and Text(maxLines=1, ellipsis) so that long localized
@@ -669,7 +748,6 @@ fun GameScreen() {
                     )
                 }
             }
-            }
 
             // v0.1.13: tutorial instruction card sits inline between
             // the action button row and the ad banner. The previous
@@ -679,7 +757,8 @@ fun GameScreen() {
             // means the action buttons are always above the card and
             // remain tappable. suppressCard hides the card during the
             // Username step while the leaderboard dialog renders its
-            // own inline instruction.
+            // own inline instruction. v0.1.15: moved fully inside the
+            // game-layer Column so it scales with the rest of the UI.
             if (tutorial.state.active) {
                 val suppressCard = showLeaderboard &&
                     tutorial.state.currentStep == TutorialStep.Username
@@ -690,8 +769,19 @@ fun GameScreen() {
                     suppressCard = suppressCard
                 )
             }
+            } // close game-layer Column (inside scaled Box)
+                } // close scaled Box (graphicsLayer)
+            } // close scale-to-fit BoxWithConstraints
 
-            BottomAdBanner()
+            // Ad banner — drawn OUTSIDE the scaled canvas at real
+            // pixel size. navigationBars padding lifts it above the
+            // gesture nav handle so the bottom row of the canvas is
+            // never visually adjacent to the system gesture area.
+            BottomAdBanner(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .windowInsetsPadding(WindowInsets.navigationBars)
+            )
         }
 
         if (showLeaderboard) {
@@ -903,6 +993,16 @@ private fun ShieldStatCard(
     onDragStart: (Offset) -> Unit,
     onDragChange: (Offset) -> Unit,
     onDragFinish: () -> Unit,
+    // v0.1.15: the parent virtual canvas may be visually scaled by
+    // graphicsLayer. pointerInput callbacks receive change.position
+    // in the modifier's *local* (unscaled, design-space) coordinate
+    // system, while cardWindowOrigin (boundsInWindow) is the *visual*
+    // post-scale window origin. To report drag positions in the
+    // same visual window space the BoardLayout uses for hit-testing,
+    // the local position must be multiplied by canvasScale before
+    // being added to cardWindowOrigin. Defaults to 1f for any caller
+    // that does not opt in.
+    canvasScale: Float = 1f,
     // Tutorial spotlight on the KALKAN card during the Hazard step's
     // shield-use sub-phase. When
     // [highlighted] is true a 3.dp pulsing border is drawn around
@@ -944,16 +1044,16 @@ private fun ShieldStatCard(
             // clickable fires only on lift without movement past the
             // touch slop, while detectDragGesturesAfterLongPress
             // requires a hold.
-            .pointerInput(Unit) {
+            .pointerInput(canvasScale) {
                 detectDragGesturesAfterLongPress(
                     onDragStart = { localStart ->
-                        onDragStart(cardWindowOrigin + localStart)
+                        onDragStart(cardWindowOrigin + localStart * canvasScale)
                     },
                     onDragEnd = { onDragFinish() },
                     onDragCancel = { onDragFinish() },
                     onDrag = { change, _ ->
                         change.consume()
-                        onDragChange(change.position + cardWindowOrigin)
+                        onDragChange(cardWindowOrigin + change.position * canvasScale)
                     }
                 )
             }
@@ -1037,7 +1137,7 @@ private fun ShieldRewardDialog(onDismiss: () -> Unit, onWatch: () -> Unit) {
 }
 
 @Composable
-private fun BottomAdBanner() {
+private fun BottomAdBanner(modifier: Modifier = Modifier) {
     // Hosts an anchored adaptive AdMob banner. The slot reserves the
     // SDK-recommended height up front so the layout never jumps,
     // including before the ad loads or on devices without Google Play
@@ -1052,11 +1152,16 @@ private fun BottomAdBanner() {
     // on the sides. BoxWithConstraints exposes the parent-granted width
     // in dp, which is the actual container width after WindowInsets
     // padding has been consumed by the surrounding Column.
+    //
+    // v0.1.15: banner sits OUTSIDE the virtual canvas (real pixels,
+    // never scaled). The caller is responsible for the
+    // navigationBarsPadding so the gesture nav handle never sits on
+    // top of the ad slot.
     val context = LocalContext.current
     val activity = context as? Activity
     val displayWidthDpFallback = LocalConfiguration.current.screenWidthDp
 
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val containerWidthDp = if (maxWidth.value > 0f) {
             maxWidth.value.toInt()
         } else {
@@ -1391,13 +1496,19 @@ private fun LeaderboardListWithPinning(
         }
     }
 
-    // v0.2.0: the bottom pinned player row is ALWAYS shown when
-    // playerEntry is non-null. That ensures the Username tutorial step has a
-    // tap target on a fresh install (when the player is not in the
-    // top 100 because their score is still 0). The top pin still
-    // appears only when the player has scrolled past their own row
-    // and that row is in the top 100, so the pinned row at the top
-    // doubles as a "jump back to me" affordance.
+    // v0.2.0: the bottom pinned player row gives the Username
+    // tutorial step a guaranteed tap target on a fresh install (when
+    // the player is not yet in the top 100 because their score is
+    // still 0). v0.1.15: gated on !playerInTop so the row is NOT
+    // duplicated when the player is already visible inside the
+    // scrollable top list — the in-list row is itself clickable and
+    // wears the same spotlight border when spotlightOwnRow is true,
+    // so the tutorial path keeps working without a duplicate. The
+    // top pin (showTopPin below) still appears when the player has
+    // scrolled past their own row and that row is in the top 100,
+    // so the pinned row at the top doubles as a "jump back to me"
+    // affordance — that is NOT a duplicate, it is the same row
+    // re-anchored after it scrolled out of view.
     val showTopPin = success.playerInTop && playerAboveViewport
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -1437,12 +1548,18 @@ private fun LeaderboardListWithPinning(
             }
         }
 
-        // Always show the player's own row pinned at the bottom. When
-        // the player is in the top 100 they will appear twice — once
-        // in the scrollable list and once pinned — and a thin
-        // separator above the pin makes the duplication read as
-        // intentional.
-        if (success.playerEntry != null) {
+        // Bottom sticky self-row. v0.1.15: rendered ONLY when the
+        // player is not already in the visible top list — testers
+        // were reporting "my row shows twice" because the previous
+        // implementation rendered this block unconditionally and
+        // celebrated the duplicate with a divider. The in-list row
+        // already carries the same spotlight + tap handler, so users
+        // who are visible in the top N no longer need a second copy.
+        // The block (divider + spacer + sticky row) remains for
+        // users outside the top N (e.g. new players with bestScore
+        // == 0, or anyone past rank 100) so they can still see and
+        // tap their own row from the dialog.
+        if (success.playerEntry != null && !success.playerInTop) {
             Spacer(Modifier.height(8.dp))
             androidx.compose.foundation.layout.Box(
                 modifier = Modifier
@@ -1824,6 +1941,16 @@ private const val VIEWPORT_SIZE = 7
 private fun BoardView(
     state: GameState,
     onLayoutChange: (BoardLayout) -> Unit = {},
+    // v0.1.15: the parent virtual canvas may be visually scaled by a
+    // graphicsLayer transform. boundsInWindow() returns the *visual*
+    // post-transform origin in window space, while cellSlot.toPx()
+    // returns the unscaled design-space px. The published BoardLayout
+    // needs visual px so the shield-drag hit-test (which receives
+    // real window-space pointer positions) can identify the right
+    // cell on any device. Multiplying cellSlotPx and padding by
+    // canvasScale aligns the published values with the visual rect.
+    // Defaults to 1f for any call site that does not opt in.
+    canvasScale: Float = 1f,
     // Tutorial spotlight inputs. When [spotlightActive] is true,
     // unlocked cells outside [highlightedCells] paint a 0.45-alpha
     // black overlay on top of their content (dim) and the highlighted
@@ -1869,44 +1996,45 @@ private fun BoardView(
         originCol = (fc - viewCount / 2).coerceIn(0, maxOrigin)
     }
 
-    // Adaptive cell sizing: derive cellSize from the parent-granted
-    // width so the 7×7 viewport always fits horizontally regardless
-    // of device width or system font scale. The cap (56dp) prevents
-    // the board from looking absurdly large on tablets, and the
-    // floor (28dp) keeps tiles tappable on the smallest supported
-    // devices (~320dp wide). The previous fixed 48.dp sizing
-    // overflowed by ~30dp on 360dp-wide phones, which is why the
-    // 7th column was clipped on flagships with display cutouts.
-    BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-        val cellSlot: Dp = ((maxWidth - boardPadding * 2) / viewCount)
-            .coerceIn(28.dp + tilePadding * 2, 56.dp + tilePadding * 2)
-        val cellSize: Dp = (cellSlot - tilePadding * 2).coerceAtLeast(20.dp)
+    // v0.1.15: cell sizing is fixed inside the virtual canvas. The
+    // previous adaptive 28..56dp cellSize logic was needed when each
+    // device chose its own scaling factor; now the entire canvas is
+    // scaled by a single graphicsLayer transform owned by the parent,
+    // so BoardView simply draws at its design-space cell slot. The
+    // cell SIZE (the inner painted area inside the cell SLOT) is the
+    // slot minus the tile padding band on each side.
+    val cellSlot: Dp = BOARD_CELL_SLOT
+    val cellSize: Dp = (cellSlot - tilePadding * 2).coerceAtLeast(20.dp)
 
-        val density = LocalDensity.current
-        val cellSlotPx = with(density) { cellSlot.toPx() }
-        val boardPaddingPx = with(density) { boardPadding.toPx() }
+    val density = LocalDensity.current
+    // Design-space px (unscaled). Multiplied by canvasScale below
+    // when publishing BoardLayout so the shield-drag hit-test (which
+    // sees real window-space pointer events) can divide by the same
+    // visual cellSlotPx the user actually tapped.
+    val cellSlotPx = with(density) { cellSlot.toPx() }
+    val boardPaddingPx = with(density) { boardPadding.toPx() }
 
-        // Republish layout whenever viewport state OR cell size
-        // changes so the parent shield drag overlay knows where to
-        // hit-test. cellSlotPx is now reactive to container width.
-        var boardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
-        LaunchedEffect(boardWindowOrigin, originRow, originCol, cellSlotPx) {
-            onLayoutChange(
-                BoardLayout(
-                    rootOriginPx = boardWindowOrigin,
-                    cellSlotPx = cellSlotPx,
-                    viewCount = viewCount,
-                    originRow = originRow,
-                    originCol = originCol,
-                    padding = boardPaddingPx
-                )
+    // Republish layout whenever viewport state OR canvas scale
+    // changes so the parent shield drag overlay knows where to
+    // hit-test.
+    var boardWindowOrigin by remember { mutableStateOf(Offset.Zero) }
+    LaunchedEffect(boardWindowOrigin, originRow, originCol, canvasScale) {
+        onLayoutChange(
+            BoardLayout(
+                rootOriginPx = boardWindowOrigin,
+                cellSlotPx = cellSlotPx * canvasScale,
+                viewCount = viewCount,
+                originRow = originRow,
+                originCol = originCol,
+                padding = boardPaddingPx * canvasScale
             )
-        }
+        )
+    }
 
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Box(
             modifier = Modifier
                 .shadow(6.dp, RoundedCornerShape(18.dp), clip = false)
@@ -1989,7 +2117,6 @@ private fun BoardView(
                     originCol = (c - viewCount / 2).coerceIn(0, maxOrigin)
                 }
             )
-        }
         }
     }
 }
