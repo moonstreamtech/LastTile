@@ -8,7 +8,10 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.Density
 import androidx.core.view.WindowCompat
 import com.moonstreamtech.lasttile.ui.GameScreen
 import com.moonstreamtech.lasttile.ui.LastTileTheme
@@ -32,12 +35,29 @@ class MainActivity : ComponentActivity() {
                 WindowCompat.getInsetsController(window, window.decorView)
         )
         setContent {
-            LastTileTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
-                ) {
-                    GameScreen()
+            // Lock the entire app to fontScale = 1.0 so the system
+            // "Display size & text" accessibility slider can't enlarge
+            // text inside the virtual-canvas game layer. The layer is
+            // drawn at a fixed design dp and scaled with a single
+            // graphicsLayer transform; if sp values still listened to
+            // system font scale, large fonts would push board cells
+            // and stat labels outside the design grid and break the
+            // reference composition. The density.density value
+            // (pixel density) is preserved — only fontScale is pinned.
+            val baseDensity = LocalDensity.current
+            CompositionLocalProvider(
+                LocalDensity provides Density(
+                    density = baseDensity.density,
+                    fontScale = 1.0f
+                )
+            ) {
+                LastTileTheme {
+                    Surface(
+                        modifier = Modifier.fillMaxSize(),
+                        color = MaterialTheme.colorScheme.background
+                    ) {
+                        GameScreen()
+                    }
                 }
             }
         }
