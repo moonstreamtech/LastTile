@@ -763,8 +763,23 @@ fun GameScreen() {
             // own inline instruction. v0.1.15: moved fully inside the
             // game-layer Column so it scales with the rest of the UI.
             if (tutorial.state.active) {
-                val suppressCard = showLeaderboard &&
-                    tutorial.state.currentStep == TutorialStep.Username
+                // v0.1.16.1: previously gated on showLeaderboard, which
+                // only suppressed the outer card while the modal was
+                // actually open. If the player closed the leaderboard
+                // modal (replay/non-mandatory mode allows this — see
+                // LeaderboardDialog's dismissOnBackPress/dismissOnClickOutside)
+                // before picking a name, showLeaderboard flipped back to
+                // false while currentStep was still Username, and the
+                // outer card reappeared showing the exact same "tap your
+                // row" instruction the modal already displays inline
+                // (LeaderboardDialog's spotlightOwnRow text) — a
+                // confusing duplicate. Gating on stepCompleted instead
+                // keeps the outer card hidden for the whole Username
+                // step regardless of modal visibility, while still
+                // allowing the checkmark success beat to show once the
+                // name is actually saved.
+                val suppressCard = tutorial.state.currentStep == TutorialStep.Username &&
+                    !tutorial.state.stepCompleted
                 TutorialOverlay(
                     state = tutorial.state,
                     onGotIt = { tutorial.next() },
@@ -2536,14 +2551,20 @@ private fun TutorialOverlay(
     }
 }
 
-// v0.1.16: fixed design-space cap (the game layer is a fixed
+// v0.1.16.1: fixed design-space cap (the game layer is a fixed
 // 411x792dp canvas scaled as a whole — see DESIGN_WIDTH/DESIGN_HEIGHT
 // above — so a dp value here is deterministic across every device,
-// unlike a runtime screen-fraction). Sized to leave headroom for the
-// title/stats/board/action-row above it in the fixed canvas while
-// comfortably fitting the longest instruction string at 2x system
-// font scale.
-private val TutorialCardMaxHeight = 200.dp
+// unlike a runtime screen-fraction). Raised from 200dp after
+// real-device testing showed the longest instruction strings
+// (Hazard step, e.g. French/German at ~185 chars across two
+// sentences) needed to scroll to reveal the second sentence. With
+// the manual CTA button removed from every step (see
+// TutorialStepButtons — the only remaining button is the
+// non-mandatory replay's Skip), the freed vertical space plus this
+// larger cap lets the longest strings in most of the 50 shipped
+// locales render without scrolling; internal scroll (below) remains
+// as a fallback for any locale that still overflows.
+private val TutorialCardMaxHeight = 320.dp
 
 @Composable
 private fun TutorialStepText(

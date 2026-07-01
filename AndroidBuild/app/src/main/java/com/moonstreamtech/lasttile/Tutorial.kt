@@ -151,14 +151,15 @@ class TutorialController(private val prefs: SharedPreferences) {
             TutorialStep.Username -> R.string.tutorial_step_username_instruction
             TutorialStep.Done -> 0
         }
-        // Hazard, Leaderboard, and Username advance on user action
-        // (shield consumed / leaderboard tap / username save), so no
-        // "Got it" CTA. Merge and Frame still show Got it as a manual
-        // escape hatch in case the auto-advance trigger misses.
-        val ctaRes = when (step) {
-            TutorialStep.Hazard, TutorialStep.Leaderboard, TutorialStep.Username -> 0
-            else -> R.string.tutorial_cta_got_it
-        }
+        // v0.1.16.1: every interactive step now advances purely on user
+        // action (merge / frame unlock / shield-clear / leaderboard tap
+        // / username save) via the same markStepCompleted() -> success
+        // beat -> next() pipeline (see GameScreen's auto-advance
+        // LaunchedEffect blocks). The manual "Got it" escape hatch that
+        // Merge and Frame used to show is gone — real-device testing
+        // showed it read as an extra, unnecessary tap once the
+        // auto-advance trigger already fires reliably on real play.
+        val ctaRes = 0
         // Mirrors GameState.setupForTutorial — keep these tile
         // coordinates in lockstep with the tiles that get placed on
         // the scripted board.
