@@ -35,6 +35,7 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
@@ -43,8 +44,10 @@ import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -2461,62 +2464,91 @@ private fun TutorialOverlay(
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        Box(
+        // v0.1.16: capped at a fixed design-space height and split into
+        // a scrollable text region + a pinned button row. Previously
+        // this Box wrapped its content at wrap-content height with no
+        // scroll; on large system font-scale settings the instruction
+        // text could wrap onto enough lines to grow the card past the
+        // remaining space in the fixed-size game-layer Column (see the
+        // v0.1.15 virtual-canvas comment above), pushing "Got it" off
+        // the bottom with no way to reach it. Capping the height and
+        // scrolling only the text guarantees the buttons are always
+        // visible regardless of text length or font scale.
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(max = TutorialCardMaxHeight)
                 .clip(RoundedCornerShape(18.dp))
                 .background(Brush.verticalGradient(listOf(CardAccent, CardBg)))
-                .padding(horizontal = 16.dp, vertical = 12.dp)
         ) {
-            // Animate the inner content (counter, text, buttons)
-            // between steps and into the success beat. The card
-            // surface itself stays fixed — only the content fades
-            // and slides. Transitions into the success beat use a
-            // scaleIn pop instead of slide so the checkmark feels
-            // like a small celebration; outgoing content always
-            // slides up + fades.
-            AnimatedContent(
-                targetState = state.currentStep to state.stepCompleted,
-                transitionSpec = {
-                    val targetIsSuccess = targetState.second
-                    val enter = if (targetIsSuccess) {
-                        fadeIn(tween(250)) +
-                            scaleIn(initialScale = 0.7f, animationSpec = tween(250))
+            Box(
+                modifier = Modifier
+                    .weight(1f, fill = false)
+                    .verticalScroll(rememberScrollState())
+                    .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
+            ) {
+                // Animate the inner content (counter, text) between
+                // steps and into the success beat. Transitions into the
+                // success beat use a scaleIn pop instead of slide so the
+                // checkmark feels like a small celebration; outgoing
+                // content always slides up + fades.
+                AnimatedContent(
+                    targetState = state.currentStep to state.stepCompleted,
+                    transitionSpec = {
+                        val targetIsSuccess = targetState.second
+                        val enter = if (targetIsSuccess) {
+                            fadeIn(tween(250)) +
+                                scaleIn(initialScale = 0.7f, animationSpec = tween(250))
+                        } else {
+                            fadeIn(tween(250)) +
+                                slideInVertically(tween(250)) { it / 4 }
+                        }
+                        val exit = fadeOut(tween(200)) +
+                            slideOutVertically(tween(200)) { -it / 4 }
+                        enter togetherWith exit
+                    },
+                    label = "tutorial-content"
+                ) { (step, completed) ->
+                    if (completed) {
+                        TutorialSuccessContent(step = step)
                     } else {
-                        fadeIn(tween(250)) +
-                            slideInVertically(tween(250)) { it / 4 }
+                        TutorialStepText(
+                            step = step,
+                            instructionTextRes = state.instructionTextRes
+                        )
                     }
-                    val exit = fadeOut(tween(200)) +
-                        slideOutVertically(tween(200)) { -it / 4 }
-                    enter togetherWith exit
-                },
-                label = "tutorial-content"
-            ) { (step, completed) ->
-                if (completed) {
-                    TutorialSuccessContent(step = step)
-                } else {
-                    TutorialStepContent(
-                        step = step,
-                        instructionTextRes = state.instructionTextRes,
-                        ctaTextRes = state.ctaTextRes,
-                        mandatory = state.mandatory,
-                        onGotIt = onGotIt,
-                        onSkip = onSkip
-                    )
                 }
+            }
+            // Buttons are pinned outside the scrollable text region so
+            // they never scroll off-screen and are never clipped by the
+            // height cap above. Hidden during the success beat, exactly
+            // as before (TutorialSuccessContent never rendered a button
+            // row either).
+            if (!state.stepCompleted) {
+                TutorialStepButtons(
+                    ctaTextRes = state.ctaTextRes,
+                    mandatory = state.mandatory,
+                    onGotIt = onGotIt,
+                    onSkip = onSkip
+                )
             }
         }
     }
 }
 
+// v0.1.16: fixed design-space cap (the game layer is a fixed
+// 411x792dp canvas scaled as a whole — see DESIGN_WIDTH/DESIGN_HEIGHT
+// above — so a dp value here is deterministic across every device,
+// unlike a runtime screen-fraction). Sized to leave headroom for the
+// title/stats/board/action-row above it in the fixed canvas while
+// comfortably fitting the longest instruction string at 2x system
+// font scale.
+private val TutorialCardMaxHeight = 200.dp
+
 @Composable
-private fun TutorialStepContent(
+private fun TutorialStepText(
     step: TutorialStep,
-    instructionTextRes: Int,
-    ctaTextRes: Int,
-    mandatory: Boolean,
-    onGotIt: () -> Unit,
-    onSkip: () -> Unit
+    instructionTextRes: Int
 ) {
     // fillMaxWidth + horizontalAlignment center the column inside the
     // AnimatedContent slot, which defaults to Alignment.TopStart and
@@ -2547,42 +2579,53 @@ private fun TutorialStepContent(
                 textAlign = TextAlign.Center
             )
         }
-        // v0.1.13: the button row is now conditional. Hazard, Leaderboard,
-        // and Username steps have no Got it CTA (they auto-advance on the
-        // user's actual action), and Skip is hidden during the mandatory
-        // first-launch flow — in that combination the row is empty and
-        // the trailing spacer would just pad the card without purpose,
-        // pushing it taller and risking overlap with the action buttons.
-        val showButtons = !mandatory || ctaTextRes != 0
-        if (showButtons) {
-            Spacer(Modifier.height(12.dp))
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                if (!mandatory) {
-                    TextButton(onClick = onSkip) {
-                        Text(
-                            stringResource(R.string.tutorial_cta_skip),
-                            color = TextSecondary,
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
-                        )
-                    }
-                    if (ctaTextRes != 0) Spacer(Modifier.size(12.dp))
-                }
-                if (ctaTextRes != 0) {
-                    Button(
-                        onClick = onGotIt,
-                        colors = ButtonDefaults.buttonColors(
-                            containerColor = AccentAmber,
-                            contentColor = Color(0xFF2B1810)
-                        )
-                    ) {
-                        Text(
-                            stringResource(ctaTextRes),
-                            fontWeight = FontWeight.Bold,
-                            letterSpacing = 1.sp
-                        )
-                    }
-                }
+    }
+}
+
+@Composable
+private fun TutorialStepButtons(
+    ctaTextRes: Int,
+    mandatory: Boolean,
+    onGotIt: () -> Unit,
+    onSkip: () -> Unit
+) {
+    // v0.1.13: the button row is conditional. Hazard, Leaderboard, and
+    // Username steps have no Got it CTA (they auto-advance on the
+    // user's actual action), and Skip is hidden during the mandatory
+    // first-launch flow — in that combination the row is empty and
+    // rendering it would just add padding without purpose.
+    val showButtons = !mandatory || ctaTextRes != 0
+    if (!showButtons) return
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (!mandatory) {
+            TextButton(onClick = onSkip) {
+                Text(
+                    stringResource(R.string.tutorial_cta_skip),
+                    color = TextSecondary,
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp
+                )
+            }
+            if (ctaTextRes != 0) Spacer(Modifier.size(12.dp))
+        }
+        if (ctaTextRes != 0) {
+            Button(
+                onClick = onGotIt,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = AccentAmber,
+                    contentColor = Color(0xFF2B1810)
+                )
+            ) {
+                Text(
+                    stringResource(ctaTextRes),
+                    fontWeight = FontWeight.Bold,
+                    letterSpacing = 1.sp
+                )
             }
         }
     }

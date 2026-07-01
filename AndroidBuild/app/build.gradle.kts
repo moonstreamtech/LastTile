@@ -74,8 +74,8 @@ android {
         applicationId = "com.moonstreamtech.lasttile"
         minSdk = 24
         targetSdk = 35
-        versionCode = 16
-        versionName = "0.1.15"
+        versionCode = 17
+        versionName = "0.1.16"
 
         // Lock the APK to the locales we ship translations for. Android still
         // auto-picks the closest match for the device language at runtime, so
@@ -269,4 +269,10 @@ dependencies {
     // back to Idle — see UpdateChecker.kt for the failure path.
     implementation("com.google.android.play:app-update:2.1.0")
     implementation("com.google.android.play:app-update-ktx:2.1.0")
+
+    // Fragment SDK override: play-services-basement pins fragment:1.1.0 transitively,
+    // flagged as outdated by Play Console. Fragment is not used directly anywhere
+    // in the codebase (pure Compose + ComponentActivity) — override only changes
+    // the resolved version, no behavior change.
+    implementation("androidx.fragment:fragment:1.8.5")
 }
