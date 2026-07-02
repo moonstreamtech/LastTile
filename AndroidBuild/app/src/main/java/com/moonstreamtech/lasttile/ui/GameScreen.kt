@@ -782,7 +782,6 @@ fun GameScreen() {
                     !tutorial.state.stepCompleted
                 TutorialOverlay(
                     state = tutorial.state,
-                    onGotIt = { tutorial.next() },
                     onSkip = { tutorial.skip() },
                     suppressCard = suppressCard
                 )
@@ -2456,7 +2455,6 @@ private fun tileBrush(value: Int): Brush {
 @Composable
 private fun TutorialOverlay(
     state: TutorialState,
-    onGotIt: () -> Unit,
     onSkip: () -> Unit,
     // v0.2.x: when true, the bottom instruction card is omitted but
     // the spotlight + dimming logic still runs — used during the Username step
@@ -2474,21 +2472,26 @@ private fun TutorialOverlay(
     // are always above the card and tappable. Spotlights on the board
     // remain handled inside BoardView; this composable now owns only
     // the instruction card.
+    // v0.1.16.2: R.string.btn_skip_tutorial does not exist as a
+    // resource — the tutorial's existing skip copy lives under
+    // tutorial_cta_skip (previously the "Eğitimi Atla" button label).
+    // Reused here as the icon's contentDescription so no new i18n
+    // string is needed across the 50 shipped locales.
+    val skipDescription = stringResource(R.string.tutorial_cta_skip)
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp)
     ) {
-        // v0.1.16: capped at a fixed design-space height and split into
-        // a scrollable text region + a pinned button row. Previously
-        // this Box wrapped its content at wrap-content height with no
-        // scroll; on large system font-scale settings the instruction
-        // text could wrap onto enough lines to grow the card past the
-        // remaining space in the fixed-size game-layer Column (see the
-        // v0.1.15 virtual-canvas comment above), pushing "Got it" off
-        // the bottom with no way to reach it. Capping the height and
-        // scrolling only the text guarantees the buttons are always
-        // visible regardless of text length or font scale.
+        // v0.1.16: capped at a fixed design-space height with a
+        // scrollable text region. Previously this Box wrapped its
+        // content at wrap-content height with no scroll; on large
+        // system font-scale settings the instruction text could wrap
+        // onto enough lines to grow the card past the remaining space
+        // in the fixed-size game-layer Column (see the v0.1.15
+        // virtual-canvas comment above). Capping the height and
+        // scrolling the text guarantees the card never overflows
+        // regardless of text length or font scale.
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -2500,7 +2503,7 @@ private fun TutorialOverlay(
                 modifier = Modifier
                     .weight(1f, fill = false)
                     .verticalScroll(rememberScrollState())
-                    .padding(start = 16.dp, end = 16.dp, top = 12.dp, bottom = 4.dp)
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
             ) {
                 // Animate the inner content (counter, text) between
                 // steps and into the success beat. Transitions into the
@@ -2534,17 +2537,32 @@ private fun TutorialOverlay(
                     }
                 }
             }
-            // Buttons are pinned outside the scrollable text region so
-            // they never scroll off-screen and are never clipped by the
-            // height cap above. Hidden during the success beat, exactly
-            // as before (TutorialSuccessContent never rendered a button
-            // row either).
-            if (!state.stepCompleted) {
-                TutorialStepButtons(
-                    ctaTextRes = state.ctaTextRes,
-                    mandatory = state.mandatory,
-                    onGotIt = onGotIt,
-                    onSkip = onSkip
+        }
+        // v0.1.16.2: replaces the old bottom "Eğitimi Atla" text
+        // button — real-device testing found the text button visually
+        // competed with the instruction copy. A small close glyph in
+        // the card's corner reads as a standard dismiss affordance
+        // without taking a line of its own. Same onSkip() behavior,
+        // same visibility rule: hidden during the mandatory first-launch
+        // flow (state.mandatory), shown only in the non-mandatory
+        // "?"-triggered replay. Plain Unicode glyph instead of
+        // Icons.Default.Close to avoid pulling in the material-icons
+        // dependency — matches the "✎" / "✓" glyph pattern used
+        // elsewhere in this file (see LeaderboardRow, TutorialSuccessContent).
+        if (!state.mandatory) {
+            IconButton(
+                onClick = onSkip,
+                modifier = Modifier
+                    .align(Alignment.TopEnd)
+                    .padding(8.dp)
+                    .size(32.dp)
+                    .semantics { contentDescription = skipDescription }
+            ) {
+                Text(
+                    text = "✕",
+                    color = TextSecondary,
+                    fontSize = 16.sp,
+                    fontWeight = FontWeight.Bold
                 )
             }
         }
@@ -2558,12 +2576,12 @@ private fun TutorialOverlay(
 // real-device testing showed the longest instruction strings
 // (Hazard step, e.g. French/German at ~185 chars across two
 // sentences) needed to scroll to reveal the second sentence. With
-// the manual CTA button removed from every step (see
-// TutorialStepButtons — the only remaining button is the
-// non-mandatory replay's Skip), the freed vertical space plus this
-// larger cap lets the longest strings in most of the 50 shipped
-// locales render without scrolling; internal scroll (below) remains
-// as a fallback for any locale that still overflows.
+// the manual CTA button removed from every step (the only dismiss
+// affordance left is the corner Skip icon — see the IconButton
+// above), the freed vertical space plus this larger cap lets the
+// longest strings in most of the 50 shipped locales render without
+// scrolling; internal scroll (below) remains as a fallback for any
+// locale that still overflows.
 private val TutorialCardMaxHeight = 320.dp
 
 @Composable
@@ -2599,55 +2617,6 @@ private fun TutorialStepText(
                 fontSize = 14.sp,
                 textAlign = TextAlign.Center
             )
-        }
-    }
-}
-
-@Composable
-private fun TutorialStepButtons(
-    ctaTextRes: Int,
-    mandatory: Boolean,
-    onGotIt: () -> Unit,
-    onSkip: () -> Unit
-) {
-    // v0.1.13: the button row is conditional. Hazard, Leaderboard, and
-    // Username steps have no Got it CTA (they auto-advance on the
-    // user's actual action), and Skip is hidden during the mandatory
-    // first-launch flow — in that combination the row is empty and
-    // rendering it would just add padding without purpose.
-    val showButtons = !mandatory || ctaTextRes != 0
-    if (!showButtons) return
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (!mandatory) {
-            TextButton(onClick = onSkip) {
-                Text(
-                    stringResource(R.string.tutorial_cta_skip),
-                    color = TextSecondary,
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-            }
-            if (ctaTextRes != 0) Spacer(Modifier.size(12.dp))
-        }
-        if (ctaTextRes != 0) {
-            Button(
-                onClick = onGotIt,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = AccentAmber,
-                    contentColor = Color(0xFF2B1810)
-                )
-            ) {
-                Text(
-                    stringResource(ctaTextRes),
-                    fontWeight = FontWeight.Bold,
-                    letterSpacing = 1.sp
-                )
-            }
         }
     }
 }
