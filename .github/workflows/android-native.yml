@@ -185,37 +185,8 @@ jobs:
 
           echo "== release AAB native lib entries (raw offset check) =="
           # zipalign doesn't understand the AAB container format, so check
-          # each base/lib/**/*.so entry's zip data offset by hand: it must
-          # be a multiple of 16384 (16 KB) when stored uncompressed.
-          python3 - "$AAB" <<'PY'
-import sys, zipfile
-aab_path = sys.argv[1]
-bad = []
-with zipfile.ZipFile(aab_path) as z:
-    so_entries = [i for i in z.infolist() if i.filename.startswith("base/lib/") and i.filename.endswith(".so")]
-    if not so_entries:
-        print("No native libraries in release AAB — nothing to check.")
-        sys.exit(0)
-    for info in so_entries:
-        header_offset = info.header_offset
-        z.fp = None
-        with open(aab_path, "rb") as f:
-            f.seek(header_offset)
-            header = f.read(30)
-            name_len = int.from_bytes(header[26:28], "little")
-            extra_len = int.from_bytes(header[28:30], "little")
-            data_offset = header_offset + 30 + name_len + extra_len
-        aligned = (data_offset % 16384) == 0
-        compressed = info.compress_type != zipfile.ZIP_STORED
-        status = "OK" if (aligned or compressed) else "MISALIGNED"
-        print(f"{status:11s} offset={data_offset:>10d} compressed={compressed!s:5s} {info.filename}")
-        if not aligned and not compressed:
-            bad.append(info.filename)
-if bad:
-    print(f"FATAL: {len(bad)} uncompressed .so entries are not 16 KB aligned")
-    sys.exit(1)
-print("All native libraries in release AAB are 16 KB aligned (or compressed).")
-PY
+          # each base/lib/**/*.so entry's zip data offset by hand.
+          python3 tools/check_16kb_alignment.py "$AAB"
 
       # LAYER 4 — post-build content scan. Decompresses the AAB and
       # searches every entry for the test AdMob publisher prefix.
