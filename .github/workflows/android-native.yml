@@ -68,10 +68,28 @@ jobs:
         with:
           packages: 'platforms;android-36 build-tools;36.0.0 platform-tools'
 
+      # No gradle-version input: the repo now ships its own Gradle
+      # wrapper (gradlew, pinned to 8.14.5 in
+      # AndroidBuild/gradle/wrapper/gradle-wrapper.properties). This
+      # action's job here is dependency/wrapper caching and wrapper
+      # checksum validation for the ./gradlew invocations below, not
+      # installing a separate Gradle binary.
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v3
-        with:
-          gradle-version: "8.14.5"
+
+      # Confirms the build actually runs on the committed wrapper's
+      # pinned version, not whatever setup-gradle would install if a
+      # gradle-version input were still present.
+      - name: Verify Gradle wrapper version
+        working-directory: AndroidBuild
+        run: |
+          set -e
+          ./gradlew --version
+          if ! ./gradlew --version | grep -q "Gradle 8.14.5"; then
+            echo "FATAL: ./gradlew is not running the wrapper-pinned 8.14.5"
+            exit 1
+          fi
+          echo "Confirmed: build runs on wrapper-pinned Gradle 8.14.5."
 
       # LAYER 3 — pre-build secret check. Validates the three real
       # AdMob ids before any gradle task runs so CI fails fast on
@@ -108,7 +126,7 @@ jobs:
           ADMOB_APP_ID: ${{ secrets.ADMOB_APP_ID }}
           ADMOB_BANNER_UNIT_ID: ${{ secrets.ADMOB_BANNER_UNIT_ID }}
           ADMOB_REWARDED_UNIT_ID: ${{ secrets.ADMOB_REWARDED_UNIT_ID }}
-        run: gradle :app:assembleDebug --no-daemon --stacktrace --max-workers=1
+        run: ./gradlew :app:assembleDebug --no-daemon --stacktrace --max-workers=1
 
       # Android 16 (API 36) migration check — confirms the compiled APK
       # actually carries targetSdkVersion=36, not just that build.gradle.kts
@@ -138,7 +156,7 @@ jobs:
           RELEASE_KEYSTORE_PASSWORD: ${{ secrets.RELEASE_KEYSTORE_PASSWORD }}
           RELEASE_KEY_ALIAS: ${{ secrets.RELEASE_KEY_ALIAS }}
           RELEASE_KEY_PASSWORD: ${{ secrets.RELEASE_KEY_PASSWORD }}
-        run: gradle :app:bundleRelease --no-daemon --stacktrace --max-workers=1
+        run: ./gradlew :app:bundleRelease --no-daemon --stacktrace --max-workers=1
 
       - name: Verify release AAB is signed
         working-directory: AndroidBuild
